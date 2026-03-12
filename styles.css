@@ -1,0 +1,317 @@
+/* --- Reset básico para estandarizar el estilo entre diferentes navegadores --- */
+* {
+    margin: 0; /* Elimina márgenes externos por defecto */
+    padding: 0; /* Elimina rellenos internos por defecto */
+    box-sizing: border-box; /* Asegura que el tamaño incluya bordes y rellenos */
+}
+
+/* --- Definición de variables globales para colores y tipografía --- */
+:root {
+    --primary-color: #003366; /* Azul institucional */
+    --secondary-color: #f2b705; /* Amarillo institucional */
+    --accent-color: #f2b705; /* Amarillo para acentos */
+    --text-color: #333; /* Color de texto para fondos claros */
+    --light-text: #ffffff; /* Color de texto para fondos oscuros */
+    --bg-color: #f4f7f6; /* Color de fondo gris claro */
+    --white: #ffffff; /* Color blanco */
+    --border-color: #ddd; /* Color para los bordes de campos */
+    --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Fuente del sitio */
+}
+
+/* --- Estilos generales para el cuerpo del sitio --- */
+body {
+    font-family: var(--font-family); /* Aplica la fuente definida */
+    line-height: 1.6; /* Aumenta el espacio entre líneas para legibilidad */
+    color: var(--text-color); /* Color de texto general */
+    background-color: var(--bg-color); /* Color de fondo general */
+    padding-top: 70px; /* Reducido para ajustarse al nuevo tamaño del header */
+}
+
+/* --- Clase de contenedor para centrar horizontalmente el contenido --- */
+.container {
+    width: 90%; /* Ancho base del 90% de la pantalla */
+    max-width: 1200px; /* Ancho máximo de 1200px para pantallas grandes */
+    margin: 0 auto; /* Centrado automático a los lados */
+}
+
+/* --- Estilos para el Encabezado (Main Header) --- */
+.main-header {
+    background-color: var(--primary-color); /* Color de fondo azul institucional */
+    color: var(--light-text); /* Texto en blanco */
+    padding: 0.4rem 0; /* Espaciado más compacto */
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1); /* Sombra suave debajo del encabezado */
+    position: fixed; /* Header fijo en la parte superior */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60px; /* Altura fija para mayor control */
+    z-index: 1000; /* Asegura que el header esté sobre otros elementos */
+    display: flex;
+    align-items: center;
+}
+
+/* --- Alineación flexible dentro del encabezado --- */
+.header-content {
+    display: flex; /* Activa el modelo de caja flexible */
+    justify-content: space-between; /* Espacia el logo de la navegación */
+    align-items: center; /* Centra verticalmente logo y nav */
+    width: 100%; /* Asegura que ocupe todo el contenedor */
+}
+
+/* --- Tamaño del logo optimizado --- */
+.logo img {
+    height: 40px; /* Tamaño más pequeño para no tapar el contenido */
+    width: auto;
+    display: block;
+}
+
+/* --- Estilos para la lista de navegación --- */
+.nav-links {
+    list-style: none; /* Elimina los puntos de la lista */
+    display: flex; /* Los items se alinean horizontalmente */
+}
+
+/* --- Separación entre opciones del menú --- */
+.nav-links li {
+    margin-left: 1.5rem; /* Margen a la izquierda de cada opción */
+}
+
+/* --- Estilos de los enlaces del menú --- */
+.nav-links a {
+    color: var(--light-text); /* Texto blanco */
+    text-decoration: none; /* Sin subrayado inicial */
+    font-weight: 500; /* Grosor de letra medio */
+    transition: color 0.3s ease; /* Suaviza el cambio de color al pasar el mouse */
+}
+
+/* --- Efecto al pasar el mouse por los enlaces --- */
+.nav-links a:hover {
+    color: var(--secondary-color); /* Cambia a amarillo al pasar el mouse */
+}
+
+/* --- Contenido principal --- */
+main {
+    padding: 3rem 0; /* Espaciado con respecto al header y footer */
+    min-height: calc(100vh - 200px); /* Asegura que el footer no suba demasiado */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* --- Caja de la sección de registro --- */
+.registration-section {
+    background-color: var(--white); /* Fondo blanco para el formulario */
+    padding: 2.5rem; /* Relleno interno generoso */
+    border-radius: 8px; /* Bordes redondeados */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1); /* Efecto de profundidad */
+    width: 100%;
+    max-width: 700px;
+}
+
+/* --- Estilo del título principal (H1) --- */
+h1 {
+    margin-bottom: 1rem; /* Espacio debajo del título */
+    color: var(--primary-color); /* Color oscuro institucional */
+    text-align: center; /* Título centrado */
+}
+
+/* --- Estilo para el párrafo descriptivo --- */
+p {
+    text-align: center; /* Párrafo centrado */
+    margin-bottom: 2rem; /* Separación con el formulario */
+    color: #666; /* Color gris suave */
+}
+
+/* --- Configuración del formulario de registro --- */
+.registration-form {
+    max-width: 600px; /* Limita el ancho del formulario */
+    margin: 0 auto; /* Centra el formulario en su caja */
+}
+
+/* --- Fieldset para accesibilidad del formulario --- */
+.form-fieldset {
+    border: none; /* Elimina bordes del fieldset */
+    padding: 0;
+    margin: 0;
+}
+
+/* --- Estilos para textos de ayuda y advertencias --- */
+.form-hint {
+    display: block; /* Ocupa su propia línea */
+    font-size: 0.85rem; /* Letra más pequeña */
+    color: #7f8c8d; /* Color gris suave */
+    margin-top: 0.25rem; /* Separación con el input */
+}
+
+/* --- Espaciado entre grupos de campos (label + input) --- */
+.form-group {
+    margin-bottom: 1.5rem; /* Distancia entre campos de entrada */
+}
+
+/* --- Estilo de las etiquetas de campo (Labels) --- */
+label {
+    display: block; /* Ocupa todo el ancho */
+    margin-bottom: 0.5rem; /* Espacio con el campo de entrada */
+    font-weight: 600; /* Texto en negrita suave */
+}
+
+/* --- Estilo unificado para inputs y selectores --- */
+input, select {
+    width: 100%; /* Ocupan todo el ancho disponible */
+    padding: 0.8rem; /* Espaciado interno para comodidad táctil */
+    border: 1px solid var(--border-color); /* Borde claro */
+    border-radius: 4px; /* Bordes ligeramente curvos */
+    font-size: 1rem; /* Tamaño de letra estándar */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Animación al seleccionar */
+}
+
+/* --- Efecto cuando el usuario hace clic en el campo (Focus) --- */
+input:focus, select:focus {
+    outline: none; /* Elimina el borde azul por defecto */
+    border-color: var(--primary-color); /* Borde azul institucional */
+    box-shadow: 0 0 0 2px rgba(0, 51, 102, 0.1); /* Brillo externo azul institucional */
+}
+
+/* --- Estilo del botón de envío --- */
+.btn-submit {
+    display: block; /* Se comporta como un bloque */
+    width: 100%; /* Botón de ancho completo */
+    padding: 1rem; /* Relleno interno */
+    background-color: var(--secondary-color); /* Color de fondo amarillo institucional */
+    color: var(--primary-color); /* Texto azul para contraste */
+    border: none; /* Sin bordes */
+    border-radius: 4px; /* Bordes curvos */
+    font-size: 1.1rem; /* Letra un poco más grande */
+    font-weight: 700; /* Texto en negrita fuerte */
+    cursor: pointer; /* Cambia el puntero al pasar por encima */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Transición suave */
+    margin-top: 1rem; /* Separación superior */
+}
+
+/* --- Efecto hover del botón --- */
+.btn-submit:hover {
+    background-color: #d8a404; /* Oscurece el amarillo al pasar el mouse */
+    transform: translateY(-2px); /* Pequeña elevación */
+}
+
+/* --- Estilos para el Pie de Página (Footer) --- */
+.main-footer {
+    background-color: var(--primary-color); /* Fondo gris oscuro */
+    color: var(--white); /* Texto blanco */
+    padding: 3rem 0 1.5rem; /* Espaciados arriba y abajo */
+}
+
+/* --- Layout del footer --- */
+.footer-content {
+    display: flex; /* Flexbox para columnas */
+    flex-wrap: wrap; /* Permite que bajen las columnas en pantallas pequeñas */
+    justify-content: space-between; /* Espacia los bloques de contenido */
+}
+
+/* --- Títulos dentro del footer --- */
+.footer-info h3 {
+    margin-bottom: 1rem; /* Espacio debajo del título Contacto */
+    font-size: 1.2rem; /* Tamaño de título */
+    color: var(--secondary-color); /* Títulos en amarillo para jerarquía */
+}
+
+/* --- Párrafos y direcciones en footer --- */
+.footer-info p, .footer-info address {
+    margin-bottom: 0.5rem; /* Separación entre líneas */
+    font-style: normal; /* Asegura que address no esté en cursiva */
+}
+
+/* --- Enlaces dentro del footer --- */
+.footer-info a {
+    color: var(--secondary-color); /* Color amarillo para los links */
+    text-decoration: none; /* Sin subrayado */
+}
+
+.footer-info a:hover {
+    text-decoration: underline;
+}
+
+/* --- Sección inferior de copyright --- */
+.footer-copy {
+    width: 100%; /* Ocupa todo el ancho inferior */
+    border-top: 1px solid rgba(255,255,255,0.1); /* Línea divisoria muy suave */
+    margin-top: 2rem; /* Separación del contenido superior */
+    padding-top: 1.5rem; /* Relleno interno superior */
+    text-align: center; /* Texto centrado */
+    font-size: 0.9rem; /* Letra más pequeña */
+    color: #bdc3c7; /* Color gris plata */
+}
+
+/* --- Clase de utilidad para Accesibilidad (Lectores de pantalla) --- */
+.sr-only {
+    position: absolute; /* Saca el elemento del flujo visual */
+    width: 1px; /* Casi invisible visualmente */
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden; /* Oculta lo que sobresale */
+    clip: rect(0, 0, 0, 0); /* Recorta la visibilidad */
+    white-space: nowrap; /* Evita saltos de línea */
+    border: 0;
+}
+
+/* --- Estilos para la barra de imágenes desplazable (Slider) --- */
+.image-slider {
+    display: flex; /* Alinea las imágenes en fila */
+    overflow-x: auto; /* Permite desplazamiento horizontal */
+    gap: 15px; /* Espacio entre cada imagen */
+    padding: 10px 0; /* Espaciado interno superior e inferior */
+    scroll-behavior: smooth; /* Desplazamiento suave */
+    -webkit-overflow-scrolling: touch; /* Mejora el scroll en dispositivos táctiles */
+}
+
+/* --- Ocultar la barra de scroll por defecto pero mantener funcionalidad --- */
+.image-slider::-webkit-scrollbar {
+    height: 8px; /* Altura de la barra de scroll */
+}
+
+.image-slider::-webkit-scrollbar-thumb {
+    background: var(--primary-color); /* Color de la barra igual al azul institucional */
+    border-radius: 10px; /* Bordes redondeados para estética */
+}
+
+/* --- Estilo de cada elemento dentro del slider --- */
+.slider-item {
+    flex: 0 0 auto; /* Evita que las imágenes se encojan */
+    width: 200px; /* Ancho fijo para cada imagen/tarjeta */
+}
+
+.slider-item img {
+    width: 100%; /* La imagen ocupa todo su contenedor */
+    height: 120px; /* Altura fija para uniformidad */
+    object-fit: cover; /* Recorta la imagen para que rellene el espacio */
+    border-radius: 6px; /* Bordes suaves */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Ligera sombra */
+}
+
+/* --- Media Queries: Responsividad para Tabletas y Celulares --- */
+@media (max-width: 768px) {
+    /* Ajustes para pantallas de menos de 768px */
+    .header-content {
+        flex-direction: column; /* Apila el logo sobre el menú */
+        gap: 1rem; /* Espacio entre logo y menú */
+    }
+
+    .nav-links {
+        padding-left: 0; /* Elimina rellenos innecesarios */
+    }
+
+    .nav-links li {
+        margin: 0 0.8rem; /* Ajusta el margen lateral del menú */
+    }
+
+    .registration-section {
+        padding: 1.5rem; /* Reduce el relleno interno en móviles */
+    }
+
+    .footer-content {
+        flex-direction: column; /* Apila las columnas del footer verticalmente */
+        align-items: center; /* Centra el contenido */
+        text-align: center; /* Centra el texto */
+    }
+}

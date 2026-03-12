@@ -1,0 +1,86 @@
+<!DOCTYPE html> <!-- Define que este es un documento HTML5 -->
+<html lang="es"> <!-- Abre el documento HTML y establece el idioma en español -->
+<head> <!-- Inicio del encabezado técnico (metadatos) -->
+    <meta charset="UTF-8"> <!-- Define la codificación de caracteres para soportar tildes y ñ -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Asegura que el sitio se vea bien en dispositivos móviles (responsivo) -->
+    <title>Registro Estudiantil</title> <!-- Título que aparece en la pestaña del navegador -->
+    <link rel="stylesheet" href="styles.css"> <!-- Vincula el archivo de estilos CSS externo -->
+    <meta name="description" content="Portal de registro para nuevos estudiantes de la Universidad."> <!-- Descripción para buscadores como Google -->
+</head>
+<body> <!-- Inicio del contenido visible de la página -->
+    <header class="main-header"> <!-- Sección del encabezado superior -->
+        <div class="container header-content"> <!-- Contenedor para centrar y alinear el contenido -->
+            <div class="logo"> <!-- Contenedor para el logo de la institución -->
+                <a href="inicio.html" aria-label="Inicio de Universidad"> <!-- Enlace al inicio con etiqueta de accesibilidad -->
+                    <img src="https://la.konradlorenz.edu.co/wp-content/uploads/2024/07/logo_konrad_acreditacion.png" alt="Logo Universidad"> <!-- Imagen del logo con texto alternativo -->
+                </a>
+            </div>
+            <nav aria-label="Navegación principal"> <!-- Área de navegación con descripción para lectores de pantalla -->
+                <ul class="nav-links"> <!-- Lista de enlaces de navegación -->
+                    <li><a href="inicio.html">Inicio</a></li> <!-- Opción de menú Inicio -->
+                    <li><a href="index.html">Registro</a></li> <!-- Opción de menú Registro actualizado -->
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container"> <!-- Sección principal del contenido de la página -->
+        <section class="registration-section"> <!-- Sección específica para el registro -->
+            <h1>Registro de Estudiante</h1> <!-- Título principal de la página -->
+            <p>Por favor, completa el siguiente formulario para iniciar tu proceso de inscripción.</p> <!-- Instrucción para el usuario -->
+            
+            <form action="#" method="POST" class="registration-form" aria-labelledby="form-title"> <!-- Formulario que envía datos vía POST -->
+                <h2 id="form-title" class="sr-only">Formulario de registro</h2> <!-- Título oculto visualmente pero disponible para accesibilidad -->
+                
+                <fieldset class="form-fieldset"> <!-- Agrupa campos relacionados para lectores de pantalla -->
+                    <legend class="sr-only">Datos personales y académicos</legend> <!-- Describe el grupo de campos de forma accesible -->
+
+                    <div class="form-group"> <!-- Grupo que une etiqueta y campo de entrada -->
+                        <label for="nombre">Nombre Completo</label> <!-- Etiqueta vinculada al campo 'nombre' -->
+                        <input type="text" id="nombre" name="nombre" required aria-required="true" autocomplete="name" placeholder="Ej: Juan Pérez"> <!-- Campo de texto obligatorio con autocompletado -->
+                    </div>
+
+                    <div class="form-group"> <!-- Grupo para el documento -->
+                        <label for="documento" id="label-doc">Documento de Identidad</label> <!-- Etiqueta para el documento -->
+                        <input type="text" id="documento" name="documento" required aria-required="true" aria-describedby="hint-doc" placeholder="Número de documento"> <!-- Campo obligatorio con descripción adicional -->
+                        <small id="hint-doc" class="form-hint">Sin puntos ni espacios (Ej: 123456789)</small> <!-- Texto de ayuda asociado por ID al input -->
+                    </div>
+
+                    <div class="form-group"> <!-- Grupo para el correo -->
+                        <label for="correo">Correo Electrónico</label> <!-- Etiqueta para el correo -->
+                        <input type="email" id="correo" name="correo" required aria-required="true" autocomplete="email" placeholder="ejemplo@correo.com"> <!-- Campo email con autocompletado -->
+                    </div>
+
+                    <div class="form-group"> <!-- Grupo para la selección de programa -->
+                        <label for="programa">Programa Académico</label> <!-- Etiqueta para el programa -->
+                        <select id="programa" name="programa" required aria-required="true"> <!-- Menú desplegable obligatorio -->
+                            <option value="" disabled selected>Selecciona un programa</option> <!-- Opción inicial por defecto -->
+                            <option value="ing-sistemas">Ingeniería de Sistemas</option> <!-- Opción 1 -->
+                            <option value="psicologia">Psicología</option> <!-- Opción 2 -->
+                            <option value="marketing">Marketing</option> <!-- Opción 3 -->
+                        </select>
+                    </div>
+                </fieldset>
+
+                <button type="submit" class="btn-submit">Enviar Registro</button> <!-- Botón para procesar y enviar el formulario -->
+            </form>
+        </section>
+    </main>
+
+    <footer class="main-footer"> <!-- Sección del pie de página -->
+        <div class="container footer-content"> <!-- Contenedor para el contenido del pie de página -->
+            <div class="footer-info"> <!-- Div para la información de contacto -->
+                <h3>Contacto</h3> <!-- Título de la sección de contacto -->
+                <p>Email: <a href="mailto:admisiones@universidad.edu.co">admisiones@universidad.edu.co</a></p> <!-- Enlace para enviar correo -->
+                <p>Teléfono: +57 (601) 123 4567</p> <!-- Número telefónico -->
+                <address> <!-- Etiqueta semántica para direcciones físicas -->
+                    Calle 63 # 45 - 67, Bogotá, Colombia <!-- Dirección de la sede -->
+                </address>
+            </div>
+            <div class="footer-copy"> <!-- Div para el copyright -->
+                <p>&copy; 2026 Universidad, diseñado unicamente con fines educativos. Todos los derechos reservados.</p> <!-- Texto de derechos de autor y año -->
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

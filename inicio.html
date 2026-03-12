@@ -1,0 +1,97 @@
+<!DOCTYPE html> <!-- Define que este es un documento HTML5 -->
+<html lang="es"> <!-- Abre el documento HTML y establece el idioma en español -->
+<head> <!-- Inicio del encabezado técnico (metadatos) -->
+    <meta charset="UTF-8"> <!-- Define la codificación de caracteres -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Responsividad móvil -->
+    <title>Inicio | Universidad Ejemplo</title> <!-- Título de la pestaña -->
+    <link rel="stylesheet" href="styles.css"> <!-- Vincula el mismo archivo de estilos -->
+    <meta name="description" content="Página de inicio de la Universidad Ejemplo.">
+</head>
+<body> <!-- Inicio del contenido visible -->
+    <header class="main-header"> <!-- Encabezado fijo -->
+        <div class="container header-content"> <!-- Contenedor centrado para el contenido del encabezado -->
+            <div class="logo"> <!-- Contenedor del logo -->
+                <a href="inicio.html" aria-label="Inicio de Universidad"> <!-- Enlace al inicio -->
+                    <img src="https://la.konradlorenz.edu.co/wp-content/uploads/2024/07/logo_konrad_acreditacion.png" alt="Logo Universidad"> <!-- Imagen del logo -->
+                </a>
+            </div>
+            <nav aria-label="Navegación principal"> <!-- Área de navegación principal -->
+                <ul class="nav-links"> <!-- Lista de enlaces de navegación -->
+                    <li><a href="inicio.html">Inicio</a></li> <!-- Enlace a esta misma página -->
+                    <li><a href="index.html">Registro</a></li> <!-- Enlace al formulario de registro -->
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container"> <!-- Contenido principal centrado -->
+        <section class="registration-section"> <!-- Reusamos la clase para mantener el estilo de tarjeta -->
+            <h1>Bienvenidos a la Universidad Ejemplo</h1> <!-- Título principal -->
+            <p>Esta es la página principal de nuestra institución. Aquí podrás encontrar información relevante sobre nuestra comunidad académica.</p> <!-- Párrafo descriptivo -->
+            
+            <div class="home-content" style="text-align: center; margin-top: 2rem;"> <!-- Contenedor de servicios con centrado -->
+                <h2>Explora nuestros servicios</h2> <!-- Subtítulo de servicios -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 2rem;"> <!-- Rejilla responsiva con mayor ancho para los sliders -->
+                    <article style="padding: 1rem; border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden;"> <!-- Artículo de programas con recorte de contenido -->
+                        <h3>Programas</h3> <!-- Título de programas -->
+                        <p style="margin-bottom: 1rem;">Conoce nuestra oferta académica.</p> <!-- Descripción breve -->
+                        <div class="image-slider"> <!-- Barra de imágenes desplazable -->
+                             <div class="slider-item">
+                                 <img src="https://www.emagister.com.co/co/albums/8/7/6/0/8/xxl_cropped_b455d813cfe6f9d9e034b20872ab8d94.jpg" alt="Psicología">
+                                 <small>Psicología </small>
+                             </div>
+                             <div class="slider-item">
+                                 <img src="https://www.emagister.com.co/co/albums/8/7/6/0/8/xl_cropped_2e31ee68ae9f2f86ce326c532707aa96.jpg" alt="Ingeniería de Sistemas">
+                                 <small>Ingeniería de Sistemas</small>
+                             </div>
+                             <div class="slider-item">
+                                 <img src="https://media.licdn.com/dms/image/v2/D4E22AQEaVl4Gz5glkg/feedshare-shrink_800/B4EZwGOsydIIAk-/0/1769631043146?e=2147483647&v=beta&t=rn0K7e8K9s1RbPkDMnvYot32P183myyZvEIPz3KrhKg" alt="IA">
+                                 <small>Inteligencia Artificial</small>
+                             </div>
+                        </div> <!-- Cierre del slider -->
+                    </article>
+                    <article style="padding: 1rem; border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden;"> <!-- Artículo de noticias con recorte de contenido -->
+                        <h3>Noticias</h3> <!-- Título de noticias -->
+                        <p style="margin-bottom: 1rem;">Mantente al día con los eventos.</p> <!-- Descripción de noticias -->
+                        <div class="image-slider"> <!-- Barra de imágenes desplazable -->
+                             <div class="slider-item">
+                                 <img src="https://www.konradlorenz.edu.co/wp-content/uploads/2025/10/Banner2-banner-mascota-Konrad.jpg" alt="MASCOTA KONRAD">
+                                 <small>Mascota K</small>
+                             </div>
+                             <div class="slider-item">
+                                 <img src="https://www.konradlorenz.edu.co/wp-content/uploads/2023/01/el-poder-de-un-sueno.jpg" alt="FRASE KONRAD">
+                                 <small>Frase Inspiradora</small>
+                             </div>
+                             <div class="slider-item">
+                                 <img src="https://www.konradlorenz.edu.co/wp-content/uploads/2022/09/2022_09_21_qs_ranking_2023_not-1-scaled.jpg" alt="KONRAD LORENZ">
+                                 <small>Logros de la K</small>
+                             </div>
+                        </div> <!-- Cierre del slider -->
+                    </article>
+                    <article style="padding: 1rem; border: 1px solid var(--border-color); border-radius: 8px;"> <!-- Artículo de admisiones -->
+                        <h3>Admisiones</h3> <!-- Título de admisiones -->
+                        <p>Inicia tu proceso de inscripción y únete a nosotros.</p> <!-- Descripción de admisiones -->
+                        <a href="index.html" class="btn-submit" style="display: inline-block; text-decoration: none; margin-top: 1rem; padding: 0.5rem 1rem;">Ir al Registro</a> <!-- Botón al registro -->
+                    </article>
+                </div> <!-- Cierre de la rejilla de servicios -->
+            </div> <!-- Cierre del contenedor de contenido de inicio -->
+        </section>
+    </main>
+
+    <footer class="main-footer"> <!-- Pie de página -->
+        <div class="container footer-content"> <!-- Contenedor del pie de página -->
+            <div class="footer-info"> <!-- Bloque de información de contacto -->
+                <h3>Contacto</h3> <!-- Título de contacto -->
+                <p>Email: <a href="mailto:admisiones@universidad.edu.co">admisiones@universidad.edu.co</a></p> <!-- Enlace de email -->
+                <p>Teléfono: +57 (601) 123 4567</p> <!-- Teléfono -->
+                <address> <!-- Dirección física -->
+                    Calle 123 # 45 - 67, Bogotá, Colombia
+                </address>
+            </div>
+            <div class="footer-copy"> <!-- Bloque de copyright -->
+                <p>&copy; 2026 Universidad Ejemplo. Todos los derechos reservados.</p> <!-- Texto de derechos reservados -->
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
