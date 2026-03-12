@@ -1,84 +1,120 @@
-<!DOCTYPE html> <!-- Define que este es un documento HTML5 -->
-<html lang="es"> <!-- Abre el documento HTML y establece el idioma en español -->
-<head> <!-- Inicio del encabezado técnico (metadatos) -->
-    <meta charset="UTF-8"> <!-- Define la codificación de caracteres para soportar tildes y ñ -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Asegura que el sitio se vea bien en dispositivos móviles (responsivo) -->
-    <title>Registro Estudiantil</title> <!-- Título que aparece en la pestaña del navegador -->
-    <link rel="stylesheet" href="styles.css"> <!-- Vincula el archivo de estilos CSS externo -->
-    <meta name="description" content="Portal de registro para nuevos estudiantes de la Universidad."> <!-- Descripción para buscadores como Google -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Melodia Stream | Explora el mundo de la música</title>
+    <link rel="stylesheet" href="styles.css">
+    <meta name="description" content="Página de inicio de Melodia Stream. Tu portal favorito para descubrir nuevos sonidos.">
 </head>
-<body> <!-- Inicio del contenido visible de la página -->
-    <header class="main-header"> <!-- Sección del encabezado superior -->
-        <div class="container header-content"> <!-- Contenedor para centrar y alinear el contenido -->
-            <div class="logo"> <!-- Contenedor para el logo de la institución -->
-                <a href="inicio.html" aria-label="Inicio de Universidad"> <!-- Enlace al inicio con etiqueta de accesibilidad -->
-                    <img src="https://la.konradlorenz.edu.co/wp-content/uploads/2024/07/logo_konrad_acreditacion.png" alt="Logo Universidad"> <!-- Imagen del logo con texto alternativo -->
+<body>
+    <header class="main-header">
+        <div class="container header-content">
+            <div class="logo">
+                <a href="index.html" aria-label="Inicio de Melodia Stream">
+                    <img src="https://i.pinimg.com/1200x/41/5c/87/415c8737a57f20f06d9b6daf4118126c.jpg" alt="Logo Melodia Stream">
                 </a>
             </div>
-            <nav aria-label="Navegación principal"> <!-- Área de navegación con descripción para lectores de pantalla -->
-                <ul class="nav-links"> <!-- Lista de enlaces de navegación -->
-                    <li><a href="inicio.html">Inicio</a></li> <!-- Opción de menú Inicio -->
-                    <li><a href="index.html">Registro</a></li> <!-- Opción de menú Registro actualizado -->
+            <nav aria-label="Navegación principal">
+                <ul class="nav-links">
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="quienes-somos.html">Quiénes somos</a></li>
+                    <li><a href="productos-servicios.html">Productos y servicios</a></li>
+                    <li><a href="login.html">Login</a></li>
                 </ul>
             </nav>
         </div>
     </header>
 
-    <main class="container"> <!-- Sección principal del contenido de la página -->
-        <section class="registration-section"> <!-- Sección específica para el registro -->
-            <h1>Registro de Estudiante</h1> <!-- Título principal de la página -->
-            <p>Por favor, completa el siguiente formulario para iniciar tu proceso de inscripción.</p> <!-- Instrucción para el usuario -->
+    <main class="container">
+        <section class="welcome-section" style="padding-top: 2rem;">
+            <h1 style="text-align: center; color: var(--primary-color); font-size: 3rem;">Tres Géneros, Una Pasión</h1>
+            <p style="text-align: center; font-size: 1.25rem; max-width: 800px; margin: 0 auto 3rem;">Explora nuestra selección curada de música Alternativa, Jazz y Rock. Calidad sonora sin compromisos.</p>
             
-            <form action="#" method="POST" class="registration-form" aria-labelledby="form-title"> <!-- Formulario que envía datos vía POST -->
-                <h2 id="form-title" class="sr-only">Formulario de registro</h2> <!-- Título oculto visualmente pero disponible para accesibilidad -->
-                
-                <fieldset class="form-fieldset"> <!-- Agrupa campos relacionados para lectores de pantalla -->
-                    <legend class="sr-only">Datos personales y académicos</legend> <!-- Describe el grupo de campos de forma accesible -->
+            <div class="home-content">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem;">
+                    
+                    <article>
+                        <div class="article-text">
+                            <h3 style="color: var(--primary-color); margin-bottom: 1rem;">Cultura Alternativa</h3>
+                            <p style="margin-bottom: 1.5rem; color: #bbb;">Nuevos sonidos, experimentación y la escena indie más vibrante.</p>
+                        </div>
+                        <div class="image-slider">
+                             <div class="slider-item">
+                                 <img src="https://cdn-images.dzcdn.net/images/cover/1e6f6130ca0ccbdd0cde4dc2b05e6df9/0x1900-000000-80-0-0.jpg" alt="Imagen de la banda Blur de genero Alternativo/ Indie/ Britpop">
+                                 <small>Blur</small>
+                             </div>
+                             <div class="slider-item">
+                                 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQQLIztJ-UHICeg0ZTp8tI_HWYz59AiOAG7Q&s" alt="Imagen de la banda Aterciopelados genero: Alternativa/independiente instrument">
+                                 <small>Aterciopelados</small>
+                             </div>
+                             <div class="slider-item">
+                                 <img src="https://cdn-images.dzcdn.net/images/cover/053dec9b5f90808b40ac68ee17c3ef23/0x1900-000000-80-0-0.jpg" alt="Imagen de la banda porter, genero:Indie Rock">
+                                 <small>Porter</small>
+                             </div>
+                        </div>
+                    </article>
 
-                    <div class="form-group"> <!-- Grupo que une etiqueta y campo de entrada -->
-                        <label for="nombre">Nombre Completo</label> <!-- Etiqueta vinculada al campo 'nombre' -->
-                        <input type="text" id="nombre" name="nombre" required aria-required="true" autocomplete="name" placeholder="Ej: Juan Pérez"> <!-- Campo de texto obligatorio con autocompletado -->
-                    </div>
+                    <article>
+                        <div class="article-text">
+                            <h3 style="color: var(--primary-color); margin-bottom: 1rem;">Jazz & Síncope</h3>
+                            <p style="margin-bottom: 1.5rem; color: #bbb;">Desde los clásicos del Bebop hasta el Jazz Fusión más vanguardista.</p>
+                        </div>
+                        <div class="image-slider">
+                             <div class="slider-item">
+                                 <img src="https://cdn.artphotolimited.com/images/5b9fc1ecac06024957be8806/1000x1000/louis-armstrong-red-hot-jazz.jpg" alt="Louis Armstrong">
+                                 <small>Louis Armstrong</small>
+                             </div>
+                             <div class="slider-item">
+                                 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-E5GH49w21NX5nO5m4rF91n7kIpx8eHDxUg&s" alt="Billie Holiday">
+                                 <small>Billie Holiday</small>
+                             </div>
+                             <div class="slider-item">
+                                 <img src="https://artist99.cdn107.com/fb6/fb618a3027470c01f5ca284e243ad706_xl.jpg" alt="Stan Getz">
+                                 <small>Stan Getz</small>
+                             </div>
+                        </div>
+                    </article>
 
-                    <div class="form-group"> <!-- Grupo para el documento -->
-                        <label for="documento" id="label-doc">Documento de Identidad</label> <!-- Etiqueta para el documento -->
-                        <input type="text" id="documento" name="documento" required aria-required="true" aria-describedby="hint-doc" placeholder="Número de documento"> <!-- Campo obligatorio con descripción adicional -->
-                        <small id="hint-doc" class="form-hint">Sin puntos ni espacios (Ej: 123456789)</small> <!-- Texto de ayuda asociado por ID al input -->
-                    </div>
+                    <article>
+                        <div class="article-text">
+                            <h3 style="color: var(--primary-color); margin-bottom: 1rem;">Esencia Rock</h3>
+                            <p style="margin-bottom: 1.5rem; color: #bbb;">Vibraciones eléctricas, distorsión y los himnos que marcaron generaciones.</p>
+                        </div>
+                        <div class="image-slider">
+                             <div class="slider-item">
+                                 <img src="https://i8.amplience.net/i/naras/the-beatles_MI0003995354-MN0000754032" alt="The Beatles">
+                                 <small>The Beatles</small>
+                             </div>
+                             <div class="slider-item">
+                                 <img src="https://cdn-images.dzcdn.net/images/cover/21d780d99cbe7eb5e1d8b5d31fce28c8/1900x1900-000000-80-0-0.jpg" alt="The Cure">
+                                 <small>The Cure</small>
+                             </div>
+                             <div class="slider-item">
+                                 <img src="https://m.media-amazon.com/images/M/MV5BZmIwYzk3YmMtZTY3Yi00NzcyLWFlMTQtYjk4N2E5MjdlNTMwXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" alt="Gorillaz">
+                                 <small>Gorillaz</small>
+                             </div>
+                        </div>
+                    </article>
 
-                    <div class="form-group"> <!-- Grupo para el correo -->
-                        <label for="correo">Correo Electrónico</label> <!-- Etiqueta para el correo -->
-                        <input type="email" id="correo" name="correo" required aria-required="true" autocomplete="email" placeholder="ejemplo@correo.com"> <!-- Campo email con autocompletado -->
-                    </div>
-
-                    <div class="form-group"> <!-- Grupo para la selección de programa -->
-                        <label for="programa">Programa Académico</label> <!-- Etiqueta para el programa -->
-                        <select id="programa" name="programa" required aria-required="true"> <!-- Menú desplegable obligatorio -->
-                            <option value="" disabled selected>Selecciona un programa</option> <!-- Opción inicial por defecto -->
-                            <option value="ing-sistemas">Ingeniería de Sistemas</option> <!-- Opción 1 -->
-                            <option value="psicologia">Psicología</option> <!-- Opción 2 -->
-                            <option value="marketing">Marketing</option> <!-- Opción 3 -->
-                        </select>
-                    </div>
-                </fieldset>
-
-                <button type="submit" class="btn-submit">Enviar Registro</button> <!-- Botón para procesar y enviar el formulario -->
-            </form>
+                </div>
+            </div>
         </section>
     </main>
 
-    <footer class="main-footer"> <!-- Sección del pie de página -->
-        <div class="container footer-content"> <!-- Contenedor para el contenido del pie de página -->
-            <div class="footer-info"> <!-- Div para la información de contacto -->
-                <h3>Contacto</h3> <!-- Título de la sección de contacto -->
-                <p>Email: <a href="mailto:admisiones@universidad.edu.co">admisiones@universidad.edu.co</a></p> <!-- Enlace para enviar correo -->
-                <p>Teléfono: +57 (601) 123 4567</p> <!-- Número telefónico -->
-                <address> <!-- Etiqueta semántica para direcciones físicas -->
-                    Calle 63 # 45 - 67, Bogotá, Colombia <!-- Dirección de la sede -->
+    <footer class="main-footer">
+        <div class="container footer-content">
+            <div class="footer-info">
+                <h3>Contacto</h3>
+                <p><strong>Melodia Stream S.A.</strong></p>
+                <address>
+                    Avenida de la Música # 12 - 34, Bogotá, Colombia
                 </address>
+                <p>Teléfono: +57 (601) 987 6543</p>
+                <p>Email: <a href="mailto:soporte@melodiastream.com">soporte@melodiastream.com</a></p>
             </div>
-            <div class="footer-copy"> <!-- Div para el copyright -->
-                <p>&copy; 2026 Universidad, diseñado unicamente con fines educativos. Todos los derechos reservados.</p> <!-- Texto de derechos de autor y año -->
+            <div class="footer-copy">
+                <p>&copy; 2026 Melodia Stream. Todos los derechos reservados.</p>
             </div>
         </div>
     </footer>

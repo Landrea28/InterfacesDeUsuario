@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productos y Servicios | Melodia Stream</title>
+    <link rel="stylesheet" href="styles.css">
+    <meta name="description" content="Elije el plan que mejor se adapte a tu ritmo. Conoce nuestros servicios de streaming y más.">
+    <style>
+        .pricing-section {
+            padding: 4rem 0;
+            text-align: center;
+        }
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        .pricing-card {
+            background-color: var(--light-bg);
+            padding: 2.5rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s, border-color 0.3s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary-color);
+        }
+        .pricing-card.popular {
+            border: 2px solid var(--primary-color);
+            position: relative;
+        }
+        .pricing-card.popular::after {
+            content: "RECOMENDADO";
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary-color);
+            color: var(--secondary-color);
+            padding: 0.2rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 800;
+        }
+        .price {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin: 1rem 0;
+        }
+        .price span {
+            font-size: 1rem;
+            color: #888;
+        }
+        .features-list {
+            list-style: none;
+            text-align: left;
+            margin: 2rem 0;
+        }
+        .features-list li {
+            margin-bottom: 0.8rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        .features-list li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+        .services-extra {
+            margin-top: 6rem;
+            padding: 4rem;
+            background: var(--light-bg);
+            border-radius: 20px;
+        }
+        .extra-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+            text-align: left;
+        }
+        @media (max-width: 768px) {
+            .extra-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <div class="container header-content">
+            <div class="logo">
+                <a href="index.html" aria-label="Inicio de Melodia Stream">
+                    <img src="https://i.pinimg.com/1200x/41/5c/87/415c8737a57f20f06d9b6daf4118126c.jpg" alt="Logo Melodia Stream">
+                </a>
+            </div>
+            <nav aria-label="Navegación principal">
+                <ul class="nav-links">
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="quienes-somos.html">Quiénes somos</a></li>
+                    <li><a href="productos-servicios.html">Productos y servicios</a></li>
+                    <li><a href="login.html">Login</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="pricing-section">
+            <h1 style="color: var(--primary-color); font-size: 3rem;">Nuestros Planes</h1>
+            <p style="font-size: 1.2rem; margin-bottom: 2rem;">Todo tu mundo musical, sin interrupciones.</p>
+
+            <div class="pricing-grid">
+                <!-- Free Plan -->
+                <div class="pricing-card">
+                    <div>
+                        <h3>Melodia FREE</h3>
+                        <div class="price">$0<span> / mes</span></div>
+                        <ul class="features-list">
+                            <li>Radio de Jazz & Rock Curada</li>
+                            <li>Calidad estándar de audio</li>
+                            <li>Con anuncios dinámicos</li>
+                            <li>Acceso limitado a conciertos</li>
+                        </ul>
+                    </div>
+                    <button class="btn-submit" style="background-color: transparent; border: 1px solid var(--primary-color); color: var(--primary-color);">Tu plan actual</button>
+                </div>
+
+                <!-- Premium Plan -->
+                <div class="pricing-card popular">
+                    <div>
+                        <h3>Melodia PREMIUM</h3>
+                        <div class="price">$14.900<span> / mes</span></div>
+                        <ul class="features-list">
+                            <li>Audio Hi-Fi (Lossless)</li>
+                            <li>Pre-ventas exclusivas Rock/Jazz</li>
+                            <li>Cero anuncios</li>
+                            <li>Saltos e historias ilimitadas</li>
+                        </ul>
+                    </div>
+                    <button class="btn-submit">Empezar Premium</button>
+                </div>
+
+                <!-- Family Plan -->
+                <div class="pricing-card">
+                    <div>
+                        <h3>Melodia FAMILIAR</h3>
+                        <div class="price">$23.900<span> / mes</span></div>
+                        <ul class="features-list">
+                            <li>Hasta 6 cuentas individuales</li>
+                            <li>Bloqueo de contenido explícito</li>
+                            <li>Melodia Kids incluido</li>
+                            <li>Playlist familiar compartida</li>
+                        </ul>
+                    </div>
+                    <button class="btn-submit" style="background-color: transparent; border: 1px solid var(--primary-color); color: var(--primary-color);">Obtener Familiar</button>
+                </div>
+            </div>
+
+            <!-- Extra services -->
+            <div class="services-extra">
+                <div class="extra-grid">
+                    <div class="extra-text">
+                        <h2 style="color: var(--primary-color); margin-bottom: 1.5rem;">Cultura Melodia</h2>
+                        <ul style="list-style: none; padding: 0;">
+                            <li style="margin-bottom: 2rem;">
+                                <strong>Melodia Vinyl Club:</strong> Recibe mensualmente un vinilo curado de Jazz, Rock o Alternativo directamente en tu puerta.
+                            </li>
+                            <li style="margin-bottom: 2rem;">
+                                <strong>Conciertos Secretos:</strong> Acceso a presentaciones íntimas en bares de jazz y sótanos de rock exclusivo para miembros.
+                            </li>
+                            <li style="margin-bottom: 2rem;">
+                                <strong>Merchandising de Autor:</strong> Tienda exclusiva con diseños limitados inspirados en la estética de los géneros que amamos.
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="extra-visual">
+                        <img src="https://images.unsplash.com/photo-1598488035139-bdbb2231ce38?auto=format&fit=crop&q=80&w=600" alt="Recording Studio" style="width: 100%; border-radius: 20px;">
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container footer-content">
+            <div class="footer-info">
+                <h3>Contacto</h3>
+                <p><strong>Melodia Stream S.A.</strong></p>
+                <address>
+                    Avenida de la Música # 12 - 34, Bogotá, Colombia
+                </address>
+                <p>Teléfono: +57 (601) 987 6543</p>
+                <p>Email: <a href="mailto:soporte@melodiastream.com">soporte@melodiastream.com</a></p>
+            </div>
+            <div class="footer-copy">
+                <p>&copy; 2026 Melodia Stream. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

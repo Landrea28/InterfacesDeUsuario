@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiénes Somos | Melodia Stream</title>
+    <link rel="stylesheet" href="styles.css">
+    <meta name="description" content="Nuestra historia, misión y los rostros detrás de Melodia Stream. Nos apasiona la música.">
+    <style>
+        .about-section {
+            padding: 4rem 0;
+            background: linear-gradient(135deg, var(--secondary-color) 0%, #1a1a1a 100%);
+        }
+        .story-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            margin-bottom: 5rem;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            text-align: center;
+            margin-top: 3rem;
+        }
+        .stat-item h2 {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        .stat-item p {
+            color: #888;
+            font-weight: 600;
+        }
+        .quote-block {
+            padding: 3rem;
+            border-left: 4px solid var(--primary-color);
+            background: var(--light-bg);
+            border-radius: 0 20px 20px 0;
+            margin: 4rem 0;
+        }
+        .quote-block blockquote {
+            font-size: 1.5rem;
+            font-style: italic;
+            color: #ccc;
+        }
+        @media (max-width: 768px) {
+            .story-grid, .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <div class="container header-content">
+            <div class="logo">
+                <a href="index.html" aria-label="Inicio de Melodia Stream">
+                    <img src="https://i.pinimg.com/1200x/41/5c/87/415c8737a57f20f06d9b6daf4118126c.jpg" alt="Logo Melodia Stream">
+                </a>
+            </div>
+            <nav aria-label="Navegación principal">
+                <ul class="nav-links">
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="quienes-somos.html">Quiénes somos</a></li>
+                    <li><a href="productos-servicios.html">Productos y servicios</a></li>
+                    <li><a href="login.html">Login</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="about-section">
+            <div class="story-grid">
+                <div class="story-content">
+                    <h1 style="color: var(--primary-color); font-size: 3.5rem; margin-bottom: 1.5rem;">Pasión Curada</h1>
+                    <p style="text-align: left; font-size: 1.1rem; line-height: 1.8; color: #ddd;">
+                        Melodia Stream no nació para ser "una aplicación más". Surgió de la necesidad de proteger y exaltar los géneros que exigen atención, virtuosismo y sentimiento: <strong>el Jazz, el Rock y la Música Alternativa</strong>.
+                        <br><br>
+                        En un ecosistema digital dominado por lo efímero, nuestro equipo de musicólogos y audiófilos trabaja para ofrecer un catálogo donde cada pista cuenta una historia. Creemos que el blues de un saxofón, la potencia de un Marshall al máximo y la experimentación de un sintetizador analógico merecen un hogar digno, con sonido sin pérdida y sin ruidos comerciales.
+                    </p>
+                </div>
+                <div class="story-visual">
+                    <img src="https://i.pinimg.com/1200x/ad/70/99/ad70999ecc4dc7256c0bca35af552239.jpg" alt="Mujer bailando con muchos colores" style="width: 100%; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.6);">
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <h2>+50M</h2>
+                    <p>Canciones Disponibles</p>
+                </div>
+                <div class="stat-item">
+                    <h2>140</h2>
+                    <p>Países Alcanzados</p>
+                </div>
+                <div class="stat-item">
+                    <h2>+5M</h2>
+                    <p>Usuarios VIP</p>
+                </div>
+            </div>
+
+            <div class="quote-block">
+                <blockquote>
+                    "La música es el lenguaje universal de la humanidad. Nuestra labor es simplemente asegurarnos de que todos puedan hablarlo sin barreras."
+                </blockquote>
+                <cite style="display: block; margin-top: 1rem; color: var(--primary-color); font-weight: bold;">— Equipo Fundador</cite>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container footer-content">
+            <div class="footer-info">
+                <h3>Contacto</h3>
+                <p><strong>Melodia Stream S.A.</strong></p>
+                <address>
+                    Avenida de la Música # 12 - 34, Bogotá, Colombia
+                </address>
+                <p>Teléfono: +57 (601) 987 6543</p>
+                <p>Email: <a href="mailto:soporte@melodiastream.com">soporte@melodiastream.com</a></p>
+            </div>
+            <div class="footer-copy">
+                <p>&copy; 2026 Melodia Stream. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

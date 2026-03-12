@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión | Melodia Stream</title>
+    <link rel="stylesheet" href="styles.css">
+    <meta name="description" content="Accede a tu cuenta de Melodia Stream y escucha tu música favorita.">
+    <style>
+        .login-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 80vh;
+            padding: 2rem 0;
+        }
+        .login-card {
+            background-color: var(--light-bg);
+            padding: 3rem;
+            border-radius: 24px;
+            width: 100%;
+            max-width: 450px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+        }
+        .login-card h2 {
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #ddd;
+            font-size: 0.95rem;
+        }
+        .form-group input {
+            background-color: #222;
+            border: 1px solid #333;
+            color: white;
+            padding: 1rem;
+            font-size: 1rem;
+            border-radius: 12px;
+            width: 100%;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(29, 185, 84, 0.2);
+        }
+        .login-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            font-size: 0.85rem;
+            color: #888;
+        }
+        .login-options a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+        .social-login {
+            margin-top: 2.5rem;
+            text-align: center;
+            border-top: 1px solid #333;
+            padding-top: 2rem;
+        }
+        .social-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+        .social-btn {
+            background: #222;
+            border: 1px solid #333;
+            padding: 0.8rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .social-btn:hover {
+            border-color: var(--primary-color);
+            transform: scale(1.1);
+        }
+        .signup-link {
+            text-align: center;
+            margin-top: 2rem;
+            color: #888;
+        }
+        .signup-link a {
+            color: var(--primary-color);
+            font-weight: bold;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <div class="container header-content">
+            <div class="logo">
+                <a href="index.html" aria-label="Inicio de Melodia Stream">
+                    <img src="https://i.pinimg.com/1200x/41/5c/87/415c8737a57f20f06d9b6daf4118126c.jpg" alt="Logo Melodia Stream">
+                </a>
+            </div>
+            <nav aria-label="Navegación principal">
+                <ul class="nav-links">
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="quienes-somos.html">Quiénes somos</a></li>
+                    <li><a href="productos-servicios.html">Productos y servicios</a></li>
+                    <li><a href="login.html">Login</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="login-wrapper">
+            <div class="login-card">
+                <h2>Bienvenido</h2>
+                <form action="#">
+                    <div class="form-group">
+                        <label for="user">Correo o Usuario</label>
+                        <input type="text" id="user" placeholder="ejemplo@correo.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="pass">Contraseña</label>
+                        <input type="password" id="pass" placeholder="Tu contraseña" required>
+                    </div>
+                    <div class="login-options">
+                        <div>
+                            <input type="checkbox" id="remember">
+                            <label for="remember" style="display: inline; margin: 0;">Recuérdame</label>
+                        </div>
+                        <a href="#">¿Olvidaste tu contraseña?</a>
+                    </div>
+                    <button type="submit" class="btn-submit">Entrar ahora</button>
+                    
+                    <div class="social-login">
+                        <p>O continúa con</p>
+                        <div class="social-buttons">
+                            <button class="social-btn" title="Facebook">
+                                <img src="https://img.icons8.com/ios-filled/25/ffffff/facebook-new.png" alt="FB">
+                            </button>
+                            <button class="social-btn" title="Google">
+                                <img src="https://img.icons8.com/ios-filled/25/ffffff/google-logo.png" alt="G">
+                            </button>
+                            <button class="social-btn" title="Apple">
+                                <img src="https://img.icons8.com/ios-filled/25/ffffff/mac-os.png" alt="Apple">
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="signup-link">
+                        ¿No tienes cuenta? <a href="index.html">Regístrate</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container footer-content">
+            <div class="footer-info">
+                <h3>Contacto</h3>
+                <p><strong>Melodia Stream S.A.</strong></p>
+                <address>
+                    Avenida de la Música # 12 - 34, Bogotá, Colombia
+                </address>
+                <p>Teléfono: +57 (601) 987 6543</p>
+                <p>Email: <a href="mailto:soporte@melodiastream.com">soporte@melodiastream.com</a></p>
+            </div>
+            <div class="footer-copy">
+                <p>&copy; 2026 Melodia Stream. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
