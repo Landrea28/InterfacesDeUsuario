@@ -1,122 +1,561 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Melodia Stream | Explora el mundo de la música</title>
-    <link rel="stylesheet" href="styles.css">
-    <meta name="description" content="Página de inicio de Melodia Stream. Tu portal favorito para descubrir nuevos sonidos.">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FrescaTemporada – Frutas y Verduras de Temporada</title>
+  <style>
+    /* ── Reset & base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --verde-oscuro:  #2d6a4f;
+      --verde-medio:   #40916c;
+      --verde-claro:   #74c69d;
+      --crema:         #f8f4e3;
+      --naranja:       #e76f51;
+      --texto:         #1b1b1b;
+      --gris-suave:    #f1f5f1;
+      --sombra:        0 4px 18px rgba(0,0,0,.10);
+      --radio:         12px;
+    }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background-color: var(--crema);
+      color: var(--texto);
+      line-height: 1.6;
+    }
+
+    /* ── ENCABEZADO / NAVBAR ── */
+    header {
+      background-color: var(--verde-oscuro);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--sombra);
+    }
+
+    .navbar {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 70px;
+      gap: 1rem;
+    }
+
+    /* ── Sesión en navbar ── */
+    .nav-sesion { display: flex; align-items: center; gap: .6rem; flex-shrink: 0; }
+    .btn-login-nav {
+      display: inline-flex; align-items: center; gap: .4rem;
+      background: var(--naranja); color: #fff;
+      padding: .42rem 1rem; border-radius: 999px;
+      text-decoration: none; font-size: .85rem;
+      font-weight: 700; transition: background .2s, transform .15s;
+      white-space: nowrap;
+    }
+    .btn-login-nav:hover { background: #c75a3e; transform: translateY(-1px); }
+    .nav-usuario {
+      display: none;
+      align-items: center; gap: .5rem;
+      color: #e0f2e9; font-size: .85rem;
+    }
+    .nav-usuario.visible { display: flex; }
+    .nav-avatar {
+      width: 30px; height: 30px;
+      background: var(--verde-claro); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .85rem; font-weight: 700; color: var(--verde-oscuro);
+    }
+    .nav-salir {
+      background: transparent;
+      border: 1px solid #74c69d; color: #e0f2e9;
+      border-radius: 999px; padding: .25rem .7rem;
+      font-size: .78rem; font-family: inherit;
+      cursor: pointer; transition: background .2s;
+    }
+    .nav-salir:hover { background: var(--verde-medio); }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: .55rem;
+      text-decoration: none;
+    }
+    .logo-icon { font-size: 2rem; }
+    .logo-text {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: .5px;
+    }
+    .logo-text span { color: var(--verde-claro); }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: .2rem;
+    }
+
+    nav ul li a {
+      display: block;
+      padding: .5rem 1rem;
+      border-radius: 8px;
+      text-decoration: none;
+      color: #e0f2e9;
+      font-size: .95rem;
+      font-weight: 500;
+      transition: background .2s, color .2s;
+    }
+    nav ul li a:hover,
+    nav ul li a.active {
+      background-color: var(--verde-medio);
+      color: #fff;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      max-width: 1200px;
+      margin: 3rem auto;
+      padding: 0 2rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .hero-texto h1 {
+      font-size: 2.6rem;
+      color: var(--verde-oscuro);
+      line-height: 1.25;
+      margin-bottom: 1rem;
+    }
+    .hero-texto h1 em {
+      font-style: normal;
+      color: var(--naranja);
+    }
+
+    .hero-texto p {
+      font-size: 1.05rem;
+      color: #444;
+      margin-bottom: 1.5rem;
+      max-width: 480px;
+    }
+
+    .hero-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .6rem;
+      margin-bottom: 2rem;
+    }
+    .badge {
+      background: var(--verde-claro);
+      color: var(--verde-oscuro);
+      padding: .35rem .85rem;
+      border-radius: 999px;
+      font-size: .85rem;
+      font-weight: 600;
+    }
+
+    .btn-principal {
+      display: inline-block;
+      background-color: var(--naranja);
+      color: #fff;
+      padding: .75rem 2rem;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1rem;
+      transition: background .2s, transform .15s;
+      box-shadow: 0 4px 12px rgba(231,111,81,.35);
+    }
+    .btn-principal:hover { background-color: #c75a3e; transform: translateY(-2px); }
+
+    .hero-imagen {
+      border-radius: var(--radio);
+      overflow: hidden;
+      box-shadow: var(--sombra);
+      aspect-ratio: 4/3;
+    }
+    .hero-imagen img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform .4s;
+    }
+    .hero-imagen:hover img { transform: scale(1.04); }
+
+    /* ── SECCIÓN: ¿Qué encontrarás? ── */
+    .seccion-tarjetas {
+      background-color: var(--gris-suave);
+      padding: 4rem 2rem;
+    }
+    .seccion-tarjetas h2 {
+      text-align: center;
+      font-size: 1.9rem;
+      color: var(--verde-oscuro);
+      margin-bottom: .5rem;
+    }
+    .seccion-tarjetas .subtitulo {
+      text-align: center;
+      color: #666;
+      margin-bottom: 2.5rem;
+      font-size: 1rem;
+    }
+
+    .grid-tarjetas {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .tarjeta {
+      background: #fff;
+      border-radius: var(--radio);
+      padding: 2rem 1.5rem;
+      text-align: center;
+      box-shadow: var(--sombra);
+      transition: transform .2s, box-shadow .2s;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+    .tarjeta:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 10px 30px rgba(0,0,0,.13);
+    }
+
+    .tarjeta-icono {
+      font-size: 2.8rem;
+      margin-bottom: .75rem;
+      display: block;
+    }
+    .tarjeta h3 {
+      font-size: 1.1rem;
+      color: var(--verde-oscuro);
+      margin-bottom: .5rem;
+    }
+    .tarjeta p {
+      font-size: .9rem;
+      color: #666;
+    }
+
+    .tarjeta-acento-1 { border-top: 4px solid var(--verde-medio); }
+    .tarjeta-acento-2 { border-top: 4px solid var(--naranja); }
+    .tarjeta-acento-3 { border-top: 4px solid #f4a261; }
+    .tarjeta-acento-4 { border-top: 4px solid #52b788; }
+
+    /* ── SECCIÓN: Temporada actual ── */
+    .temporada {
+      max-width: 1200px;
+      margin: 4rem auto;
+      padding: 0 2rem;
+    }
+    .temporada h2 {
+      font-size: 1.9rem;
+      color: var(--verde-oscuro);
+      margin-bottom: .4rem;
+    }
+    .temporada .subtitulo { color: #666; margin-bottom: 2rem; font-size: 1rem; }
+
+    .temporada-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .temporada-bloque {
+      background: #fff;
+      border-radius: var(--radio);
+      padding: 1.5rem;
+      box-shadow: var(--sombra);
+    }
+    .temporada-bloque h3 {
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      color: var(--verde-oscuro);
+    }
+    .chips { display: flex; flex-wrap: wrap; gap: .5rem; }
+    .chip {
+      background: var(--gris-suave);
+      border: 1px solid #d0e8d8;
+      border-radius: 999px;
+      padding: .3rem .85rem;
+      font-size: .85rem;
+      color: var(--verde-oscuro);
+      font-weight: 500;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background-color: var(--verde-oscuro);
+      color: #cce5d6;
+      text-align: center;
+      padding: 2rem 1rem;
+      margin-top: 3rem;
+      font-size: .9rem;
+    }
+    footer strong { color: #fff; }
+
+    /* ── HAMBURGUESA / MENÚ MÓVIL ── */
+    .hamburger {
+      display: none; background: none; border: none; cursor: pointer;
+      flex-direction: column; gap: 5px; padding: .45rem; border-radius: 6px;
+      transition: background .2s; align-items: center;
+    }
+    .hamburger:hover { background: rgba(255,255,255,.12); }
+    .hamburger span {
+      display: block; width: 24px; height: 3px; background: #fff;
+      border-radius: 2px; transition: transform .3s, opacity .3s;
+    }
+    .hamburger.abierto span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+    .hamburger.abierto span:nth-child(2) { opacity: 0; }
+    .hamburger.abierto span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+    .nav-mobile {
+      display: none; position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0; z-index: 299;
+    }
+    .nav-mobile.visible { display: block; }
+    .nav-mobile-backdrop {
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,.52);
+    }
+    .nav-mobile-panel {
+      position: absolute; top: 0; left: 0;
+      width: 270px; height: 100%; overflow-y: auto;
+      background: var(--verde-oscuro);
+      padding: 1.4rem 1.1rem;
+      box-shadow: 4px 0 20px rgba(0,0,0,.3);
+    }
+    .nav-mobile-logo {
+      display: flex; align-items: center; gap: .55rem;
+      text-decoration: none;
+      padding-bottom: 1rem; margin-bottom: .7rem;
+      border-bottom: 1px solid rgba(255,255,255,.18);
+    }
+    .nav-mobile-logo .mi { font-size: 1.55rem; }
+    .nav-mobile-logo .mt { font-size: 1.05rem; font-weight: 700; color: #fff; }
+    .nav-mobile-logo .mt span { color: var(--verde-claro); }
+    .nav-mobile-panel a {
+      display: block; padding: .7rem .9rem; margin-bottom: .1rem;
+      color: #e0f2e9; text-decoration: none;
+      border-radius: 8px; font-size: .93rem; font-weight: 500;
+      transition: background .2s;
+    }
+    .nav-mobile-panel a:hover, .nav-mobile-panel a.active {
+      background: var(--verde-medio); color: #fff;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .hero { grid-template-columns: 1fr; gap: 2rem; }
+      .hero-texto h1 { font-size: 2rem; }
+      .temporada-grid { grid-template-columns: 1fr; }
+      nav { display: none; }
+      .hamburger { display: flex; }
+      .logo-text { font-size: 1.1rem; }
+      .navbar { padding: 0 1rem; }
+      .nav-sesion .btn-login-nav { font-size: .78rem; padding: .32rem .65rem; }
+      .nav-sesion #navNombre { display: none; }
+    }
+    @media (max-width: 480px) {
+      .hero-texto h1 { font-size: 1.7rem; }
+      .hero-badges { gap: .4rem; }
+    }
+  </style>
 </head>
 <body>
-    <header class="main-header">
-        <div class="container header-content">
-            <div class="logo">
-                <a href="index.html" aria-label="Inicio de Melodia Stream">
-                    <img src="https://i.pinimg.com/1200x/41/5c/87/415c8737a57f20f06d9b6daf4118126c.jpg" alt="Logo Melodia Stream">
-                </a>
-            </div>
-            <nav aria-label="Navegación principal">
-                <ul class="nav-links">
-                    <li><a href="index.html">Inicio</a></li>
-                    <li><a href="quienes-somos.html">Quiénes somos</a></li>
-                    <li><a href="productos-servicios.html">Productos y servicios</a></li>
-                    <li><a href="login.html">Login</a></li>
-                </ul>
-            </nav>
+
+  <!-- ═══════════════════════════ HEADER / NAV ═══════════════════════════ -->
+  <header>
+    <div class="navbar">
+      <a href="index.html" class="logo" title="FrescaTemporada – Ir al inicio">
+        <span class="logo-icon">🥦</span>
+        <span class="logo-text">Fresca<span>Temporada</span></span>
+      </a>
+      <button class="hamburger" onclick="toggleMenu()" title="Abrir menú de navegación" aria-label="Abrir menú de navegación">
+        <span></span><span></span><span></span>
+      </button>
+      <nav>
+        <ul>
+          <li><a href="index.html" class="active" title="Inicio – Página principal de FrescaTemporada">Inicio</a></li>
+          <li><a href="frutas.html" title="Frutas – Calendario de frutas de temporada por mes">Frutas</a></li>
+          <li><a href="verduras.html" title="Verduras – Guía de hortalizas de temporada">Verduras</a></li>
+          <li><a href="nutricion.html" title="Nutrición – Vitaminas, minerales y beneficios para la salud">Nutrición</a></li>
+          <li><a href="sostenible.html" title="Consumo Sostenible – Consejos para reducir el desperdicio y comprar local">Consumo Sostenible</a></li>
+          <li><a href="recetas.html" title="Recetas – Platos deliciosos con ingredientes de temporada">Recetas</a></li>
+        </ul>
+      </nav>
+      <!-- Sesión -->
+      <div class="nav-sesion">
+        <div class="nav-usuario" id="navUsuario">
+          <div class="nav-avatar" id="navAvatar">U</div>
+          <span id="navNombre"></span>
+          <button class="nav-salir" onclick="navCerrarSesion()" title="Cerrar sesión – Salir de tu cuenta">Salir</button>
         </div>
-    </header>
+        <a href="login.html" class="btn-login-nav" id="btnIniciarSesion" title="Iniciar sesión – Acceder o crear tu cuenta">🔑 Iniciar sesión</a>
+      </div>
+    </div>
+  </header>
 
-    <main class="container">
-        <section class="welcome-section" style="padding-top: 2rem;">
-            <h1 style="text-align: center; color: var(--primary-color); font-size: 3rem;">Tres Géneros, Una Pasión</h1>
-            <p style="text-align: center; font-size: 1.25rem; max-width: 800px; margin: 0 auto 3rem;">Explora nuestra selección curada de música Alternativa, Jazz y Rock. Calidad sonora sin compromisos.</p>
-            
-            <div class="home-content">
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem;">
-                    
-                    <article>
-                        <div class="article-text">
-                            <h3 style="color: var(--primary-color); margin-bottom: 1rem;">Cultura Alternativa</h3>
-                            <p style="margin-bottom: 1.5rem; color: #bbb;">Nuevos sonidos, experimentación y la escena indie más vibrante.</p>
-                        </div>
-                        <div class="image-slider">
-                             <div class="slider-item">
-                                 <img src="https://cdn-images.dzcdn.net/images/cover/1e6f6130ca0ccbdd0cde4dc2b05e6df9/0x1900-000000-80-0-0.jpg" alt="Imagen de la banda Blur de genero Alternativo/ Indie/ Britpop">
-                                 <small>Blur</small>
-                             </div>
-                             <div class="slider-item">
-                                 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQQLIztJ-UHICeg0ZTp8tI_HWYz59AiOAG7Q&s" alt="Imagen de la banda Aterciopelados genero: Alternativa/independiente instrument">
-                                 <small>Aterciopelados</small>
-                             </div>
-                             <div class="slider-item">
-                                 <img src="https://cdn-images.dzcdn.net/images/cover/053dec9b5f90808b40ac68ee17c3ef23/0x1900-000000-80-0-0.jpg" alt="Imagen de la banda porter, genero:Indie Rock">
-                                 <small>Porter</small>
-                             </div>
-                        </div>
-                    </article>
+  <!-- ── MENÚ MÓVIL ── -->
+  <div class="nav-mobile" id="navMobile">
+    <div class="nav-mobile-backdrop" onclick="cerrarMenu()"></div>
+    <div class="nav-mobile-panel">
+      <a href="index.html" class="nav-mobile-logo" title="FrescaTemporada – Ir al inicio">
+        <span class="mi">🥦</span>
+        <span class="mt">Fresca<span>Temporada</span></span>
+      </a>
+      <a href="index.html" class="active" title="Inicio – Página principal de FrescaTemporada">🏠 Inicio</a>
+      <a href="frutas.html" title="Frutas – Calendario de frutas de temporada por mes">🍓 Frutas</a>
+      <a href="verduras.html" title="Verduras – Guía de hortalizas de temporada">🥦 Verduras</a>
+      <a href="nutricion.html" title="Nutrición – Vitaminas, minerales y beneficios para la salud">🧬 Nutrición</a>
+      <a href="sostenible.html" title="Consumo Sostenible – Consejos para un consumo responsable">♻️ Consumo Sostenible</a>
+      <a href="recetas.html" title="Recetas – Platos deliciosos con ingredientes de temporada">🥗 Recetas</a>
+      <a href="login.html" title="Mi cuenta – Iniciar sesión o crear una cuenta nueva">🔑 Mi Cuenta</a>
+    </div>
+  </div>
 
-                    <article>
-                        <div class="article-text">
-                            <h3 style="color: var(--primary-color); margin-bottom: 1rem;">Jazz & Síncope</h3>
-                            <p style="margin-bottom: 1.5rem; color: #bbb;">Desde los clásicos del Bebop hasta el Jazz Fusión más vanguardista.</p>
-                        </div>
-                        <div class="image-slider">
-                             <div class="slider-item">
-                                 <img src="https://cdn.artphotolimited.com/images/5b9fc1ecac06024957be8806/1000x1000/louis-armstrong-red-hot-jazz.jpg" alt="Louis Armstrong">
-                                 <small>Louis Armstrong</small>
-                             </div>
-                             <div class="slider-item">
-                                 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-E5GH49w21NX5nO5m4rF91n7kIpx8eHDxUg&s" alt="Billie Holiday">
-                                 <small>Billie Holiday</small>
-                             </div>
-                             <div class="slider-item">
-                                 <img src="https://artist99.cdn107.com/fb6/fb618a3027470c01f5ca284e243ad706_xl.jpg" alt="Stan Getz">
-                                 <small>Stan Getz</small>
-                             </div>
-                        </div>
-                    </article>
+  <script>
+    (function(){
+      var s=JSON.parse(sessionStorage.getItem('ft_sesion')||localStorage.getItem('ft_sesion')||'null');
+      if(s){
+        document.getElementById('navUsuario').classList.add('visible');
+        var btn=document.getElementById('btnIniciarSesion');
+        btn.textContent='📊 Mi Dashboard';
+        btn.href='dashboard.html';
+        document.getElementById('navNombre').textContent=s.nombre||s.usuario;
+        document.getElementById('navAvatar').textContent=(s.nombre||s.usuario).charAt(0).toUpperCase();
+      }
+    })();
+    function navCerrarSesion(){
+      sessionStorage.removeItem('ft_sesion');
+      localStorage.removeItem('ft_sesion');
+      location.reload();
+    }
+    function toggleMenu(){
+      var b=document.querySelector('.hamburger');
+      var p=document.getElementById('navMobile');
+      b.classList.toggle('abierto');
+      p.classList.toggle('visible');
+      document.body.style.overflow=p.classList.contains('visible')?'hidden':'';
+    }
+    function cerrarMenu(){
+      document.querySelector('.hamburger').classList.remove('abierto');
+      document.getElementById('navMobile').classList.remove('visible');
+      document.body.style.overflow='';
+    }
+  </script>
 
-                    <article>
-                        <div class="article-text">
-                            <h3 style="color: var(--primary-color); margin-bottom: 1rem;">Esencia Rock</h3>
-                            <p style="margin-bottom: 1.5rem; color: #bbb;">Vibraciones eléctricas, distorsión y los himnos que marcaron generaciones.</p>
-                        </div>
-                        <div class="image-slider">
-                             <div class="slider-item">
-                                 <img src="https://i8.amplience.net/i/naras/the-beatles_MI0003995354-MN0000754032" alt="The Beatles">
-                                 <small>The Beatles</small>
-                             </div>
-                             <div class="slider-item">
-                                 <img src="https://cdn-images.dzcdn.net/images/cover/21d780d99cbe7eb5e1d8b5d31fce28c8/1900x1900-000000-80-0-0.jpg" alt="The Cure">
-                                 <small>The Cure</small>
-                             </div>
-                             <div class="slider-item">
-                                 <img src="https://m.media-amazon.com/images/M/MV5BZmIwYzk3YmMtZTY3Yi00NzcyLWFlMTQtYjk4N2E5MjdlNTMwXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" alt="Gorillaz">
-                                 <small>Gorillaz</small>
-                             </div>
-                        </div>
-                    </article>
+  <!-- ═══════════════════════════ HERO ═══════════════════════════ -->
+  <section class="hero">
+    <!-- Texto descriptivo -->
+    <div class="hero-texto">
+      <h1>Come fresco,<br>come <em>de temporada</em> 🌿</h1>
+      <p>
+        Descubre qué frutas y verduras están en su mejor momento cada mes,
+        conoce sus beneficios nutricionales y aprende a consumirlas de forma
+        sostenible para cuidar tu salud y el planeta.
+      </p>
+      <div class="hero-badges">
+        <span class="badge">🍓 Frutas de temporada</span>
+        <span class="badge">🥕 Verduras locales</span>
+        <span class="badge">💚 Consumo sostenible</span>
+        <span class="badge">🥗 Recetas saludables</span>
+      </div>
+      <a href="frutas.html" class="btn-principal">Explorar ahora →</a>
+    </div>
 
-                </div>
-            </div>
-        </section>
-    </main>
+    <!-- Imagen principal -->
+    <div class="hero-imagen">
+      <img
+        src="https://images.unsplash.com/photo-1610348725531-843dff563e2c?w=800&q=80"
+        alt="Canasta colorida con frutas y verduras frescas de temporada"
+      />
+    </div>
+  </section>
 
-    <footer class="main-footer">
-        <div class="container footer-content">
-            <div class="footer-info">
-                <h3>Contacto</h3>
-                <p><strong>Melodia Stream S.A.</strong></p>
-                <address>
-                    Avenida de la Música # 12 - 34, Bogotá, Colombia
-                </address>
-                <p>Teléfono: +57 (601) 987 6543</p>
-                <p>Email: <a href="mailto:soporte@melodiastream.com">soporte@melodiastream.com</a></p>
-            </div>
-            <div class="footer-copy">
-                <p>&copy; 2026 Melodia Stream. Todos los derechos reservados.</p>
-            </div>
+  <!-- ═══════════════════════════ TARJETAS DE SECCIONES ═══════════════════════════ -->
+  <section class="seccion-tarjetas">
+    <h2>¿Qué encontrarás aquí?</h2>
+    <p class="subtitulo">Todo lo que necesitas para una alimentación fresca, nutritiva y responsable</p>
+    <div class="grid-tarjetas">
+
+      <a href="frutas.html" class="tarjeta tarjeta-acento-1">
+        <span class="tarjeta-icono">🍑</span>
+        <h3>Frutas de Temporada</h3>
+        <p>Calendario mensual de frutas en su punto óptimo de madurez, sabor y precio.</p>
+      </a>
+
+      <a href="verduras.html" class="tarjeta tarjeta-acento-2">
+        <span class="tarjeta-icono">🥦</span>
+        <h3>Verduras de Temporada</h3>
+        <p>Guía de hortalizas y verduras locales disponibles en cada época del año.</p>
+      </a>
+
+      <a href="nutricion.html" class="tarjeta tarjeta-acento-3">
+        <span class="tarjeta-icono">🧬</span>
+        <h3>Beneficios Nutricionales</h3>
+        <p>Vitaminas, minerales y propiedades de cada alimento explicadas de forma sencilla.</p>
+      </a>
+
+      <a href="sostenible.html" class="tarjeta tarjeta-acento-4">
+        <span class="tarjeta-icono">♻️</span>
+        <h3>Consumo Sostenible</h3>
+        <p>Consejos para reducir el desperdicio, comprar local y cuidar el medio ambiente.</p>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════ TEMPORADA ACTUAL ═══════════════════════════ -->
+  <section class="temporada">
+    <h2>🗓️ En temporada ahora — Marzo</h2>
+    <p class="subtitulo">Productos frescos disponibles este mes para aprovechar al máximo</p>
+
+    <div class="temporada-grid">
+      <div class="temporada-bloque">
+        <h3>🍓 Frutas</h3>
+        <div class="chips">
+          <span class="chip">Fresa</span>
+          <span class="chip">Naranja</span>
+          <span class="chip">Kiwi</span>
+          <span class="chip">Limón</span>
+          <span class="chip">Mandarina</span>
+          <span class="chip">Aguacate</span>
         </div>
-    </footer>
+      </div>
+
+      <div class="temporada-bloque">
+        <h3>🥕 Verduras</h3>
+        <div class="chips">
+          <span class="chip">Espinaca</span>
+          <span class="chip">Zanahoria</span>
+          <span class="chip">Puerro</span>
+          <span class="chip">Alcachofa</span>
+          <span class="chip">Brócoli</span>
+          <span class="chip">Acelga</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════ FOOTER ═══════════════════════════ -->
+  <footer>
+    <p><strong>FrescaTemporada</strong> — Come mejor, vive mejor 🌱</p>
+    <p style="margin-top:.4rem; font-size:.8rem;">
+      Proyecto académico · Diseño de Interfaces de Usuario · 2026
+    </p>
+  </footer>
+
 </body>
 </html>

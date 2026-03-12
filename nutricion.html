@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Beneficios Nutricionales – FrescaTemporada</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --verde-oscuro: #2d6a4f; --verde-medio: #40916c;
+      --verde-claro: #74c69d; --crema: #f8f4e3;
+      --naranja: #e76f51; --gris-suave: #f1f5f1;
+      --sombra: 0 4px 18px rgba(0,0,0,.10); --radio: 12px;
+    }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--crema); color: #1b1b1b; line-height: 1.6; }
+
+    header { background: var(--verde-oscuro); position: sticky; top: 0; z-index: 100; box-shadow: var(--sombra); }
+    .navbar { max-width: 1200px; margin: 0 auto; padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 70px; }
+    .logo { display: flex; align-items: center; gap: .55rem; text-decoration: none; }
+    .logo-icon { font-size: 2rem; }
+    .logo-text { font-size: 1.4rem; font-weight: 700; color: #fff; }
+    .logo-text span { color: var(--verde-claro); }
+    nav ul { list-style: none; display: flex; gap: .2rem; }
+    nav ul li a { display: block; padding: .5rem 1rem; border-radius: 8px; text-decoration: none; color: #e0f2e9; font-size: .95rem; font-weight: 500; transition: background .2s; }
+    nav ul li a:hover, nav ul li a.active { background: var(--verde-medio); color: #fff; }
+    .nav-sesion { display: flex; align-items: center; gap: .6rem; flex-shrink: 0; }
+    .btn-login-nav { display: inline-flex; align-items: center; gap: .4rem; background: var(--naranja); color: #fff; padding: .42rem 1rem; border-radius: 999px; text-decoration: none; font-size: .85rem; font-weight: 700; transition: background .2s; white-space: nowrap; }
+    .btn-login-nav:hover { background: #c75a3e; }
+    .nav-usuario { display: none; align-items: center; gap: .5rem; color: #e0f2e9; font-size: .85rem; }
+    .nav-usuario.visible { display: flex; }
+    .nav-avatar { width: 30px; height: 30px; background: var(--verde-claro); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: .85rem; font-weight: 700; color: var(--verde-oscuro); }
+    .nav-salir { background: transparent; border: 1px solid #74c69d; color: #e0f2e9; border-radius: 999px; padding: .25rem .7rem; font-size: .78rem; font-family: inherit; cursor: pointer; transition: background .2s; }
+    .nav-salir:hover { background: var(--verde-medio); }
+
+    .page-hero {
+      background: linear-gradient(135deg, #fff3e0 0%, #ffe8cc 100%);
+      padding: 3.5rem 2rem; text-align: center;
+    }
+    .page-hero .icono-grande { font-size: 4rem; margin-bottom: .5rem; }
+    .page-hero h1 { font-size: 2.4rem; color: var(--verde-oscuro); margin-bottom: .75rem; }
+    .page-hero p { max-width: 650px; margin: 0 auto; font-size: 1.05rem; color: #6d4c41; }
+
+    .descripcion { max-width: 900px; margin: 3rem auto; padding: 2.5rem; background: #fff; border-radius: var(--radio); box-shadow: var(--sombra); }
+    .descripcion h2 { color: var(--verde-oscuro); font-size: 1.5rem; margin-bottom: 1rem; }
+    .descripcion p { color: #555; margin-bottom: 1rem; }
+    .descripcion ul { padding-left: 1.5rem; color: #555; }
+    .descripcion ul li { margin-bottom: .5rem; }
+
+    /* VITAMINAS */
+    .vitaminas { max-width: 1100px; margin: 0 auto 4rem; padding: 0 2rem; }
+    .vitaminas h2 { font-size: 1.7rem; color: var(--verde-oscuro); margin-bottom: .4rem; }
+    .vitaminas .sub { color: #666; margin-bottom: 2rem; }
+    .vit-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1.3rem; }
+    .vit-card {
+      background: #fff; border-radius: var(--radio); padding: 1.5rem;
+      box-shadow: var(--sombra); display: flex; flex-direction: column; gap: .5rem;
+    }
+    .vit-card .vit-nombre {
+      font-size: 1.05rem; font-weight: 700; color: var(--verde-oscuro);
+      display: flex; align-items: center; gap: .5rem;
+    }
+    .vit-card p { font-size: .88rem; color: #555; }
+    .vit-card .fuentes { font-size: .8rem; background: var(--gris-suave); border-radius: 8px; padding: .4rem .7rem; color: #444; }
+    .vit-card .fuentes strong { color: var(--verde-oscuro); }
+    .color-c  { border-left: 4px solid #f4a261; }
+    .color-a  { border-left: 4px solid #e76f51; }
+    .color-k  { border-left: 4px solid var(--verde-medio); }
+    .color-b9 { border-left: 4px solid #52b788; }
+    .color-e  { border-left: 4px solid #f9c74f; }
+    .color-fe { border-left: 4px solid #a8dadc; }
+
+    /* BENEFICIOS */
+    .beneficios { background: var(--gris-suave); padding: 4rem 2rem; }
+    .beneficios h2 { text-align: center; font-size: 1.7rem; color: var(--verde-oscuro); margin-bottom: .4rem; }
+    .beneficios .sub { text-align: center; color: #666; margin-bottom: 2rem; }
+    .ben-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.3rem; }
+    .ben-card { background: #fff; border-radius: var(--radio); padding: 1.5rem; box-shadow: var(--sombra); }
+    .ben-card .icon { font-size: 2rem; margin-bottom: .5rem; }
+    .ben-card h3 { color: var(--verde-oscuro); font-size: 1rem; margin-bottom: .4rem; }
+    .ben-card p { font-size: .88rem; color: #666; }
+
+    /* BARRA NUTRICIONAL comparativa */
+    .comparativa { max-width: 900px; margin: 4rem auto; padding: 0 2rem; }
+    .comparativa h2 { font-size: 1.7rem; color: var(--verde-oscuro); margin-bottom: .4rem; }
+    .comparativa .sub { color: #666; margin-bottom: 1.5rem; }
+    .barra-item { margin-bottom: 1.2rem; }
+    .barra-label { display: flex; justify-content: space-between; font-size: .9rem; color: #444; margin-bottom: .3rem; }
+    .barra-track { background: #e0ede6; border-radius: 999px; height: 14px; overflow: hidden; }
+    .barra-fill { height: 100%; border-radius: 999px; background: var(--verde-medio); transition: width .6s; }
+
+    footer { background: var(--verde-oscuro); color: #cce5d6; text-align: center; padding: 2rem 1rem; margin-top: 3rem; font-size: .9rem; }
+    footer strong { color: #fff; }
+
+    /* ── HAMBURGUESA / MENÚ MÓVIL ── */
+    .hamburger {
+      display: none; background: none; border: none; cursor: pointer;
+      flex-direction: column; gap: 5px; padding: .45rem; border-radius: 6px;
+      transition: background .2s; align-items: center;
+    }
+    .hamburger:hover { background: rgba(255,255,255,.12); }
+    .hamburger span {
+      display: block; width: 24px; height: 3px; background: #fff;
+      border-radius: 2px; transition: transform .3s, opacity .3s;
+    }
+    .hamburger.abierto span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+    .hamburger.abierto span:nth-child(2) { opacity: 0; }
+    .hamburger.abierto span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+    .nav-mobile {
+      display: none; position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0; z-index: 299;
+    }
+    .nav-mobile.visible { display: block; }
+    .nav-mobile-backdrop {
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,.52);
+    }
+    .nav-mobile-panel {
+      position: absolute; top: 0; left: 0;
+      width: 270px; height: 100%; overflow-y: auto;
+      background: var(--verde-oscuro);
+      padding: 1.4rem 1.1rem;
+      box-shadow: 4px 0 20px rgba(0,0,0,.3);
+    }
+    .nav-mobile-logo {
+      display: flex; align-items: center; gap: .55rem;
+      text-decoration: none;
+      padding-bottom: 1rem; margin-bottom: .7rem;
+      border-bottom: 1px solid rgba(255,255,255,.18);
+    }
+    .nav-mobile-logo .mi { font-size: 1.55rem; }
+    .nav-mobile-logo .mt { font-size: 1.05rem; font-weight: 700; color: #fff; }
+    .nav-mobile-logo .mt span { color: var(--verde-claro); }
+    .nav-mobile-panel a {
+      display: block; padding: .7rem .9rem; margin-bottom: .1rem;
+      color: #e0f2e9; text-decoration: none;
+      border-radius: 8px; font-size: .93rem; font-weight: 500;
+      transition: background .2s;
+    }
+    .nav-mobile-panel a:hover, .nav-mobile-panel a.active {
+      background: var(--verde-medio); color: #fff;
+    }
+    @media (max-width: 768px) {
+      .page-hero h1 { font-size: 1.8rem; }
+      .vit-grid { grid-template-columns: 1fr; }
+      .ben-grid { grid-template-columns: repeat(2, 1fr); }
+      nav { display: none; }
+      .hamburger { display: flex; }
+      .navbar { padding: 0 1rem; }
+      .nav-sesion .btn-login-nav { font-size: .78rem; padding: .32rem .65rem; }
+      .nav-sesion #navNombre { display: none; }
+    }
+    @media (max-width: 480px) {
+      .page-hero h1 { font-size: 1.5rem; }
+      .ben-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="navbar">
+      <a href="index.html" class="logo" title="FrescaTemporada – Ir al inicio">
+        <span class="logo-icon">🥦</span>
+        <span class="logo-text">Fresca<span>Temporada</span></span>
+      </a>
+      <button class="hamburger" onclick="toggleMenu()" title="Abrir menú de navegación" aria-label="Abrir menú de navegación">
+        <span></span><span></span><span></span>
+      </button>
+      <nav>
+        <ul>
+          <li><a href="index.html" title="Inicio – Página principal de FrescaTemporada">Inicio</a></li>
+          <li><a href="frutas.html" title="Frutas – Calendario de frutas de temporada por mes">Frutas</a></li>
+          <li><a href="verduras.html" title="Verduras – Guía de hortalizas de temporada">Verduras</a></li>
+          <li><a href="nutricion.html" class="active" title="Nutrición – Vitaminas, minerales y beneficios para la salud">Nutrición</a></li>
+          <li><a href="sostenible.html" title="Consumo Sostenible – Consejos para reducir el desperdicio y comprar local">Consumo Sostenible</a></li>
+          <li><a href="recetas.html" title="Recetas – Platos deliciosos con ingredientes de temporada">Recetas</a></li>
+        </ul>
+      </nav>
+      <div class="nav-sesion">
+        <div class="nav-usuario" id="navUsuario"><div class="nav-avatar" id="navAvatar">U</div><span id="navNombre"></span><button class="nav-salir" onclick="navCerrarSesion()" title="Cerrar sesión – Salir de tu cuenta">Salir</button></div>
+        <a href="login.html" class="btn-login-nav" id="btnIniciarSesion" title="Iniciar sesión – Acceder o crear tu cuenta">🔑 Iniciar sesión</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── MENÚ MÓVIL ── -->
+  <div class="nav-mobile" id="navMobile">
+    <div class="nav-mobile-backdrop" onclick="cerrarMenu()"></div>
+    <div class="nav-mobile-panel">
+      <a href="index.html" class="nav-mobile-logo" title="FrescaTemporada – Ir al inicio">
+        <span class="mi">🥦</span>
+        <span class="mt">Fresca<span>Temporada</span></span>
+      </a>
+      <a href="index.html" title="Inicio – Página principal de FrescaTemporada">🏠 Inicio</a>
+      <a href="frutas.html" title="Frutas – Calendario de frutas de temporada por mes">🍓 Frutas</a>
+      <a href="verduras.html" title="Verduras – Guía de hortalizas de temporada">🥦 Verduras</a>
+      <a href="nutricion.html" class="active" title="Nutrición – Vitaminas, minerales y beneficios para la salud">🧬 Nutrición</a>
+      <a href="sostenible.html" title="Consumo Sostenible – Consejos para un consumo responsable">♻️ Consumo Sostenible</a>
+      <a href="recetas.html" title="Recetas – Platos deliciosos con ingredientes de temporada">🥗 Recetas</a>
+      <a href="login.html" title="Mi cuenta – Iniciar sesión o crear una cuenta nueva">🔑 Mi Cuenta</a>
+    </div>
+  </div>
+
+  <script>(function(){var s=JSON.parse(sessionStorage.getItem('ft_sesion')||localStorage.getItem('ft_sesion')||'null');if(s){document.getElementById('navUsuario').classList.add('visible');var btn=document.getElementById('btnIniciarSesion');btn.textContent='📊 Mi Dashboard';btn.href='dashboard.html';document.getElementById('navNombre').textContent=s.nombre||s.usuario;document.getElementById('navAvatar').textContent=(s.nombre||s.usuario).charAt(0).toUpperCase();}})();function navCerrarSesion(){sessionStorage.removeItem('ft_sesion');localStorage.removeItem('ft_sesion');location.reload();}function toggleMenu(){var b=document.querySelector('.hamburger');var p=document.getElementById('navMobile');b.classList.toggle('abierto');p.classList.toggle('visible');document.body.style.overflow=p.classList.contains('visible')?'hidden':'';}function cerrarMenu(){document.querySelector('.hamburger').classList.remove('abierto');document.getElementById('navMobile').classList.remove('visible');document.body.style.overflow='';}</script>
+
+  <div class="page-hero">
+    <div class="icono-grande">🧬</div>
+    <h1>Beneficios Nutricionales</h1>
+    <p>
+      Vitaminas, minerales, antioxidantes y fibra: todo lo que las frutas y verduras
+      de temporada aportan a tu cuerpo, explicado de forma clara y sencilla.
+    </p>
+  </div>
+
+  <div class="descripcion">
+    <h2>¿Qué aprenderás en esta sección?</h2>
+    <p>
+      La sección de <strong>Beneficios Nutricionales</strong> traduce la ciencia
+      dietética a un lenguaje cotidiano. Aquí encontrarás:
+    </p>
+    <ul>
+      <li>Explicación de los principales nutrientes presentes en frutas y verduras (vitaminas, minerales, fibra y antioxidantes).</li>
+      <li>Qué beneficios concretos aporta cada nutriente al organismo (sistema inmune, piel, huesos, energía, etc.).</li>
+      <li>Las fuentes vegetales más ricas en cada vitamina o mineral para orientar tu compra.</li>
+      <li>Comparativa visual de densidad nutricional entre distintos alimentos.</li>
+      <li>Consejos sobre biodisponibilidad: cómo preparar los alimentos para aprovechar mejor sus nutrientes.</li>
+    </ul>
+  </div>
+
+  <!-- VITAMINAS Y MINERALES -->
+  <div class="vitaminas">
+    <h2>🔬 Principales nutrientes</h2>
+    <p class="sub">Lo que cada vitamina y mineral hace por tu cuerpo y dónde encontrarlo</p>
+    <div class="vit-grid">
+
+      <div class="vit-card color-c">
+        <div class="vit-nombre">💊 Vitamina C</div>
+        <p>Potencia el sistema inmunológico, facilita la absorción del hierro y actúa como antioxidante protegiendo las células del daño oxidativo.</p>
+        <div class="fuentes"><strong>Fuentes:</strong> Fresa, kiwi, naranja, pimiento rojo, brócoli</div>
+      </div>
+
+      <div class="vit-card color-a">
+        <div class="vit-nombre">🥕 Vitamina A (β-caroteno)</div>
+        <p>Esencial para la visión, el sistema inmune y la salud de la piel y las mucosas. El betacaroteno es su precursor vegetal.</p>
+        <div class="fuentes"><strong>Fuentes:</strong> Zanahoria, espinaca, mango, calabaza, brócoli</div>
+      </div>
+
+      <div class="vit-card color-k">
+        <div class="vit-nombre">🌿 Vitamina K</div>
+        <p>Fundamental para la coagulación sanguínea y la salud ósea. Actúa junto al calcio para mantener los huesos fuertes.</p>
+        <div class="fuentes"><strong>Fuentes:</strong> Espinaca, brócoli, col, acelga, espárrago</div>
+      </div>
+
+      <div class="vit-card color-b9">
+        <div class="vit-nombre">🧬 Ácido Fólico (B9)</div>
+        <p>Imprescindible en el embarazo para el desarrollo neurológico del feto. También interviene en la formación de glóbulos rojos.</p>
+        <div class="fuentes"><strong>Fuentes:</strong> Espinaca, fresa, aguacate, espárrago, remolacha</div>
+      </div>
+
+      <div class="vit-card color-e">
+        <div class="vit-nombre">🌻 Vitamina E</div>
+        <p>Poderoso antioxidante que protege las membranas celulares y contribuye a la salud cardiovascular y de la piel.</p>
+        <div class="fuentes"><strong>Fuentes:</strong> Aguacate, kiwi, espinaca, mango, espárrago</div>
+      </div>
+
+      <div class="vit-card color-fe">
+        <div class="vit-nombre">⚙️ Hierro (no hemo)</div>
+        <p>Necesario para transportar oxígeno en la sangre. Su absorción desde vegetales mejora significativamente con vitamina C.</p>
+        <div class="fuentes"><strong>Fuentes:</strong> Espinaca, acelga, guisantes, alcachofa, remolacha</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- BENEFICIOS PARA LA SALUD -->
+  <section class="beneficios">
+    <h2>💪 ¿Qué mejora en tu salud?</h2>
+    <p class="sub">Consumir fruta y verdura de temporada de forma regular tiene estos efectos comprobados</p>
+    <div class="ben-grid">
+      <div class="ben-card"><div class="icon">🛡️</div><h3>Sistema inmunológico</h3><p>La vitamina C y antioxidantes reducen la frecuencia de infecciones y aceleran la recuperación.</p></div>
+      <div class="ben-card"><div class="icon">❤️</div><h3>Salud cardiovascular</h3><p>El potasio (banana, aguacate) y la fibra soluble reducen la presión arterial y el colesterol LDL.</p></div>
+      <div class="ben-card"><div class="icon">🦷</div><h3>Huesos y dientes</h3><p>El calcio (brócoli, espinaca) y la vitamina K contribuyen a mantener la densidad ósea.</p></div>
+      <div class="ben-card"><div class="icon">🔋</div><h3>Energía y metabolismo</h3><p>Las vitaminas del grupo B regulan el metabolismo celular y reducen el cansancio crónico.</p></div>
+      <div class="ben-card"><div class="icon">🧠</div><h3>Función cognitiva</h3><p>Los antioxidantes del arándano y la luteína de las hojas verdes protegen el tejido cerebral.</p></div>
+    </div>
+  </section>
+
+  <!-- COMPARATIVA VISUAL -->
+  <div class="comparativa">
+    <h2>📊 Densidad de vitamina C por 100g</h2>
+    <p class="sub">Comparativa orientativa (% de la ingesta diaria recomendada)</p>
+
+    <div class="barra-item">
+      <div class="barra-label"><span>🫑 Pimiento rojo</span><span>190%</span></div>
+      <div class="barra-track"><div class="barra-fill" style="width:95%; background:#e76f51;"></div></div>
+    </div>
+    <div class="barra-item">
+      <div class="barra-label"><span>🥦 Brócoli</span><span>150%</span></div>
+      <div class="barra-track"><div class="barra-fill" style="width:75%; background:#40916c;"></div></div>
+    </div>
+    <div class="barra-item">
+      <div class="barra-label"><span>🥝 Kiwi</span><span>93%</span></div>
+      <div class="barra-track"><div class="barra-fill" style="width:47%; background:#52b788;"></div></div>
+    </div>
+    <div class="barra-item">
+      <div class="barra-label"><span>🍓 Fresa</span><span>88%</span></div>
+      <div class="barra-track"><div class="barra-fill" style="width:44%; background:#e63946;"></div></div>
+    </div>
+    <div class="barra-item">
+      <div class="barra-label"><span>🍊 Naranja</span><span>70%</span></div>
+      <div class="barra-track"><div class="barra-fill" style="width:35%; background:#f4a261;"></div></div>
+    </div>
+    <div class="barra-item">
+      <div class="barra-label"><span>🍋 Limón</span><span>64%</span></div>
+      <div class="barra-track"><div class="barra-fill" style="width:32%; background:#e9c46a;"></div></div>
+    </div>
+  </div>
+
+  <footer>
+    <p><strong>FrescaTemporada</strong> — Come mejor, vive mejor 🌱</p>
+    <p style="margin-top:.4rem; font-size:.8rem;">Proyecto académico · Diseño de Interfaces de Usuario · 2026</p>
+  </footer>
+
+</body>
+</html>

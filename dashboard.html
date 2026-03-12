@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard – FrescaTemporada</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --verde-oscuro:  #2d6a4f;
+      --verde-medio:   #40916c;
+      --verde-claro:   #74c69d;
+      --crema:         #f8f4e3;
+      --naranja:       #e76f51;
+      --gris-suave:    #f1f5f1;
+      --rojo:          #e63946;
+      --sidebar-w:     260px;
+      --header-h:      65px;
+      --sombra:        0 4px 18px rgba(0,0,0,.09);
+      --radio:         12px;
+    }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: var(--gris-suave);
+      color: #1b1b1b;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ══════════════════════════════
+       TOP BAR
+    ══════════════════════════════ */
+    .topbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      height: var(--header-h);
+      background: var(--verde-oscuro);
+      display: flex; align-items: center;
+      padding: 0 1.5rem;
+      gap: 1rem;
+      box-shadow: 0 2px 12px rgba(0,0,0,.2);
+    }
+
+    /* Hamburger (mobile) */
+    .btn-menu {
+      background: none; border: none; cursor: pointer;
+      color: #fff; font-size: 1.4rem; padding: .3rem;
+      display: none;
+    }
+
+    .topbar-logo {
+      display: flex; align-items: center; gap: .5rem;
+      text-decoration: none; flex-shrink: 0;
+    }
+    .topbar-logo .icono { font-size: 1.7rem; }
+    .topbar-logo .texto { font-size: 1.2rem; font-weight: 700; color: #fff; }
+    .topbar-logo .texto span { color: var(--verde-claro); }
+
+    .topbar-spacer { flex: 1; }
+
+    /* Búsqueda rápida */
+    .topbar-search {
+      display: flex; align-items: center;
+      background: rgba(255,255,255,.12);
+      border-radius: 999px;
+      padding: .35rem .9rem;
+      gap: .5rem;
+      max-width: 280px; width: 100%;
+      border: 1px solid rgba(255,255,255,.2);
+      transition: background .2s;
+    }
+    .topbar-search:focus-within { background: rgba(255,255,255,.22); }
+    .topbar-search input {
+      background: none; border: none; outline: none;
+      color: #fff; font-size: .88rem; font-family: inherit;
+      width: 100%;
+    }
+    .topbar-search input::placeholder { color: rgba(255,255,255,.6); }
+    .topbar-search .lupa { color: rgba(255,255,255,.7); font-size: .95rem; }
+
+    /* Info de usuario en topbar */
+    .topbar-user {
+      display: flex; align-items: center; gap: .7rem;
+      flex-shrink: 0;
+    }
+    .topbar-user .saludo {
+      font-size: .82rem; color: rgba(255,255,255,.75);
+      text-align: right; line-height: 1.3;
+    }
+    .topbar-user .saludo strong { display: block; color: #fff; font-size: .9rem; }
+
+    .avatar-topbar {
+      width: 38px; height: 38px;
+      background: var(--verde-claro);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; font-weight: 800;
+      color: var(--verde-oscuro);
+      flex-shrink: 0;
+      border: 2px solid rgba(255,255,255,.3);
+    }
+
+    .btn-cerrar-sesion {
+      display: flex; align-items: center; gap: .35rem;
+      background: rgba(231,111,81,.85);
+      color: #fff; border: none;
+      padding: .4rem .95rem; border-radius: 999px;
+      font-size: .82rem; font-weight: 700;
+      font-family: inherit; cursor: pointer;
+      transition: background .2s, transform .15s;
+      white-space: nowrap;
+    }
+    .btn-cerrar-sesion:hover { background: #c75a3e; transform: translateY(-1px); }
+
+    /* ══════════════════════════════
+       LAYOUT PRINCIPAL
+    ══════════════════════════════ */
+    .layout {
+      display: flex;
+      margin-top: var(--header-h);
+      min-height: calc(100vh - var(--header-h));
+    }
+
+    /* ══════════════════════════════
+       SIDEBAR
+    ══════════════════════════════ */
+    .sidebar {
+      width: var(--sidebar-w);
+      background: #fff;
+      box-shadow: 2px 0 12px rgba(0,0,0,.07);
+      position: fixed;
+      top: var(--header-h);
+      bottom: 0;
+      left: 0;
+      overflow-y: auto;
+      z-index: 100;
+      transition: transform .3s;
+      display: flex; flex-direction: column;
+    }
+
+    /* Perfil en sidebar */
+    .sidebar-perfil {
+      padding: 1.5rem 1.2rem 1rem;
+      border-bottom: 1px solid #e8f0eb;
+      text-align: center;
+    }
+    .sidebar-avatar {
+      width: 56px; height: 56px;
+      background: linear-gradient(135deg, var(--verde-medio), var(--verde-claro));
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; font-weight: 800; color: #fff;
+      margin: 0 auto .6rem;
+      box-shadow: 0 4px 12px rgba(64,145,108,.3);
+    }
+    .sidebar-perfil .nombre {
+      font-size: .95rem; font-weight: 700; color: var(--verde-oscuro);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .sidebar-perfil .rol {
+      font-size: .75rem; color: #888; margin-top: .15rem;
+    }
+    .badge-sesion {
+      display: inline-flex; align-items: center; gap: .3rem;
+      background: #d8f3dc; color: var(--verde-oscuro);
+      border-radius: 999px; padding: .2rem .65rem;
+      font-size: .72rem; font-weight: 600; margin-top: .5rem;
+    }
+    .dot-verde {
+      width: 7px; height: 7px;
+      background: #40916c; border-radius: 50%;
+      animation: pulso 2s infinite;
+    }
+    @keyframes pulso {
+      0%, 100% { opacity: 1; } 50% { opacity: .4; }
+    }
+
+    /* Navegación del menú */
+    .sidebar-nav { flex: 1; padding: .8rem 0; }
+    .nav-grupo-titulo {
+      font-size: .68rem; text-transform: uppercase;
+      letter-spacing: .9px; color: #aaa; font-weight: 700;
+      padding: .6rem 1.3rem .3rem;
+    }
+
+    .nav-item {
+      display: flex; align-items: center; gap: .75rem;
+      padding: .62rem 1.3rem;
+      text-decoration: none; color: #555;
+      font-size: .9rem; font-weight: 500;
+      border-left: 3px solid transparent;
+      transition: background .15s, color .15s, border-color .15s;
+      cursor: pointer; border: none; background: none;
+      width: 100%; font-family: inherit; text-align: left;
+    }
+    .nav-item:hover {
+      background: #f0faf4; color: var(--verde-oscuro);
+      border-left-color: var(--verde-claro);
+    }
+    .nav-item.activo {
+      background: #e8f5ee; color: var(--verde-oscuro);
+      border-left-color: var(--verde-medio); font-weight: 700;
+    }
+    .nav-item .nav-icono { font-size: 1.1rem; flex-shrink: 0; width: 22px; text-align: center; }
+    .nav-badge {
+      margin-left: auto; background: var(--naranja); color: #fff;
+      border-radius: 999px; padding: .1rem .5rem;
+      font-size: .68rem; font-weight: 700;
+    }
+
+    /* Footer sidebar */
+    .sidebar-footer {
+      padding: 1rem 1.2rem;
+      border-top: 1px solid #e8f0eb;
+    }
+    .btn-logout-sidebar {
+      display: flex; align-items: center; gap: .6rem;
+      padding: .6rem 1rem;
+      background: #fde8e4; color: var(--rojo);
+      border: 1px solid #f5b8b0;
+      border-radius: 8px; width: 100%;
+      font-size: .88rem; font-weight: 700;
+      font-family: inherit; cursor: pointer;
+      transition: background .2s;
+    }
+    .btn-logout-sidebar:hover { background: #fbd0cb; }
+
+    /* ══════════════════════════════
+       CONTENIDO PRINCIPAL
+    ══════════════════════════════ */
+    .main {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      padding: 2rem;
+      min-width: 0;
+    }
+
+    /* Header de sección */
+    .seccion-header {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      margin-bottom: 1.8rem; gap: 1rem; flex-wrap: wrap;
+    }
+    .seccion-header h1 { font-size: 1.6rem; color: var(--verde-oscuro); line-height: 1.25; }
+    .seccion-header .sub { font-size: .9rem; color: #888; margin-top: .2rem; }
+    .fecha-badge {
+      background: #fff; border: 1px solid #d0e8d8; border-radius: 8px;
+      padding: .4rem .9rem; font-size: .82rem; color: var(--verde-oscuro); font-weight: 600;
+      white-space: nowrap;
+    }
+
+    /* ── TARJETAS DE ESTADÍSTICAS ── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 1.2rem;
+      margin-bottom: 2rem;
+    }
+    .stat-card {
+      background: #fff; border-radius: var(--radio);
+      padding: 1.3rem 1.2rem;
+      box-shadow: var(--sombra);
+      display: flex; align-items: center; gap: 1rem;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .stat-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,.12); }
+    .stat-icono {
+      width: 48px; height: 48px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; flex-shrink: 0;
+    }
+    .si-verde  { background: #d8f3dc; }
+    .si-naranja{ background: #fde8d4; }
+    .si-azul   { background: #dbeafe; }
+    .si-amarillo{ background: #fef9c3; }
+    .stat-info .numero { font-size: 1.6rem; font-weight: 900; color: var(--verde-oscuro); line-height: 1; }
+    .stat-info .etiqueta { font-size: .78rem; color: #888; margin-top: .15rem; }
+
+    /* ── GRID ACCIONES RÁPIDAS ── */
+    .panel-titulo {
+      font-size: 1.1rem; font-weight: 700; color: var(--verde-oscuro);
+      margin-bottom: 1rem; display: flex; align-items: center; gap: .5rem;
+    }
+    .acciones-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .accion-card {
+      background: #fff; border-radius: var(--radio);
+      padding: 1.4rem 1.2rem;
+      box-shadow: var(--sombra);
+      text-align: center; cursor: pointer;
+      border: 2px solid transparent;
+      transition: transform .2s, border-color .2s, box-shadow .2s;
+      text-decoration: none; color: inherit;
+      display: block;
+    }
+    .accion-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--verde-claro);
+      box-shadow: 0 10px 28px rgba(0,0,0,.12);
+    }
+    .accion-card .ac-icono { font-size: 2.2rem; margin-bottom: .6rem; display: block; }
+    .accion-card .ac-titulo { font-size: .92rem; font-weight: 700; color: var(--verde-oscuro); margin-bottom: .3rem; }
+    .accion-card .ac-desc   { font-size: .78rem; color: #888; line-height: 1.4; }
+    .ac-tag {
+      display: inline-block; margin-top: .5rem;
+      background: var(--gris-suave); border-radius: 999px;
+      padding: .15rem .6rem; font-size: .7rem;
+      color: #666; font-weight: 600;
+    }
+    .ac-tag.nuevo  { background: #d8f3dc; color: var(--verde-oscuro); }
+    .ac-tag.activo { background: #dbeafe; color: #1d4ed8; }
+
+    /* ── PANEL INFERIOR (actividad + notificaciones) ── */
+    .panel-grid {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 1.4rem;
+    }
+
+    .panel-box {
+      background: #fff; border-radius: var(--radio);
+      box-shadow: var(--sombra);
+      overflow: hidden;
+    }
+    .panel-box-header {
+      padding: 1rem 1.3rem;
+      border-bottom: 1px solid #e8f0eb;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .panel-box-header h3 { font-size: .95rem; font-weight: 700; color: var(--verde-oscuro); }
+    .panel-box-header .ver-todo { font-size: .78rem; color: var(--verde-medio); text-decoration: none; }
+    .panel-box-header .ver-todo:hover { text-decoration: underline; }
+
+    /* Lista de actividad */
+    .actividad-lista { padding: .5rem 0; }
+    .actividad-item {
+      display: flex; align-items: flex-start; gap: .8rem;
+      padding: .7rem 1.3rem;
+      border-bottom: 1px solid #f3f7f4;
+      transition: background .15s;
+    }
+    .actividad-item:last-child { border-bottom: none; }
+    .actividad-item:hover { background: #f9fdf9; }
+    .act-icono-wrap {
+      width: 34px; height: 34px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .95rem; flex-shrink: 0; margin-top: .1rem;
+    }
+    .ai-verde   { background: #d8f3dc; }
+    .ai-naranja { background: #fde8d4; }
+    .ai-azul    { background: #dbeafe; }
+    .ai-gris    { background: #f0f0f0; }
+    .act-texto .titulo { font-size: .88rem; color: #333; font-weight: 500; line-height: 1.3; }
+    .act-texto .hora   { font-size: .75rem; color: #aaa; margin-top: .15rem; }
+
+    /* Notificaciones */
+    .noti-lista { padding: .5rem 0; }
+    .noti-item {
+      display: flex; align-items: flex-start; gap: .75rem;
+      padding: .75rem 1.3rem;
+      border-bottom: 1px solid #f3f7f4;
+    }
+    .noti-item:last-child { border-bottom: none; }
+    .noti-item.no-leida { background: #f6fbf8; }
+    .noti-punto {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--verde-medio); flex-shrink: 0; margin-top: .4rem;
+    }
+    .noti-punto.leida { background: #ccc; }
+    .noti-item .noti-texto { font-size: .85rem; color: #444; line-height: 1.4; }
+    .noti-item .noti-hora  { font-size: .73rem; color: #aaa; margin-top: .2rem; }
+
+    /* Modal de confirmación logout */
+    .overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,.45); z-index: 400;
+      align-items: center; justify-content: center;
+    }
+    .overlay.visible { display: flex; }
+    .modal {
+      background: #fff; border-radius: var(--radio);
+      padding: 2.2rem 2rem; max-width: 380px; width: 90%;
+      text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,.3);
+      animation: slideUp .25s ease;
+    }
+    @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    .modal .modal-icono { font-size: 3rem; margin-bottom: .6rem; }
+    .modal h3 { font-size: 1.2rem; color: var(--verde-oscuro); margin-bottom: .5rem; }
+    .modal p  { font-size: .9rem; color: #666; margin-bottom: 1.5rem; }
+    .modal-btns { display: flex; gap: .8rem; justify-content: center; }
+    .btn-cancel {
+      padding: .6rem 1.5rem; background: #f1f1f1; border: none;
+      border-radius: 999px; font-size: .9rem; font-family: inherit;
+      cursor: pointer; color: #555; transition: background .2s;
+    }
+    .btn-cancel:hover { background: #e0e0e0; }
+    .btn-confirm {
+      padding: .6rem 1.5rem; background: var(--rojo); border: none;
+      border-radius: 999px; font-size: .9rem; font-family: inherit;
+      cursor: pointer; color: #fff; font-weight: 700; transition: background .2s;
+    }
+    .btn-confirm:hover { background: #c0392b; }
+
+    /* Toast */
+    .toast {
+      position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 500;
+      background: var(--verde-oscuro); color: #fff;
+      border-radius: 10px; padding: .8rem 1.4rem;
+      font-size: .88rem; font-weight: 600;
+      box-shadow: 0 8px 20px rgba(0,0,0,.2);
+      display: none; align-items: center; gap: .6rem;
+      animation: fadeInUp .3s ease;
+    }
+    .toast.visible { display: flex; }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* ═══════════════════════════════════════
+       ESTILOS PARA SECCIONES EMBEBIDAS (RF08)
+    ═══════════════════════════════════════ */
+    .chips { display: flex; flex-wrap: wrap; gap: .4rem; }
+    .chip { background: var(--gris-suave); border: 1px solid #d0e8d8; border-radius: 999px; padding: .25rem .7rem; font-size: .78rem; color: var(--verde-oscuro); font-weight: 500; }
+    .chip.destacado { background: #fff3cd; border-color: #f9c74f; color: #7d5a00; }
+
+    .sec-hero { padding: 2rem; border-radius: var(--radio); text-align: center; margin-bottom: 1.5rem; }
+    .sec-hero .icono-grande { font-size: 3rem; margin-bottom: .5rem; }
+    .sec-hero h2 { font-size: 1.8rem; color: var(--verde-oscuro); margin-bottom: .6rem; }
+    .sec-hero p { max-width: 650px; margin: 0 auto; font-size: .95rem; color: #444; }
+    .sec-hero.color-frutas { background: linear-gradient(135deg, #d8f3dc 0%, #b7e4c7 100%); }
+    .sec-hero.color-verduras { background: linear-gradient(135deg, #b7e4c7 0%, #95d5b2 100%); }
+    .sec-hero.color-nutricion { background: linear-gradient(135deg, #fff3e0 0%, #ffe8cc 100%); }
+    .sec-hero.color-sostenible { background: linear-gradient(135deg, #d8f3dc 0%, #52b788 100%); }
+    .sec-hero.color-recetas { background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); }
+
+    .descripcion-pag { background: #fff; border-radius: var(--radio); padding: 1.8rem; box-shadow: var(--sombra); margin-bottom: 1.5rem; }
+    .descripcion-pag h3 { color: var(--verde-oscuro); font-size: 1.15rem; margin-bottom: .7rem; }
+    .descripcion-pag p { color: #555; margin-bottom: .7rem; font-size: .92rem; }
+    .descripcion-pag ul { padding-left: 1.4rem; color: #555; font-size: .92rem; }
+    .descripcion-pag ul li { margin-bottom: .35rem; }
+
+    .sub-titulo { font-size: 1.35rem; color: var(--verde-oscuro); margin: 1.5rem 0 .25rem; font-weight: 700; }
+    .sub-sub { color: #666; font-size: .87rem; margin-bottom: 1rem; }
+
+    .mes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+    .mes-card { background: #fff; border-radius: var(--radio); padding: 1rem; box-shadow: var(--sombra); border-top: 4px solid var(--verde-medio); }
+    .mes-card h3 { font-size: .88rem; color: var(--verde-oscuro); margin-bottom: .6rem; font-weight: 700; }
+    .mes-card h3.activo { color: var(--naranja); }
+
+    .frutas-section { background: var(--gris-suave); padding: 1.5rem; border-radius: var(--radio); margin-bottom: 1.5rem; }
+    .frutas-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; }
+    .fruta-card { background: #fff; border-radius: var(--radio); padding: 1.3rem 1rem; text-align: center; box-shadow: var(--sombra); transition: transform .2s; }
+    .fruta-card:hover { transform: translateY(-4px); }
+    .fruta-card .emoji { font-size: 2.4rem; margin-bottom: .4rem; }
+    .fruta-card h3 { color: var(--verde-oscuro); font-size: .9rem; margin-bottom: .3rem; }
+    .fruta-card p { font-size: .8rem; color: #666; }
+    .tag-mes { display: inline-block; background: var(--verde-claro); color: var(--verde-oscuro); border-radius: 999px; padding: .12rem .65rem; font-size: .73rem; font-weight: 700; margin-top: .4rem; }
+
+    table.tabla-verd { width: 100%; border-collapse: collapse; background: #fff; border-radius: var(--radio); overflow: hidden; box-shadow: var(--sombra); margin-bottom: 1.5rem; }
+    table.tabla-verd thead tr { background: var(--verde-oscuro); color: #fff; }
+    table.tabla-verd thead th { padding: .75rem 1rem; text-align: left; font-size: .87rem; font-weight: 600; }
+    table.tabla-verd tbody tr:nth-child(even) { background: #f6fbf8; }
+    table.tabla-verd tbody tr:hover { background: #e8f5ee; }
+    table.tabla-verd tbody td { padding: .65rem 1rem; font-size: .87rem; color: #444; border-bottom: 1px solid #e0ede6; }
+    .badge-mes { display: inline-block; background: var(--verde-claro); color: var(--verde-oscuro); border-radius: 999px; padding: .1rem .55rem; font-size: .72rem; font-weight: 700; margin: .08rem; }
+    .badge-ahora { background: #f4a261 !important; color: #fff !important; }
+
+    .cat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+    .cat-card { background: #fff; border-radius: var(--radio); padding: 1.2rem; text-align: center; box-shadow: var(--sombra); border-top: 4px solid var(--verde-medio); }
+    .cat-card .emoji { font-size: 2.2rem; margin-bottom: .4rem; }
+    .cat-card h3 { color: var(--verde-oscuro); font-size: .88rem; margin-bottom: .25rem; }
+    .cat-card p { font-size: .78rem; color: #666; }
+
+    .vit-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.1rem; margin-bottom: 1.5rem; }
+    .vit-card { background: #fff; border-radius: var(--radio); padding: 1.2rem; box-shadow: var(--sombra); display: flex; flex-direction: column; gap: .4rem; }
+    .vit-card .vit-nombre { font-size: .97rem; font-weight: 700; color: var(--verde-oscuro); display: flex; align-items: center; gap: .4rem; }
+    .vit-card p { font-size: .83rem; color: #555; }
+    .vit-card .fuentes { font-size: .76rem; background: var(--gris-suave); border-radius: 7px; padding: .3rem .6rem; color: #444; }
+    .vit-card .fuentes strong { color: var(--verde-oscuro); }
+    .color-c  { border-left: 4px solid #f4a261; }
+    .color-a  { border-left: 4px solid #e76f51; }
+    .color-k  { border-left: 4px solid var(--verde-medio); }
+    .color-b9 { border-left: 4px solid #52b788; }
+    .color-e  { border-left: 4px solid #f9c74f; }
+    .color-fe { border-left: 4px solid #a8dadc; }
+
+    .ben-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1.1rem; margin-bottom: 1.5rem; }
+    .ben-card { background: #fff; border-radius: var(--radio); padding: 1.2rem; box-shadow: var(--sombra); }
+    .ben-card .icon { font-size: 1.7rem; margin-bottom: .35rem; }
+    .ben-card h3 { color: var(--verde-oscuro); font-size: .9rem; margin-bottom: .25rem; }
+    .ben-card p { font-size: .82rem; color: #666; }
+
+    .barra-item { margin-bottom: .9rem; }
+    .barra-label { display: flex; justify-content: space-between; font-size: .86rem; color: #444; margin-bottom: .2rem; }
+    .barra-track { background: #e0ede6; border-radius: 999px; height: 12px; overflow: hidden; }
+    .barra-fill { height: 100%; border-radius: 999px; background: var(--verde-medio); transition: width .6s; }
+
+    .consejos-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1.2rem; margin-bottom: 1.5rem; }
+    .consejo-card { background: #fff; border-radius: var(--radio); padding: 1.4rem; box-shadow: var(--sombra); border-left: 5px solid var(--verde-medio); }
+    .consejo-card .num { font-size: 1.7rem; font-weight: 900; color: var(--verde-claro); line-height: 1; margin-bottom: .3rem; }
+    .consejo-card h3 { font-size: .93rem; color: var(--verde-oscuro); margin-bottom: .35rem; }
+    .consejo-card p { font-size: .83rem; color: #666; }
+
+    .impacto-section { background: var(--verde-oscuro); padding: 1.8rem; border-radius: var(--radio); margin-bottom: 1.5rem; color: #fff; }
+    .impacto-section h3 { font-size: 1.2rem; margin-bottom: .25rem; }
+    .impacto-section .sub { color: var(--verde-claro); margin-bottom: 1.1rem; font-size: .85rem; }
+    .impacto-stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; }
+    .impacto-stat { background: rgba(255,255,255,.1); border-radius: var(--radio); padding: 1.1rem; text-align: center; }
+    .impacto-stat .numero { font-size: 1.9rem; font-weight: 900; color: var(--verde-claro); }
+    .impacto-stat p { font-size: .8rem; color: #cce5d6; margin-top: .25rem; }
+
+    .acc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 1.1rem; margin-bottom: 1.5rem; }
+    .acc-card { background: #fff; border-radius: var(--radio); padding: 1.2rem; text-align: center; box-shadow: var(--sombra); }
+    .acc-card .emoji { font-size: 1.9rem; margin-bottom: .4rem; }
+    .acc-card h3 { font-size: .88rem; color: var(--verde-oscuro); margin-bottom: .25rem; }
+    .acc-card p { font-size: .78rem; color: #666; }
+
+    .filtros-rec { display: flex; flex-wrap: wrap; gap: .45rem; margin-bottom: 1.2rem; }
+    .filtro-btn { background: #fff; border: 2px solid #d0e8d8; border-radius: 999px; padding: .32rem .9rem; font-size: .83rem; font-weight: 600; color: var(--verde-oscuro); cursor: pointer; transition: all .2s; font-family: inherit; }
+    .filtro-btn:hover, .filtro-btn.sel { background: var(--verde-medio); color: #fff; border-color: var(--verde-medio); }
+
+    .recetas-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 1.4rem; margin-bottom: 1.5rem; }
+    .receta-card { background: #fff; border-radius: var(--radio); box-shadow: var(--sombra); overflow: hidden; transition: transform .2s, box-shadow .2s; }
+    .receta-card:hover { transform: translateY(-4px); box-shadow: 0 10px 24px rgba(0,0,0,.12); }
+    .receta-imagen { height: 140px; display: flex; align-items: center; justify-content: center; font-size: 4rem; background: var(--gris-suave); }
+    .receta-body { padding: 1.1rem; }
+    .receta-meta { display: flex; gap: .5rem; margin-bottom: .55rem; flex-wrap: wrap; }
+    .meta-tag { display: inline-flex; align-items: center; gap: .25rem; font-size: .75rem; color: #666; background: var(--gris-suave); border-radius: 999px; padding: .16rem .6rem; }
+    .receta-body h3 { font-size: .97rem; color: var(--verde-oscuro); margin-bottom: .3rem; }
+    .receta-body p { font-size: .82rem; color: #666; margin-bottom: .6rem; }
+    .ingredientes { font-size: .79rem; color: #555; }
+    .ingredientes strong { color: var(--verde-oscuro); }
+    .dificultad { display: inline-block; padding: .16rem .65rem; border-radius: 999px; font-size: .72rem; font-weight: 700; }
+    .facil   { background: #d8f3dc; color: #1b4332; }
+    .medio   { background: #fff3cd; color: #7d5a00; }
+    .dificil { background: #fde8e4; color: #7d2d00; }
+
+    .chef-consejo { background: var(--verde-oscuro); color: #fff; padding: 1.8rem; border-radius: var(--radio); margin-bottom: 1.5rem; }
+    .chef-consejo h3 { font-size: 1.15rem; margin-bottom: .7rem; color: var(--verde-claro); }
+    .chef-consejo blockquote { font-size: .97rem; font-style: italic; margin: .8rem 0; color: #fff; border-left: 4px solid var(--verde-claro); padding-left: .9rem; }
+    .chef-consejo p { font-size: .86rem; color: #cce5d6; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .panel-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 768px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.abierto { transform: translateX(0); }
+      .main { margin-left: 0; padding: 1.2rem 1rem; }
+      .btn-menu { display: block; }
+      .topbar-search { display: none; }
+      .acciones-grid { grid-template-columns: repeat(2, 1fr); }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 420px) {
+      .acciones-grid { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: 1fr; }
+      .topbar-user .saludo { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════
+       TOP BAR
+  ══════════════════════════════════════════ -->
+  <header class="topbar">
+    <button class="btn-menu" onclick="toggleSidebar()">☰</button>
+
+    <a href="index.html" class="topbar-logo">
+      <span class="icono">🥦</span>
+      <span class="texto">Fresca<span>Temporada</span></span>
+    </a>
+
+    <div class="topbar-spacer"></div>
+
+    <!-- Búsqueda -->
+    <div class="topbar-search">
+      <span class="lupa">🔍</span>
+      <input type="text" placeholder="Buscar frutas, recetas…" id="buscador" oninput="buscar()" />
+    </div>
+
+    <!-- Usuario -->
+    <div class="topbar-user">
+      <div class="saludo" id="saludoTop">
+        Bienvenido/a<br><strong id="nombreTop">Cargando…</strong>
+      </div>
+      <div class="avatar-topbar" id="avatarTop">U</div>
+      <button class="btn-cerrar-sesion" onclick="abrirModal()">
+        🚪 Cerrar sesión
+      </button>
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════════════════
+       LAYOUT
+  ══════════════════════════════════════════ -->
+  <div class="layout">
+
+    <!-- ──────── SIDEBAR ──────── -->
+    <aside class="sidebar" id="sidebar">
+
+      <!-- Perfil -->
+      <div class="sidebar-perfil">
+        <div class="sidebar-avatar" id="sidebarAvatar">U</div>
+        <div class="nombre" id="sidebarNombre">Usuario</div>
+        <div class="rol">Miembro activo</div>
+        <div class="badge-sesion"><span class="dot-verde"></span> En sesión</div>
+      </div>
+
+      <!-- Navegación -->
+      <nav class="sidebar-nav">
+
+        <div class="nav-grupo-titulo">Principal</div>
+        <button class="nav-item activo" data-seccion="inicio" title="Inicio – Ver resumen de actividad y estadísticas" onclick="mostrarSeccion('inicio')">
+          <span class="nav-icono">🏠</span> Inicio – Resumen
+        </button>
+        <button class="nav-item" data-seccion="frutas" title="Frutas de Temporada – Calendario mensual y frutas de Marzo" onclick="mostrarSeccion('frutas')">
+          <span class="nav-icono">🍓</span> Frutas de Temporada
+        </button>
+        <button class="nav-item" data-seccion="verduras" title="Verduras de Temporada – Tabla por mes y categorías" onclick="mostrarSeccion('verduras')">
+          <span class="nav-icono">🥦</span> Verduras de Temporada
+        </button>
+
+        <div class="nav-grupo-titulo">Información</div>
+        <button class="nav-item" data-seccion="nutricion" title="Beneficios Nutricionales – Vitaminas, minerales y comparativa" onclick="mostrarSeccion('nutricion')">
+          <span class="nav-icono">🧬</span> Beneficios Nutricionales
+        </button>
+        <button class="nav-item" data-seccion="sostenible" title="Consumo Sostenible – 6 consejos y datos de impacto ambiental" onclick="mostrarSeccion('sostenible')">
+          <span class="nav-icono">♻️</span> Consumo Sostenible
+        </button>
+        <button class="nav-item" data-seccion="recetas" title="Recetas – 6 platos con ingredientes de temporada de Marzo" onclick="mostrarSeccion('recetas')">
+          <span class="nav-icono">🥗</span> Recetas
+          <span class="nav-badge">6</span>
+        </button>
+
+        <div class="nav-grupo-titulo">Mi cuenta</div>
+        <button class="nav-item" data-seccion="favoritos" title="Mis Favoritos – Frutas y recetas que has guardado" onclick="mostrarSeccion('favoritos')">
+          <span class="nav-icono">❤️</span> Mis Favoritos
+        </button>
+        <button class="nav-item" data-seccion="calendario" title="Mi Calendario – Planifica tus compras por mes" onclick="mostrarSeccion('calendario')">
+          <span class="nav-icono">🗓️</span> Mi Calendario
+        </button>
+        <button class="nav-item" data-seccion="alertas" title="Mis Alertas – Notificaciones de cambio de temporada" onclick="mostrarSeccion('alertas')">
+          <span class="nav-icono">🔔</span> Mis Alertas
+          <span class="nav-badge">3</span>
+        </button>
+        <button class="nav-item" data-seccion="perfil" title="Mi Perfil – Ver y gestionar tu información personal" onclick="mostrarSeccion('perfil')">
+          <span class="nav-icono">👤</span> Mi Perfil
+        </button>
+        <button class="nav-item" data-seccion="ajustes" title="Ajustes – Configurar preferencias de la aplicación" onclick="mostrarSeccion('ajustes')">
+          <span class="nav-icono">⚙️</span> Ajustes
+        </button>
+
+      </nav>
+
+      <!-- Botón logout en sidebar -->
+      <div class="sidebar-footer">
+        <button class="btn-logout-sidebar" onclick="abrirModal()">
+          🚪 Cerrar sesión
+        </button>
+      </div>
+
+    </aside>
+
+    <!-- ──────── CONTENIDO PRINCIPAL ──────── -->
+    <main class="main" id="main">
+
+      <!-- ═══════════ SECCIÓN: INICIO ═══════════ -->
+      <div id="sec-inicio">
+
+        <div class="seccion-header">
+          <div>
+            <h1>¡Bienvenido/a, <span id="nombreBienvenida">Usuario</span>! 👋</h1>
+            <p class="sub">Aquí tienes un resumen de tu actividad y las novedades de la app</p>
+          </div>
+          <div class="fecha-badge">🗓️ Marzo 2026 — Temporada de fresas</div>
+        </div>
+
+        <!-- Estadísticas -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icono si-verde">🍓</div>
+            <div class="stat-info">
+              <div class="numero">6</div>
+              <div class="etiqueta">Frutas en temporada</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icono si-naranja">🥦</div>
+            <div class="stat-info">
+              <div class="numero">6</div>
+              <div class="etiqueta">Verduras en temporada</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icono si-azul">🥗</div>
+            <div class="stat-info">
+              <div class="numero">6</div>
+              <div class="etiqueta">Recetas disponibles</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icono si-amarillo">❤️</div>
+            <div class="stat-info">
+              <div class="numero" id="contFavoritos">0</div>
+              <div class="etiqueta">Elementos guardados</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Acciones rápidas -->
+        <div class="panel-titulo">⚡ Acciones rápidas</div>
+        <div class="acciones-grid">
+
+          <button class="accion-card" title="Ver Frutas de Temporada – Calendario y frutas destacadas de Marzo" onclick="mostrarSeccion('frutas')">
+            <span class="ac-icono">🍑</span>
+            <div class="ac-titulo">Ver Frutas del Mes</div>
+            <div class="ac-desc">Consulta el calendario y las frutas disponibles en Marzo</div>
+            <span class="ac-tag activo">Marzo activo</span>
+          </button>
+
+          <button class="accion-card" title="Ver Verduras de Temporada – Guía de hortalizas por mes" onclick="mostrarSeccion('verduras')">
+            <span class="ac-icono">🥕</span>
+            <div class="ac-titulo">Ver Verduras del Mes</div>
+            <div class="ac-desc">Hortalizas frescas y locales disponibles en la temporada actual</div>
+            <span class="ac-tag activo">Marzo activo</span>
+          </button>
+
+          <button class="accion-card" title="Consultar Nutrición – Vitaminas, minerales y beneficios" onclick="mostrarSeccion('nutricion')">
+            <span class="ac-icono">🧬</span>
+            <div class="ac-titulo">Consultar Nutrición</div>
+            <div class="ac-desc">Vitaminas, minerales y beneficios de cada alimento</div>
+            <span class="ac-tag">Guía completa</span>
+          </button>
+
+          <button class="accion-card" title="Ver Recetas – 6 platos con ingredientes de temporada" onclick="mostrarSeccion('recetas')">
+            <span class="ac-icono">🥗</span>
+            <div class="ac-titulo">Recetas de Temporada</div>
+            <div class="ac-desc">6 recetas nuevas con ingredientes de Marzo</div>
+            <span class="ac-tag nuevo">6 nuevas</span>
+          </button>
+
+          <button class="accion-card" title="Ver Consumo Sostenible – Consejos para reducir el desperdicio" onclick="mostrarSeccion('sostenible')">
+            <span class="ac-icono">♻️</span>
+            <div class="ac-titulo">Consumo Sostenible</div>
+            <div class="ac-desc">Consejos para reducir el desperdicio y comprar local</div>
+            <span class="ac-tag">Consejos</span>
+          </button>
+
+          <button class="accion-card" onclick="mostrarSeccion('favoritos')">
+            <span class="ac-icono">❤️</span>
+            <div class="ac-titulo">Mis Favoritos</div>
+            <div class="ac-desc">Gestiona tus frutas y recetas guardadas</div>
+            <span class="ac-tag">Mi lista</span>
+          </button>
+
+          <button class="accion-card" onclick="mostrarSeccion('calendario')">
+            <span class="ac-icono">🗓️</span>
+            <div class="ac-titulo">Calendario Personal</div>
+            <div class="ac-desc">Planifica tus compras de temporada semana a semana</div>
+            <span class="ac-tag">Planeación</span>
+          </button>
+
+          <button class="accion-card" onclick="mostrarSeccion('alertas')">
+            <span class="ac-icono">🔔</span>
+            <div class="ac-titulo">Mis Alertas</div>
+            <div class="ac-desc">Notificaciones de cambio de temporada y novedades</div>
+            <span class="ac-tag nuevo">3 nuevas</span>
+          </button>
+
+        </div>
+
+        <!-- Panel inferior -->
+        <div class="panel-grid">
+
+          <!-- Actividad reciente -->
+          <div class="panel-box">
+            <div class="panel-box-header">
+              <h3>📋 Actividad reciente</h3>
+              <a href="#" class="ver-todo">Ver todo</a>
+            </div>
+            <div class="actividad-lista">
+              <div class="actividad-item">
+                <div class="act-icono-wrap ai-verde">🍓</div>
+                <div class="act-texto">
+                  <div class="titulo">Consultaste las <strong>frutas de marzo</strong> en el calendario</div>
+                  <div class="hora">Hace 5 minutos</div>
+                </div>
+              </div>
+              <div class="actividad-item">
+                <div class="act-icono-wrap ai-naranja">🥗</div>
+                <div class="act-texto">
+                  <div class="titulo">Guardaste la receta <strong>Ensalada de fresas con espinaca</strong></div>
+                  <div class="hora">Hace 30 minutos</div>
+                </div>
+              </div>
+              <div class="actividad-item">
+                <div class="act-icono-wrap ai-azul">🔔</div>
+                <div class="act-texto">
+                  <div class="titulo">Nueva temporada de <strong>fresas y berberechos</strong> disponible</div>
+                  <div class="hora">Hoy, 9:00 am</div>
+                </div>
+              </div>
+              <div class="actividad-item">
+                <div class="act-icono-wrap ai-verde">🧬</div>
+                <div class="act-texto">
+                  <div class="titulo">Exploraste los <strong>beneficios del aguacate</strong> en Nutrición</div>
+                  <div class="hora">Ayer, 8:14 pm</div>
+                </div>
+              </div>
+              <div class="actividad-item">
+                <div class="act-icono-wrap ai-gris">♻️</div>
+                <div class="act-texto">
+                  <div class="titulo">Leíste el consejo de <strong>consumo sostenible</strong> del mes</div>
+                  <div class="hora">Ayer, 7:30 pm</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Notificaciones -->
+          <div class="panel-box">
+            <div class="panel-box-header">
+              <h3>🔔 Notificaciones</h3>
+              <a href="#" class="ver-todo" onclick="marcarLeidas(); return false;">Marcar leídas</a>
+            </div>
+            <div class="noti-lista" id="notiLista">
+              <div class="noti-item no-leida">
+                <div class="noti-punto"></div>
+                <div>
+                  <div class="noti-texto">🍓 La temporada de <strong>fresas</strong> ha comenzado. ¡Están en su mejor momento!</div>
+                  <div class="noti-hora">Hoy · 8:00 am</div>
+                </div>
+              </div>
+              <div class="noti-item no-leida">
+                <div class="noti-punto"></div>
+                <div>
+                  <div class="noti-texto">🥦 Nuevas recetas con <strong>brócoli y alcachofa</strong> agregadas esta semana</div>
+                  <div class="noti-hora">Ayer · 6:00 pm</div>
+                </div>
+              </div>
+              <div class="noti-item no-leida">
+                <div class="noti-punto"></div>
+                <div>
+                  <div class="noti-texto">♻️ Consejo de sostenibilidad: compra en tu mercado local este fin de semana</div>
+                  <div class="noti-hora">Hace 2 días</div>
+                </div>
+              </div>
+              <div class="noti-item">
+                <div class="noti-punto leida"></div>
+                <div>
+                  <div class="noti-texto">✅ Tu cuenta fue creada correctamente. ¡Bienvenido/a a FrescaTemporada!</div>
+                  <div class="noti-hora">Al registrarse</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /panel-grid -->
+
+      </div><!-- /sec-inicio -->
+
+      <!-- ═══════════ SECCIÓN: FAVORITOS ═══════════ -->
+      <div id="sec-favoritos" style="display:none;">
+        <div class="seccion-header">
+          <div><h1>❤️ Mis Favoritos</h1><p class="sub">Frutas, verduras y recetas que has guardado</p></div>
+        </div>
+        <div style="background:#fff; border-radius:var(--radio); padding:2rem; box-shadow:var(--sombra); text-align:center; color:#888;">
+          <div style="font-size:3rem; margin-bottom:.8rem;">❤️</div>
+          <p>Aún no tienes favoritos guardados.<br>Explora las secciones y presiona el corazón para guardar tu contenido.</p>
+          <button onclick="mostrarSeccion('frutas')" title="Ir a la sección de Frutas de Temporada" style="display:inline-block;margin-top:1.2rem;background:var(--verde-oscuro);color:#fff;padding:.65rem 1.5rem;border-radius:999px;border:none;font-weight:700;font-size:.9rem;cursor:pointer;">Ir a Frutas →</button>
+        </div>
+      </div>
+
+      <!-- ═══════════ SECCIÓN: CALENDARIO ═══════════ -->
+      <div id="sec-calendario" style="display:none;">
+        <div class="seccion-header">
+          <div><h1>🗓️ Mi Calendario de Temporada</h1><p class="sub">Planifica tus compras según la disponibilidad mensual</p></div>
+        </div>
+        <div style="background:#fff; border-radius:var(--radio); padding:2rem; box-shadow:var(--sombra);">
+          <p style="color:#888; margin-bottom:1.2rem; font-size:.9rem;">Meses del año — productos en <span style="background:#fff3cd;padding:.1rem .4rem;border-radius:4px;">amarillo = temporada activa</span></p>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.8rem;">
+            <div style="background:#f9fdf9;border-radius:8px;padding:1rem;border-top:3px solid #ccc;"><strong>Ene</strong><br><small>Naranja, Kiwi, Espinaca</small></div>
+            <div style="background:#f9fdf9;border-radius:8px;padding:1rem;border-top:3px solid #ccc;"><strong>Feb</strong><br><small>Fresa, Aguacate, Puerro</small></div>
+            <div style="background:#fff3cd;border-radius:8px;padding:1rem;border-top:3px solid var(--naranja);"><strong>Mar ⬅</strong><br><small>Fresa, Kiwi, Alcachofa, Brócoli</small></div>
+            <div style="background:#f9fdf9;border-radius:8px;padding:1rem;border-top:3px solid #ccc;"><strong>Abr</strong><br><small>Cereza, Níspero, Espárrago</small></div>
+            <div style="background:#f9fdf9;border-radius:8px;padding:1rem;border-top:3px solid #ccc;"><strong>May</strong><br><small>Cereza, Sandía, Ajo</small></div>
+            <div style="background:#f9fdf9;border-radius:8px;padding:1rem;border-top:3px solid #ccc;"><strong>Jun</strong><br><small>Melocotón, Tomate, Calabacín</small></div>
+            <div style="background:#f9fdf9;border-radius:8px;padding:1rem;border-top:3px solid #ccc;"><strong>Jul</strong><br><small>Melocotón, Ciruela, Pimiento</small></div>
+            <div style="background:#f9fdf9;border-radius:8px;padding:1rem;border-top:3px solid #ccc;"><strong>Ago</strong><br><small>Uva, Higo, Sandía</small></div>
+            <div style="background:#f9fdf9;border-radius:8px;padding:1rem;border-top:3px solid #ccc;"><strong>Sep</strong><br><small>Uva, Manzana, Granada</small></div>
+            <div style="background:#f9fdf9;border-radius:8px;padding:1rem;border-top:3px solid #ccc;"><strong>Oct</strong><br><small>Manzana, Caqui, Brócoli</small></div>
+            <div style="background:#f9fdf9;border-radius:8px;padding:1rem;border-top:3px solid #ccc;"><strong>Nov</strong><br><small>Naranja, Mandarina, Puerro</small></div>
+            <div style="background:#f9fdf9;border-radius:8px;padding:1rem;border-top:3px solid #ccc;"><strong>Dic</strong><br><small>Naranja, Pera, Uva</small></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════ SECCIÓN: ALERTAS ═══════════ -->
+      <div id="sec-alertas" style="display:none;">
+        <div class="seccion-header">
+          <div><h1>🔔 Mis Alertas</h1><p class="sub">Notificaciones sobre cambios de temporada y novedades</p></div>
+        </div>
+        <div style="background:#fff; border-radius:var(--radio); box-shadow:var(--sombra); overflow:hidden;">
+          <div style="padding:1rem 1.3rem; border-bottom:1px solid #e8f0eb; display:flex; justify-content:space-between; align-items:center;">
+            <strong style="color:var(--verde-oscuro)">3 alertas sin leer</strong>
+            <button onclick="marcarLeidas(); mostrarToast('✅ Todas las alertas marcadas como leídas')" style="background:none;border:none;color:var(--verde-medio);font-size:.82rem;cursor:pointer;font-weight:600;">Marcar todas como leídas</button>
+          </div>
+          <div style="padding:.5rem 0;">
+            <div style="display:flex;gap:.8rem;padding:.9rem 1.3rem;background:#f6fbf8;border-bottom:1px solid #f0f5f2;">
+              <span style="font-size:1.2rem">🍓</span>
+              <div><div style="font-size:.9rem;color:#333;font-weight:500;">Inicio de temporada de <strong>fresas</strong></div><div style="font-size:.76rem;color:#aaa;margin-top:.15rem;">Hoy · 8:00 am</div></div>
+            </div>
+            <div style="display:flex;gap:.8rem;padding:.9rem 1.3rem;background:#f6fbf8;border-bottom:1px solid #f0f5f2;">
+              <span style="font-size:1.2rem">🥦</span>
+              <div><div style="font-size:.9rem;color:#333;font-weight:500;">Nuevas recetas con <strong>brócoli y alcachofa</strong></div><div style="font-size:.76rem;color:#aaa;margin-top:.15rem;">Ayer · 6:00 pm</div></div>
+            </div>
+            <div style="display:flex;gap:.8rem;padding:.9rem 1.3rem;background:#f6fbf8;border-bottom:1px solid #f0f5f2;">
+              <span style="font-size:1.2rem">♻️</span>
+              <div><div style="font-size:.9rem;color:#333;font-weight:500;">Consejo de consumo sostenible del mes</div><div style="font-size:.76rem;color:#aaa;margin-top:.15rem;">Hace 2 días</div></div>
+            </div>
+            <div style="display:flex;gap:.8rem;padding:.9rem 1.3rem;border-bottom:1px solid #f0f5f2;">
+              <span style="font-size:1.2rem">✅</span>
+              <div><div style="font-size:.9rem;color:#888;">Bienvenida a FrescaTemporada — cuenta creada</div><div style="font-size:.76rem;color:#aaa;margin-top:.15rem;">Al registrarse</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════ SECCIÓN: PERFIL ═══════════ -->
+      <div id="sec-perfil" style="display:none;">
+        <div class="seccion-header">
+          <div><h1>👤 Mi Perfil</h1><p class="sub">Gestiona tu información personal</p></div>
+        </div>
+        <div style="background:#fff; border-radius:var(--radio); padding:2rem; box-shadow:var(--sombra); max-width:520px;">
+          <div style="display:flex;align-items:center;gap:1.2rem;margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid #e8f0eb;">
+            <div style="width:64px;height:64px;background:linear-gradient(135deg,#40916c,#74c69d);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.6rem;font-weight:800;color:#fff;" id="perfilAvatar">U</div>
+            <div>
+              <div style="font-size:1.1rem;font-weight:700;color:var(--verde-oscuro);" id="perfilNombre">Usuario</div>
+              <div style="font-size:.82rem;color:#888;" id="perfilCorreo">correo@ejemplo.com</div>
+              <div style="font-size:.75rem;color:var(--verde-medio);font-weight:600;margin-top:.2rem;">Miembro activo</div>
+            </div>
+          </div>
+          <div style="color:#888;font-size:.88rem;">
+            <p>📅 Miembro desde: <strong style="color:#444">Marzo 2026</strong></p>
+            <p style="margin-top:.6rem;">🔐 Contraseña: <strong style="color:#444">••••••••</strong> <a href="#" style="color:var(--verde-medio);font-size:.8rem;margin-left:.5rem;">Cambiar</a></p>
+            <p style="margin-top:.6rem;">🔔 Notificaciones: <strong style="color:#444">Activadas</strong></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════ SECCIÓN: AJUSTES ═══════════ -->
+      <div id="sec-ajustes" style="display:none;">
+        <div class="seccion-header">
+          <div><h1>⚙️ Ajustes</h1><p class="sub">Personaliza tu experiencia en FrescaTemporada</p></div>
+        </div>
+        <div style="background:#fff; border-radius:var(--radio); padding:2rem; box-shadow:var(--sombra); max-width:520px; display:flex; flex-direction:column; gap:1.2rem;">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:1rem;border-bottom:1px solid #eee;">
+            <div><div style="font-size:.92rem;font-weight:600;color:#333;">Notificaciones de temporada</div><div style="font-size:.78rem;color:#888">Recibir avisos cuando cambia la temporada</div></div>
+            <div style="width:44px;height:24px;background:var(--verde-medio);border-radius:999px;position:relative;cursor:pointer;" onclick="mostrarToast('⚙️ Configuración guardada')"><div style="position:absolute;right:2px;top:2px;width:20px;height:20px;background:#fff;border-radius:50%;"></div></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:1rem;border-bottom:1px solid #eee;">
+            <div><div style="font-size:.92rem;font-weight:600;color:#333;">Nuevas recetas</div><div style="font-size:.78rem;color:#888">Avisar cuando se publican recetas nuevas</div></div>
+            <div style="width:44px;height:24px;background:var(--verde-medio);border-radius:999px;position:relative;cursor:pointer;" onclick="mostrarToast('⚙️ Configuración guardada')"><div style="position:absolute;right:2px;top:2px;width:20px;height:20px;background:#fff;border-radius:50%;"></div></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div><div style="font-size:.92rem;font-weight:600;color:#333;">Región de temporada</div><div style="font-size:.78rem;color:#888">España (Penínsuda Ibérica)</div></div>
+            <button onclick="mostrarToast('⚙️ Función disponible próximamente')" style="background:var(--gris-suave);border:none;border-radius:8px;padding:.4rem .9rem;font-size:.82rem;cursor:pointer;color:var(--verde-oscuro);font-weight:600;">Cambiar</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════ SECCIÓN: FRUTAS ═══════════ -->
+      <div id="sec-frutas" style="display:none;">
+        <div class="sec-hero color-frutas">
+          <div class="icono-grande">🍓</div>
+          <h2>Frutas de Temporada</h2>
+          <p>Conoce qué frutas están en su punto máximo de madurez, sabor y valor nutritivo en cada mes del año.</p>
+        </div>
+        <div class="descripcion-pag">
+          <h3>¿De qué trata esta sección?</h3>
+          <p>Encontrarás un calendario mensual con las frutas que se producen de forma natural durante cada época del año:</p>
+          <ul>
+            <li>Elegir frutas en su mejor estado nutricional, con mayor concentración de vitaminas y antioxidantes.</li>
+            <li>Ahorrar dinero: la fruta de temporada abunda en el mercado y su precio baja considerablemente.</li>
+            <li>Apoyar a los productores locales y reducir la huella de carbono del transporte.</li>
+            <li>Variar tu dieta a lo largo del año de manera natural y equilibrada.</li>
+          </ul>
+        </div>
+        <p class="sub-titulo">📅 Calendario anual de frutas</p>
+        <p class="sub-sub">Las frutas marcadas en amarillo corresponden al mes de <strong>Marzo</strong> (temporada actual)</p>
+        <div class="mes-grid">
+          <div class="mes-card"><h3>Enero</h3><div class="chips"><span class="chip">Naranja</span><span class="chip">Mandarina</span><span class="chip">Pera</span><span class="chip">Kiwi</span></div></div>
+          <div class="mes-card"><h3>Febrero</h3><div class="chips"><span class="chip">Fresa</span><span class="chip">Naranja</span><span class="chip">Limón</span><span class="chip">Aguacate</span></div></div>
+          <div class="mes-card"><h3 class="activo">Marzo ⬅ Ahora</h3><div class="chips"><span class="chip destacado">Fresa</span><span class="chip destacado">Naranja</span><span class="chip destacado">Kiwi</span><span class="chip destacado">Limón</span><span class="chip destacado">Mandarina</span><span class="chip destacado">Aguacate</span></div></div>
+          <div class="mes-card"><h3>Abril</h3><div class="chips"><span class="chip">Fresa</span><span class="chip">Cereza</span><span class="chip">Níspero</span><span class="chip">Mango</span></div></div>
+          <div class="mes-card"><h3>Mayo</h3><div class="chips"><span class="chip">Cereza</span><span class="chip">Albaricoque</span><span class="chip">Níspero</span><span class="chip">Sandía</span></div></div>
+          <div class="mes-card"><h3>Junio</h3><div class="chips"><span class="chip">Albaricoque</span><span class="chip">Melocotón</span><span class="chip">Sandía</span><span class="chip">Higo</span></div></div>
+          <div class="mes-card"><h3>Julio</h3><div class="chips"><span class="chip">Melocotón</span><span class="chip">Frambuesa</span><span class="chip">Ciruela</span><span class="chip">Higo</span></div></div>
+          <div class="mes-card"><h3>Agosto</h3><div class="chips"><span class="chip">Uva</span><span class="chip">Higo</span><span class="chip">Pera</span><span class="chip">Sandía</span></div></div>
+          <div class="mes-card"><h3>Septiembre</h3><div class="chips"><span class="chip">Uva</span><span class="chip">Manzana</span><span class="chip">Pera</span><span class="chip">Granada</span></div></div>
+          <div class="mes-card"><h3>Octubre</h3><div class="chips"><span class="chip">Manzana</span><span class="chip">Membrillo</span><span class="chip">Caqui</span><span class="chip">Granada</span></div></div>
+          <div class="mes-card"><h3>Noviembre</h3><div class="chips"><span class="chip">Naranja</span><span class="chip">Mandarina</span><span class="chip">Caqui</span><span class="chip">Kiwi</span></div></div>
+          <div class="mes-card"><h3>Diciembre</h3><div class="chips"><span class="chip">Naranja</span><span class="chip">Mandarina</span><span class="chip">Pera</span><span class="chip">Uva</span></div></div>
+        </div>
+        <p class="sub-titulo">🍊 Frutas destacadas este mes</p>
+        <p class="sub-sub">Las mejores opciones para consumir en Marzo</p>
+        <div class="frutas-section">
+          <div class="frutas-grid">
+            <div class="fruta-card"><div class="emoji">🍓</div><h3>Fresa</h3><p>Rica en vitamina C, ácido fólico y antioxidantes.</p><span class="tag-mes">Mar – May</span></div>
+            <div class="fruta-card"><div class="emoji">🍊</div><h3>Naranja</h3><p>Fuente principal de vitamina C. Ideal para jugos naturales.</p><span class="tag-mes">Nov – Abr</span></div>
+            <div class="fruta-card"><div class="emoji">🥝</div><h3>Kiwi</h3><p>Alto contenido de vitaminas C y E. Excelente para el sistema inmune.</p><span class="tag-mes">Ene – Abr</span></div>
+            <div class="fruta-card"><div class="emoji">🍋</div><h3>Limón</h3><p>Potente fuente de vitamina C y flavonoides.</p><span class="tag-mes">Todo el año</span></div>
+            <div class="fruta-card"><div class="emoji">🥑</div><h3>Aguacate</h3><p>Repleto de grasas saludables, potasio y vitaminas del grupo B.</p><span class="tag-mes">Feb – Abr</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════ SECCIÓN: VERDURAS ═══════════ -->
+      <div id="sec-verduras" style="display:none;">
+        <div class="sec-hero color-verduras">
+          <div class="icono-grande">🥦</div>
+          <h2>Verduras de Temporada</h2>
+          <p>Guía completa de hortalizas y verduras disponibles en cada época del año. Aprende a elegir los mejores productos locales.</p>
+        </div>
+        <div class="descripcion-pag">
+          <h3>¿Qué encontrarás en esta sección?</h3>
+          <ul>
+            <li>Listado de verduras organizado por mes de disponibilidad óptima.</li>
+            <li>Categorías: hoja verde, raíces, crucíferas, bulbos y frutos-verdura.</li>
+            <li>Consejos de selección y almacenamiento correcto para conservar frescura y nutrientes.</li>
+          </ul>
+        </div>
+        <p class="sub-titulo">🗓️ Verduras por mes</p>
+        <p class="sub-sub">Disponibilidad a lo largo del año. <strong>Naranja = disponible en Marzo</strong></p>
+        <div style="overflow-x:auto; margin-bottom:1.5rem;">
+          <table class="tabla-verd">
+            <thead><tr><th>Verdura</th><th>Temporada principal</th><th>Meses disponibles</th><th>Nota</th></tr></thead>
+            <tbody>
+              <tr><td>🥬 Espinaca</td><td><strong>Invierno–Primavera</strong></td><td><span class="badge-mes">Ene</span><span class="badge-mes">Feb</span><span class="badge-mes badge-ahora">Mar</span><span class="badge-mes">Abr</span><span class="badge-mes">Nov</span><span class="badge-mes">Dic</span></td><td>Ricas en hierro y ácido fólico</td></tr>
+              <tr><td>🥕 Zanahoria</td><td><strong>Todo el año</strong></td><td><span class="badge-mes badge-ahora">Mar</span><span class="badge-mes">Todo el año</span></td><td>Pico de dulzor en meses fríos</td></tr>
+              <tr><td>🧅 Puerro</td><td><strong>Otoño–Invierno</strong></td><td><span class="badge-mes">Oct</span><span class="badge-mes">Nov</span><span class="badge-mes">Dic</span><span class="badge-mes">Ene</span><span class="badge-mes">Feb</span><span class="badge-mes badge-ahora">Mar</span></td><td>Sabor suave, ideal en sopas</td></tr>
+              <tr><td>🌿 Alcachofa</td><td><strong>Primavera</strong></td><td><span class="badge-mes badge-ahora">Mar</span><span class="badge-mes">Abr</span><span class="badge-mes">May</span></td><td>Depurativa y antioxidante</td></tr>
+              <tr><td>🥦 Brócoli</td><td><strong>Otoño–Primavera</strong></td><td><span class="badge-mes">Sep</span><span class="badge-mes">Oct</span><span class="badge-mes">Nov</span><span class="badge-mes">Dic</span><span class="badge-mes badge-ahora">Mar</span><span class="badge-mes">Abr</span></td><td>Alto en vitamina C y K</td></tr>
+              <tr><td>🌿 Acelga</td><td><strong>Primavera–Otoño</strong></td><td><span class="badge-mes badge-ahora">Mar</span><span class="badge-mes">Abr</span><span class="badge-mes">May</span><span class="badge-mes">Sep</span><span class="badge-mes">Oct</span></td><td>Fuente de magnesio y vitamina A</td></tr>
+              <tr><td>🍅 Tomate</td><td><strong>Verano</strong></td><td><span class="badge-mes">Jun</span><span class="badge-mes">Jul</span><span class="badge-mes">Ago</span><span class="badge-mes">Sep</span></td><td>Rico en licopeno y vitamina C</td></tr>
+              <tr><td>🫑 Pimiento</td><td><strong>Verano–Otoño</strong></td><td><span class="badge-mes">Jul</span><span class="badge-mes">Ago</span><span class="badge-mes">Sep</span><span class="badge-mes">Oct</span></td><td>Gran fuente de vitamina C</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="sub-titulo">Categorías de verduras</p>
+        <div class="cat-grid">
+          <div class="cat-card"><div class="emoji">🥬</div><h3>Hojas verdes</h3><p>Espinaca, acelga, lechuga. Ricas en hierro, calcio y vitaminas.</p></div>
+          <div class="cat-card"><div class="emoji">🥕</div><h3>Raíces y tubérculos</h3><p>Zanahoria, remolacha, rábano. Gran aporte de hidratos y minerales.</p></div>
+          <div class="cat-card"><div class="emoji">🥦</div><h3>Crucíferas</h3><p>Brócoli, coliflor, col. Propiedades anticancerígenas y depurativas.</p></div>
+          <div class="cat-card"><div class="emoji">🧅</div><h3>Bulbos</h3><p>Cebolla, ajo, puerro. Antioxidantes naturales y refuerzo inmune.</p></div>
+          <div class="cat-card"><div class="emoji">🫑</div><h3>Frutos-verdura</h3><p>Tomate, pimiento, calabacín. Alto contenido en vitamina C y licopeno.</p></div>
+        </div>
+      </div>
+
+      <!-- ═══════════ SECCIÓN: NUTRICIÓN ═══════════ -->
+      <div id="sec-nutricion" style="display:none;">
+        <div class="sec-hero color-nutricion">
+          <div class="icono-grande">🧬</div>
+          <h2>Beneficios Nutricionales</h2>
+          <p>Vitaminas, minerales, antioxidantes y fibra: todo lo que las frutas y verduras de temporada aportan a tu cuerpo.</p>
+        </div>
+        <div class="descripcion-pag">
+          <h3>¿Qué aprenderás en esta sección?</h3>
+          <ul>
+            <li>Principales nutrientes presentes en frutas y verduras (vitaminas, minerales, fibra y antioxidantes).</li>
+            <li>Beneficios concretos de cada nutriente al organismo.</li>
+            <li>Las fuentes vegetales más ricas en cada vitamina o mineral.</li>
+            <li>Comparativa visual de densidad nutricional entre distintos alimentos.</li>
+          </ul>
+        </div>
+        <p class="sub-titulo">🔬 Principales nutrientes</p>
+        <p class="sub-sub">Lo que cada vitamina y mineral hace por tu cuerpo y dónde encontrarlo</p>
+        <div class="vit-grid">
+          <div class="vit-card color-c"><div class="vit-nombre">💊 Vitamina C</div><p>Potencia el sistema inmunológico, facilita la absorción del hierro y actúa como antioxidante.</p><div class="fuentes"><strong>Fuentes:</strong> Fresa, kiwi, naranja, pimiento rojo, brócoli</div></div>
+          <div class="vit-card color-a"><div class="vit-nombre">🥕 Vitamina A (β-caroteno)</div><p>Esencial para la visión, el sistema inmune y la salud de la piel y las mucosas.</p><div class="fuentes"><strong>Fuentes:</strong> Zanahoria, espinaca, mango, calabaza, brócoli</div></div>
+          <div class="vit-card color-k"><div class="vit-nombre">🌿 Vitamina K</div><p>Fundamental para la coagulación sanguínea y la salud ósea.</p><div class="fuentes"><strong>Fuentes:</strong> Espinaca, brócoli, col, acelga, espárrago</div></div>
+          <div class="vit-card color-b9"><div class="vit-nombre">🧬 Ácido Fólico (B9)</div><p>Imprescindible en el embarazo y para la formación de glóbulos rojos.</p><div class="fuentes"><strong>Fuentes:</strong> Espinaca, fresa, aguacate, espárrago, remolacha</div></div>
+          <div class="vit-card color-e"><div class="vit-nombre">🌻 Vitamina E</div><p>Poderoso antioxidante que protege las membranas celulares y la salud cardiovascular.</p><div class="fuentes"><strong>Fuentes:</strong> Aguacate, kiwi, espinaca, mango, espárrago</div></div>
+          <div class="vit-card color-fe"><div class="vit-nombre">⚙️ Hierro (no hemo)</div><p>Necesario para transportar oxígeno en la sangre. Mejora con vitamina C.</p><div class="fuentes"><strong>Fuentes:</strong> Espinaca, acelga, guisantes, alcachofa, remolacha</div></div>
+        </div>
+        <p class="sub-titulo">💪 ¿Qué mejora en tu salud?</p>
+        <div class="ben-grid">
+          <div class="ben-card"><div class="icon">🛡️</div><h3>Sistema inmunológico</h3><p>La vitamina C y antioxidantes reducen la frecuencia de infecciones.</p></div>
+          <div class="ben-card"><div class="icon">❤️</div><h3>Salud cardiovascular</h3><p>El potasio y la fibra soluble reducen la presión arterial y el colesterol LDL.</p></div>
+          <div class="ben-card"><div class="icon">🦷</div><h3>Huesos y dientes</h3><p>El calcio y la vitamina K contribuyen a mantener la densidad ósea.</p></div>
+          <div class="ben-card"><div class="icon">🔋</div><h3>Energía y metabolismo</h3><p>Las vitaminas del grupo B regulan el metabolismo celular y reducen el cansancio.</p></div>
+          <div class="ben-card"><div class="icon">🧠</div><h3>Función cognitiva</h3><p>Los antioxidantes del arándano y la luteína de las hojas verdes protegen el tejido cerebral.</p></div>
+        </div>
+        <p class="sub-titulo">📊 Densidad de vitamina C por 100 g</p>
+        <p class="sub-sub">Comparativa orientativa (% de la ingesta diaria recomendada)</p>
+        <div style="background:#fff;border-radius:var(--radio);padding:1.5rem;box-shadow:var(--sombra);margin-bottom:1.5rem;">
+          <div class="barra-item"><div class="barra-label"><span>🫑 Pimiento rojo</span><span>190%</span></div><div class="barra-track"><div class="barra-fill" style="width:95%;background:#e76f51;"></div></div></div>
+          <div class="barra-item"><div class="barra-label"><span>🥦 Brócoli</span><span>150%</span></div><div class="barra-track"><div class="barra-fill" style="width:75%;background:#40916c;"></div></div></div>
+          <div class="barra-item"><div class="barra-label"><span>🥝 Kiwi</span><span>93%</span></div><div class="barra-track"><div class="barra-fill" style="width:47%;background:#52b788;"></div></div></div>
+          <div class="barra-item"><div class="barra-label"><span>🍓 Fresa</span><span>88%</span></div><div class="barra-track"><div class="barra-fill" style="width:44%;background:#e63946;"></div></div></div>
+          <div class="barra-item"><div class="barra-label"><span>🍊 Naranja</span><span>70%</span></div><div class="barra-track"><div class="barra-fill" style="width:35%;background:#f4a261;"></div></div></div>
+          <div class="barra-item"><div class="barra-label"><span>🍋 Limón</span><span>64%</span></div><div class="barra-track"><div class="barra-fill" style="width:32%;background:#e9c46a;"></div></div></div>
+        </div>
+      </div>
+
+      <!-- ═══════════ SECCIÓN: SOSTENIBLE ═══════════ -->
+      <div id="sec-sostenible" style="display:none;">
+        <div class="sec-hero color-sostenible">
+          <div class="icono-grande">♻️</div>
+          <h2>Consumo Sostenible</h2>
+          <p>Pequeñas decisiones de compra y consumo pueden generar un gran impacto en el medioambiente.</p>
+        </div>
+        <div class="descripcion-pag">
+          <h3>¿Por qué es importante esta sección?</h3>
+          <p>El sistema agroalimentario representa cerca del <strong>26% de las emisiones globales de CO₂</strong>. Aquí encontrarás:</p>
+          <ul>
+            <li>Consejos prácticos para reducir el desperdicio de frutas y verduras en el hogar.</li>
+            <li>Guía para comprar en mercados locales y de temporada reduciendo la huella de carbono.</li>
+            <li>Técnicas de conservación y aprovechamiento total del alimento.</li>
+          </ul>
+        </div>
+        <p class="sub-titulo">✅ 6 Consejos esenciales</p>
+        <p class="sub-sub">Acciones concretas que puedes aplicar desde hoy mismo</p>
+        <div class="consejos-grid">
+          <div class="consejo-card"><div class="num">01</div><h3>Compra lo que necesitas</h3><p>Planifica tus comidas semanalmente antes de ir al mercado. Evita la compra impulsiva.</p></div>
+          <div class="consejo-card"><div class="num">02</div><h3>Elige productos locales</h3><p>Los alimentos locales recorren menos kilómetros hasta tu mesa, reduciendo emisiones de transporte.</p></div>
+          <div class="consejo-card"><div class="num">03</div><h3>Consume la temporada</h3><p>Las frutas y verduras fuera de temporada requieren invernaderos de alta energía o vuelos internacionales.</p></div>
+          <div class="consejo-card"><div class="num">04</div><h3>Aprovecha todo el alimento</h3><p>Las hojas de zanahoria y tallos de brócoli son nutritivos. Úsalos en caldos, smoothies o compost.</p></div>
+          <div class="consejo-card"><div class="num">05</div><h3>Almacena correctamente</h3><p>Conoce qué va en la nevera y qué no. Un mal almacenamiento es la primera causa de desperdicio.</p></div>
+          <div class="consejo-card"><div class="num">06</div><h3>Prefiere envase mínimo</h3><p>Compra a granel cuando sea posible. Los envases plásticos generan millones de toneladas de residuos.</p></div>
+        </div>
+        <div class="impacto-section">
+          <h3>🌍 El impacto en números</h3>
+          <div class="sub">Lo que genera nuestro sistema alimentario actual</div>
+          <div class="impacto-stats-grid">
+            <div class="impacto-stat"><div class="numero">1/3</div><p>De todos los alimentos producidos en el mundo se desperdicia cada año</p></div>
+            <div class="impacto-stat"><div class="numero">8%</div><p>De las emisiones globales provienen del desperdicio de alimentos</p></div>
+            <div class="impacto-stat"><div class="numero">50%</div><p>Menos emisiones genera consumir productos de temporada vs. importados</p></div>
+            <div class="impacto-stat"><div class="numero">70%</div><p>Del agua dulce mundial se usa en agricultura</p></div>
+          </div>
+        </div>
+        <p class="sub-titulo" style="margin-top:1.5rem;">🛒 Cómo actuar en el día a día</p>
+        <div class="acc-grid">
+          <div class="acc-card"><div class="emoji">🧺</div><h3>Mercados de barrio</h3><p>Prioriza tiendas locales y mercados de productores frente a supermercados de importación.</p></div>
+          <div class="acc-card"><div class="emoji">🫙</div><h3>Encurtir y conservar</h3><p>Encurtidos, mermeladas y deshidratados permiten conservar excedentes de temporada durante meses.</p></div>
+          <div class="acc-card"><div class="emoji">🌱</div><h3>Huerto en casa</h3><p>Incluso una maceta de hierbas aromáticas reduce tu huella y te conecta con el alimento.</p></div>
+          <div class="acc-card"><div class="emoji">🚲</div><h3>Compra de proximidad</h3><p>Desplázate andando o en bici al mercado cuando sea posible.</p></div>
+          <div class="acc-card"><div class="emoji">🗑️</div><h3>Compost doméstico</h3><p>Transforma los restos orgánicos en abono. Reduce hasta un 30% los residuos del hogar.</p></div>
+        </div>
+      </div>
+
+      <!-- ═══════════ SECCIÓN: RECETAS ═══════════ -->
+      <div id="sec-recetas" style="display:none;">
+        <div class="sec-hero color-recetas">
+          <div class="icono-grande">🥗</div>
+          <h2>Recetas de Temporada</h2>
+          <p>Prepara platos deliciosos, nutritivos y sostenibles aprovechando las frutas y verduras que están en su mejor momento.</p>
+        </div>
+        <div class="descripcion-pag">
+          <h3>¿Qué encontrarás aquí?</h3>
+          <ul>
+            <li>Recetas que usan ingredientes de temporada en el momento actual, optimizando frescura y precio.</li>
+            <li>Opciones rápidas (menos de 30 min), económicas y aptas para toda la familia.</li>
+            <li>Clasificación por dificultad, tiempo y tipo (ensalada, sopa, smoothie, plato principal).</li>
+          </ul>
+        </div>
+        <div class="filtros-rec">
+          <button class="filtro-btn sel" title="Ver todas las recetas">🍽️ Todas</button>
+          <button class="filtro-btn" title="Ver recetas de ensaladas" onclick="this.closest('.filtros-rec').querySelectorAll('.filtro-btn').forEach(b=>b.classList.remove('sel'));this.classList.add('sel')">🥗 Ensaladas</button>
+          <button class="filtro-btn" title="Ver recetas de smoothies" onclick="this.closest('.filtros-rec').querySelectorAll('.filtro-btn').forEach(b=>b.classList.remove('sel'));this.classList.add('sel')">🥤 Smoothies</button>
+          <button class="filtro-btn" title="Ver recetas de sopas" onclick="this.closest('.filtros-rec').querySelectorAll('.filtro-btn').forEach(b=>b.classList.remove('sel'));this.classList.add('sel')">🍲 Sopas</button>
+          <button class="filtro-btn" title="Ver platos principales" onclick="this.closest('.filtros-rec').querySelectorAll('.filtro-btn').forEach(b=>b.classList.remove('sel'));this.classList.add('sel')">🌮 Plato principal</button>
+          <button class="filtro-btn" title="Ver postres" onclick="this.closest('.filtros-rec').querySelectorAll('.filtro-btn').forEach(b=>b.classList.remove('sel'));this.classList.add('sel')">🍰 Postres</button>
+          <button class="filtro-btn" title="Ver recetas de menos de 15 minutos" onclick="this.closest('.filtros-rec').querySelectorAll('.filtro-btn').forEach(b=>b.classList.remove('sel'));this.classList.add('sel')">⚡ Menos de 15 min</button>
+        </div>
+        <p class="sub-titulo">🍴 Recetas del mes — Marzo</p>
+        <p class="sub-sub">Elaboradas con los mejores ingredientes de temporada disponibles ahora</p>
+        <div class="recetas-grid">
+          <div class="receta-card"><div class="receta-imagen">🥗</div><div class="receta-body"><div class="receta-meta"><span class="meta-tag">⏱️ 15 min</span><span class="meta-tag">👤 2 personas</span><span class="dificultad facil">Fácil</span></div><h3>Ensalada de fresas con espinaca y aguacate</h3><p>Combinación fresca y nutritiva con tres superalimentos de temporada en un solo plato.</p><div class="ingredientes"><strong>Ingredientes:</strong> Fresas · Espinaca baby · Aguacate · Nueces · Vinagreta de limón</div></div></div>
+          <div class="receta-card"><div class="receta-imagen">🥤</div><div class="receta-body"><div class="receta-meta"><span class="meta-tag">⏱️ 5 min</span><span class="meta-tag">👤 1 persona</span><span class="dificultad facil">Fácil</span></div><h3>Smoothie verde de kiwi y espinaca</h3><p>Bebida energizante cargada de vitamina C, hierro y clorofila. Perfecta para empezar el día.</p><div class="ingredientes"><strong>Ingredientes:</strong> Kiwi · Espinaca · Plátano · Limón · Agua de coco</div></div></div>
+          <div class="receta-card"><div class="receta-imagen">🥕</div><div class="receta-body"><div class="receta-meta"><span class="meta-tag">⏱️ 30 min</span><span class="meta-tag">👤 4 personas</span><span class="dificultad facil">Fácil</span></div><h3>Crema de zanahoria y puerro</h3><p>Sopa reconfortante y depurativa con dos verduras estrella de la temporada.</p><div class="ingredientes"><strong>Ingredientes:</strong> Zanahoria · Puerro · Caldo vegetal · Jengibre · Aceite de oliva</div></div></div>
+          <div class="receta-card"><div class="receta-imagen">🥦</div><div class="receta-body"><div class="receta-meta"><span class="meta-tag">⏱️ 25 min</span><span class="meta-tag">👤 2 personas</span><span class="dificultad medio">Medio</span></div><h3>Brócoli al horno con limón y ajo</h3><p>Receta antioxidante que transforma el brócoli en un snack crujiente e irresistible.</p><div class="ingredientes"><strong>Ingredientes:</strong> Brócoli · Ajo · Limón · Parmesano · Aceite de oliva</div></div></div>
+          <div class="receta-card"><div class="receta-imagen">🍓</div><div class="receta-body"><div class="receta-meta"><span class="meta-tag">⏱️ 20 min</span><span class="meta-tag">👤 4 personas</span><span class="dificultad facil">Fácil</span></div><h3>Tarta de fresas sin horno</h3><p>Postre fresco, ligero y sin azúcar añadida. Aprovecha las fresas en su mejor momento.</p><div class="ingredientes"><strong>Ingredientes:</strong> Fresas · Yogur griego · Avena · Dátiles · Ralladura de limón</div></div></div>
+          <div class="receta-card"><div class="receta-imagen">🌿</div><div class="receta-body"><div class="receta-meta"><span class="meta-tag">⏱️ 40 min</span><span class="meta-tag">👤 2 personas</span><span class="dificultad medio">Medio</span></div><h3>Alcachofas rellenas de acelga y queso</h3><p>Plato principal sofisticado y depurativo. Las alcachofas de marzo son las más tiernas del año.</p><div class="ingredientes"><strong>Ingredientes:</strong> Alcachofa · Acelga · Queso ricotta · Nuez moscada · Limón</div></div></div>
+        </div>
+        <div class="chef-consejo">
+          <h3>💡 Consejo del mes</h3>
+          <blockquote>"Las hojas verdes de los rábanos y de las zanahorias son completamente comestibles y tienen un sabor parecido al perejil. Úsalas en sofrito, en pestos o para decorar tus platos. ¡No las tires!"</blockquote>
+          <p>Reducir el desperdicio empieza en la cocina. Cada parte del alimento que aprovechas es un pequeño acto de consumo responsable.</p>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       MODAL CERRAR SESIÓN
+  ══════════════════════════════════════════ -->
+  <div class="overlay" id="overlay" onclick="cerrarModal(event)">
+    <div class="modal">
+      <div class="modal-icono">🚪</div>
+      <h3>¿Cerrar sesión?</h3>
+      <p>Se cerrará tu sesión activa y serás redirigido/a a la pantalla de inicio de sesión.</p>
+      <div class="modal-btns">
+        <button class="btn-cancel" onclick="cerrarModal()">Cancelar</button>
+        <button class="btn-confirm" onclick="confirmarCerrarSesion()">Sí, cerrar sesión</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast">🌿 <span id="toastMsg"></span></div>
+
+  <!-- ══════════════════════════════════════════
+       JAVASCRIPT
+  ══════════════════════════════════════════ -->
+  <script>
+    /* ─── Protección de ruta: si no hay sesión → login ─── */
+    const sesion = JSON.parse(
+      sessionStorage.getItem('ft_sesion') || localStorage.getItem('ft_sesion') || 'null'
+    );
+    if (!sesion) {
+      window.location.replace('login.html');
+    }
+
+    /* ─── Cargar datos del usuario en pantalla ─── */
+    window.addEventListener('DOMContentLoaded', () => {
+      if (!sesion) return;
+
+      const nombre = sesion.nombre || sesion.usuario;
+      const inicial = nombre.charAt(0).toUpperCase();
+      const correo  = sesion.usuario;
+
+      // Topbar
+      document.getElementById('nombreTop').textContent      = nombre;
+      document.getElementById('avatarTop').textContent      = inicial;
+      // Sidebar
+      document.getElementById('sidebarNombre').textContent  = nombre;
+      document.getElementById('sidebarAvatar').textContent  = inicial;
+      // Bienvenida
+      document.getElementById('nombreBienvenida').textContent = nombre;
+      // Perfil
+      document.getElementById('perfilAvatar').textContent   = inicial;
+      document.getElementById('perfilNombre').textContent   = nombre;
+      document.getElementById('perfilCorreo').textContent   = correo;
+    });
+
+    /* ─── Navegación entre secciones del dashboard ─── */
+    const secciones = ['inicio','favoritos','calendario','alertas','perfil','ajustes','frutas','verduras','nutricion','sostenible','recetas'];
+    function mostrarSeccion(id) {
+      secciones.forEach(s => {
+        document.getElementById('sec-' + s).style.display = s === id ? 'block' : 'none';
+      });
+      /* Marcar ítem activo en sidebar */
+      document.querySelectorAll('.nav-item').forEach(el => {
+        el.classList.toggle('activo', el.dataset.seccion === id);
+      });
+      /* Scroll al inicio del main */
+      document.getElementById('main').scrollTop = 0;
+      window.scrollTo(0, 0);
+      /* Cerrar sidebar en móvil */
+      document.getElementById('sidebar').classList.remove('abierto');
+    }
+
+    /* ─── Sidebar toggle (móvil) ─── */
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('abierto');
+    }
+
+    /* ─── Modal cerrar sesión ─── */
+    function abrirModal() {
+      document.getElementById('overlay').classList.add('visible');
+    }
+    function cerrarModal(e) {
+      if (!e || e.target === document.getElementById('overlay')) {
+        document.getElementById('overlay').classList.remove('visible');
+      }
+    }
+    function confirmarCerrarSesion() {
+      sessionStorage.removeItem('ft_sesion');
+      localStorage.removeItem('ft_sesion');
+      window.location.href = 'login.html';
+    }
+
+    /* ─── Marcar notificaciones como leídas ─── */
+    function marcarLeidas() {
+      document.querySelectorAll('.noti-punto').forEach(p => { p.classList.add('leida'); });
+      document.querySelectorAll('.noti-item').forEach(i => { i.classList.remove('no-leida'); });
+    }
+
+    /* ─── Buscador rápido ─── */
+    function buscar() {
+      const q = document.getElementById('buscador').value.toLowerCase();
+      if (q.length < 2) return;
+      const tabla = {
+        'fresa': 'frutas', 'naranja': 'frutas', 'kiwi': 'frutas',
+        'aguacate': 'frutas', 'espinaca': 'verduras', 'brócoli': 'verduras',
+        'receta': 'recetas', 'recetas': 'recetas', 'nutricion': 'nutricion',
+        'vitamina': 'nutricion', 'sostenible': 'sostenible',
+        'zanahoria': 'verduras', 'alcachofa': 'verduras',
+      };
+      const clave = Object.keys(tabla).find(k => q.includes(k));
+      if (clave) {
+        mostrarToast('🔍 Buscando "' + q + '"…');
+        setTimeout(() => mostrarSeccion(tabla[clave]), 400);
+        document.getElementById('buscador').value = '';
+      }
+    }
+
+    /* ─── Toast ─── */
+    let toastTimer;
+    function mostrarToast(msg) {
+      const t = document.getElementById('toast');
+      document.getElementById('toastMsg').textContent = msg;
+      t.classList.add('visible');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => t.classList.remove('visible'), 3000);
+    }
+  </script>
+
+</body>
+</html>

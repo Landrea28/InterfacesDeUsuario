@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Recetas – FrescaTemporada</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --verde-oscuro: #2d6a4f; --verde-medio: #40916c;
+      --verde-claro: #74c69d; --crema: #f8f4e3;
+      --naranja: #e76f51; --gris-suave: #f1f5f1;
+      --sombra: 0 4px 18px rgba(0,0,0,.10); --radio: 12px;
+    }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--crema); color: #1b1b1b; line-height: 1.6; }
+
+    header { background: var(--verde-oscuro); position: sticky; top: 0; z-index: 100; box-shadow: var(--sombra); }
+    .navbar { max-width: 1200px; margin: 0 auto; padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 70px; }
+    .logo { display: flex; align-items: center; gap: .55rem; text-decoration: none; }
+    .logo-icon { font-size: 2rem; }
+    .logo-text { font-size: 1.4rem; font-weight: 700; color: #fff; }
+    .logo-text span { color: var(--verde-claro); }
+    nav ul { list-style: none; display: flex; gap: .2rem; }
+    nav ul li a { display: block; padding: .5rem 1rem; border-radius: 8px; text-decoration: none; color: #e0f2e9; font-size: .95rem; font-weight: 500; transition: background .2s; }
+    nav ul li a:hover, nav ul li a.active { background: var(--verde-medio); color: #fff; }
+    .nav-sesion { display: flex; align-items: center; gap: .6rem; flex-shrink: 0; }
+    .btn-login-nav { display: inline-flex; align-items: center; gap: .4rem; background: var(--naranja); color: #fff; padding: .42rem 1rem; border-radius: 999px; text-decoration: none; font-size: .85rem; font-weight: 700; transition: background .2s; white-space: nowrap; }
+    .btn-login-nav:hover { background: #c75a3e; }
+    .nav-usuario { display: none; align-items: center; gap: .5rem; color: #e0f2e9; font-size: .85rem; }
+    .nav-usuario.visible { display: flex; }
+    .nav-avatar { width: 30px; height: 30px; background: var(--verde-claro); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: .85rem; font-weight: 700; color: var(--verde-oscuro); }
+    .nav-salir { background: transparent; border: 1px solid #74c69d; color: #e0f2e9; border-radius: 999px; padding: .25rem .7rem; font-size: .78rem; font-family: inherit; cursor: pointer; transition: background .2s; }
+    .nav-salir:hover { background: var(--verde-medio); }
+
+    .page-hero {
+      background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+      padding: 3.5rem 2rem; text-align: center;
+    }
+    .page-hero .icono-grande { font-size: 4rem; margin-bottom: .5rem; }
+    .page-hero h1 { font-size: 2.4rem; color: #7d2d00; margin-bottom: .75rem; }
+    .page-hero p { max-width: 650px; margin: 0 auto; font-size: 1.05rem; color: #7d4a2f; }
+
+    .descripcion { max-width: 900px; margin: 3rem auto; padding: 2.5rem; background: #fff; border-radius: var(--radio); box-shadow: var(--sombra); }
+    .descripcion h2 { color: var(--verde-oscuro); font-size: 1.5rem; margin-bottom: 1rem; }
+    .descripcion p { color: #555; margin-bottom: 1rem; }
+    .descripcion ul { padding-left: 1.5rem; color: #555; }
+    .descripcion ul li { margin-bottom: .5rem; }
+
+    /* FILTROS */
+    .filtros { max-width: 1100px; margin: 0 auto 1rem; padding: 0 2rem; display: flex; flex-wrap: wrap; gap: .6rem; }
+    .filtro-btn {
+      background: #fff; border: 2px solid #d0e8d8; border-radius: 999px;
+      padding: .4rem 1.1rem; font-size: .88rem; font-weight: 600;
+      color: var(--verde-oscuro); cursor: pointer; transition: all .2s;
+    }
+    .filtro-btn:hover, .filtro-btn.sel { background: var(--verde-medio); color: #fff; border-color: var(--verde-medio); }
+
+    /* RECETAS GRID */
+    .recetas { max-width: 1100px; margin: 0 auto 4rem; padding: 0 2rem; }
+    .recetas h2 { font-size: 1.7rem; color: var(--verde-oscuro); margin-bottom: .4rem; }
+    .recetas .sub { color: #666; margin-bottom: 2rem; }
+    .recetas-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); gap: 1.6rem; }
+    .receta-card {
+      background: #fff; border-radius: var(--radio); box-shadow: var(--sombra);
+      overflow: hidden; transition: transform .2s, box-shadow .2s;
+    }
+    .receta-card:hover { transform: translateY(-5px); box-shadow: 0 12px 30px rgba(0,0,0,.14); }
+    .receta-imagen {
+      height: 180px; display: flex; align-items: center; justify-content: center;
+      font-size: 5rem; background: var(--gris-suave);
+    }
+    .receta-body { padding: 1.3rem; }
+    .receta-meta { display: flex; gap: .8rem; margin-bottom: .7rem; }
+    .meta-tag {
+      display: inline-flex; align-items: center; gap: .3rem;
+      font-size: .78rem; color: #666; background: var(--gris-suave);
+      border-radius: 999px; padding: .2rem .7rem;
+    }
+    .receta-body h3 { font-size: 1.05rem; color: var(--verde-oscuro); margin-bottom: .4rem; }
+    .receta-body p { font-size: .88rem; color: #666; margin-bottom: .8rem; }
+    .ingredientes { font-size: .82rem; color: #555; }
+    .ingredientes strong { color: var(--verde-oscuro); }
+    .dificultad { display: inline-block; padding: .2rem .75rem; border-radius: 999px; font-size: .75rem; font-weight: 700; }
+    .facil   { background: #d8f3dc; color: #1b4332; }
+    .medio   { background: #fff3cd; color: #7d5a00; }
+    .dificil { background: #fde8e4; color: #7d2d00; }
+
+    /* CONSEJO DEL CHEF */
+    .consejo-chef { background: var(--verde-oscuro); color: #fff; padding: 3rem 2rem; margin-bottom: 0; }
+    .consejo-chef-inner { max-width: 800px; margin: 0 auto; text-align: center; }
+    .consejo-chef h2 { font-size: 1.5rem; margin-bottom: 1rem; color: var(--verde-claro); }
+    .consejo-chef p { font-size: 1rem; color: #cce5d6; }
+    .consejo-chef blockquote { font-size: 1.1rem; font-style: italic; margin: 1.5rem 0; color: #fff; border-left: 4px solid var(--verde-claro); padding-left: 1rem; text-align: left; }
+
+    footer { background: var(--verde-oscuro); color: #cce5d6; text-align: center; padding: 2rem 1rem; font-size: .9rem; }
+    footer strong { color: #fff; }
+
+    /* ── HAMBURGUESA / MENÚ MÓVIL ── */
+    .hamburger {
+      display: none; background: none; border: none; cursor: pointer;
+      flex-direction: column; gap: 5px; padding: .45rem; border-radius: 6px;
+      transition: background .2s; align-items: center;
+    }
+    .hamburger:hover { background: rgba(255,255,255,.12); }
+    .hamburger span {
+      display: block; width: 24px; height: 3px; background: #fff;
+      border-radius: 2px; transition: transform .3s, opacity .3s;
+    }
+    .hamburger.abierto span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+    .hamburger.abierto span:nth-child(2) { opacity: 0; }
+    .hamburger.abierto span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+    .nav-mobile {
+      display: none; position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0; z-index: 299;
+    }
+    .nav-mobile.visible { display: block; }
+    .nav-mobile-backdrop {
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,.52);
+    }
+    .nav-mobile-panel {
+      position: absolute; top: 0; left: 0;
+      width: 270px; height: 100%; overflow-y: auto;
+      background: var(--verde-oscuro);
+      padding: 1.4rem 1.1rem;
+      box-shadow: 4px 0 20px rgba(0,0,0,.3);
+    }
+    .nav-mobile-logo {
+      display: flex; align-items: center; gap: .55rem;
+      text-decoration: none;
+      padding-bottom: 1rem; margin-bottom: .7rem;
+      border-bottom: 1px solid rgba(255,255,255,.18);
+    }
+    .nav-mobile-logo .mi { font-size: 1.55rem; }
+    .nav-mobile-logo .mt { font-size: 1.05rem; font-weight: 700; color: #fff; }
+    .nav-mobile-logo .mt span { color: var(--verde-claro); }
+    .nav-mobile-panel a {
+      display: block; padding: .7rem .9rem; margin-bottom: .1rem;
+      color: #e0f2e9; text-decoration: none;
+      border-radius: 8px; font-size: .93rem; font-weight: 500;
+      transition: background .2s;
+    }
+    .nav-mobile-panel a:hover, .nav-mobile-panel a.active {
+      background: var(--verde-medio); color: #fff;
+    }
+    @media (max-width: 768px) {
+      .page-hero h1 { font-size: 1.8rem; }
+      .recetas-grid { grid-template-columns: 1fr; }
+      nav { display: none; }
+      .hamburger { display: flex; }
+      .navbar { padding: 0 1rem; }
+      .nav-sesion .btn-login-nav { font-size: .78rem; padding: .32rem .65rem; }
+      .nav-sesion #navNombre { display: none; }
+    }
+    @media (max-width: 480px) {
+      .page-hero h1 { font-size: 1.5rem; }
+      .filtros { gap: .3rem; }
+      .filtro-btn { font-size: .8rem; padding: .3rem .7rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="navbar">
+      <a href="index.html" class="logo" title="FrescaTemporada – Ir al inicio">
+        <span class="logo-icon">🥦</span>
+        <span class="logo-text">Fresca<span>Temporada</span></span>
+      </a>
+      <button class="hamburger" onclick="toggleMenu()" title="Abrir menú de navegación" aria-label="Abrir menú de navegación">
+        <span></span><span></span><span></span>
+      </button>
+      <nav>
+        <ul>
+          <li><a href="index.html" title="Inicio – Página principal de FrescaTemporada">Inicio</a></li>
+          <li><a href="frutas.html" title="Frutas – Calendario de frutas de temporada por mes">Frutas</a></li>
+          <li><a href="verduras.html" title="Verduras – Guía de hortalizas de temporada">Verduras</a></li>
+          <li><a href="nutricion.html" title="Nutrición – Vitaminas, minerales y beneficios para la salud">Nutrición</a></li>
+          <li><a href="sostenible.html" title="Consumo Sostenible – Consejos para reducir el desperdicio y comprar local">Consumo Sostenible</a></li>
+          <li><a href="recetas.html" class="active" title="Recetas – Platos deliciosos con ingredientes de temporada">Recetas</a></li>
+        </ul>
+      </nav>
+      <div class="nav-sesion">
+        <div class="nav-usuario" id="navUsuario"><div class="nav-avatar" id="navAvatar">U</div><span id="navNombre"></span><button class="nav-salir" onclick="navCerrarSesion()" title="Cerrar sesión – Salir de tu cuenta">Salir</button></div>
+        <a href="login.html" class="btn-login-nav" id="btnIniciarSesion" title="Iniciar sesión – Acceder o crear tu cuenta">🔑 Iniciar sesión</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── MENÚ MÓVIL ── -->
+  <div class="nav-mobile" id="navMobile">
+    <div class="nav-mobile-backdrop" onclick="cerrarMenu()"></div>
+    <div class="nav-mobile-panel">
+      <a href="index.html" class="nav-mobile-logo" title="FrescaTemporada – Ir al inicio">
+        <span class="mi">🥦</span>
+        <span class="mt">Fresca<span>Temporada</span></span>
+      </a>
+      <a href="index.html" title="Inicio – Página principal de FrescaTemporada">🏠 Inicio</a>
+      <a href="frutas.html" title="Frutas – Calendario de frutas de temporada por mes">🍓 Frutas</a>
+      <a href="verduras.html" title="Verduras – Guía de hortalizas de temporada">🥦 Verduras</a>
+      <a href="nutricion.html" title="Nutrición – Vitaminas, minerales y beneficios para la salud">🧬 Nutrición</a>
+      <a href="sostenible.html" title="Consumo Sostenible – Consejos para un consumo responsable">♻️ Consumo Sostenible</a>
+      <a href="recetas.html" class="active" title="Recetas – Platos deliciosos con ingredientes de temporada">🥗 Recetas</a>
+      <a href="login.html" title="Mi cuenta – Iniciar sesión o crear una cuenta nueva">🔑 Mi Cuenta</a>
+    </div>
+  </div>
+
+  <script>(function(){var s=JSON.parse(sessionStorage.getItem('ft_sesion')||localStorage.getItem('ft_sesion')||'null');if(s){document.getElementById('navUsuario').classList.add('visible');var btn=document.getElementById('btnIniciarSesion');btn.textContent='📊 Mi Dashboard';btn.href='dashboard.html';document.getElementById('navNombre').textContent=s.nombre||s.usuario;document.getElementById('navAvatar').textContent=(s.nombre||s.usuario).charAt(0).toUpperCase();}})();function navCerrarSesion(){sessionStorage.removeItem('ft_sesion');localStorage.removeItem('ft_sesion');location.reload();}function toggleMenu(){var b=document.querySelector('.hamburger');var p=document.getElementById('navMobile');b.classList.toggle('abierto');p.classList.toggle('visible');document.body.style.overflow=p.classList.contains('visible')?'hidden':'';}function cerrarMenu(){document.querySelector('.hamburger').classList.remove('abierto');document.getElementById('navMobile').classList.remove('visible');document.body.style.overflow='';}</script>
+
+  <div class="page-hero">
+    <div class="icono-grande">🥗</div>
+    <h1>Recetas de Temporada</h1>
+    <p>
+      Prepara platos deliciosos, nutritivos y sostenibles aprovechando las frutas
+      y verduras que están en su mejor momento cada mes del año.
+    </p>
+  </div>
+
+  <div class="descripcion">
+    <h2>¿Qué encontrarás aquí?</h2>
+    <p>
+      La sección de <strong>Recetas</strong> combina todo lo que aprendiste sobre
+      la temporada y la nutrición en preparaciones prácticas para el día a día.
+      Cada receta está diseñada para:
+    </p>
+    <ul>
+      <li>Usar ingredientes que están en temporada en el momento actual, optimizando frescura y precio.</li>
+      <li>Maximizar el aprovechamiento del alimento usando las partes que normalmente se desechan.</li>
+      <li>Ofrecer opciones rápidas (menos de 30 min), económicas y aptas para toda la familia.</li>
+      <li>Incluir el perfil nutricional aproximado para que sepas exactamente qué aporta cada plato.</li>
+      <li>Clasificarse por dificultad, tiempo y tipo (ensalada, sopa, smoothie, plato principal).</li>
+    </ul>
+  </div>
+
+  <!-- FILTROS -->
+  <div class="filtros">
+    <button class="filtro-btn sel">🍽️ Todas</button>
+    <button class="filtro-btn">🥗 Ensaladas</button>
+    <button class="filtro-btn">🥤 Smoothies</button>
+    <button class="filtro-btn">🍲 Sopas</button>
+    <button class="filtro-btn">🌮 Plato principal</button>
+    <button class="filtro-btn">🍰 Postres</button>
+    <button class="filtro-btn">⚡ Menos de 15 min</button>
+  </div>
+
+  <!-- RECETAS -->
+  <div class="recetas">
+    <h2>🍴 Recetas del mes — Marzo</h2>
+    <p class="sub">Elaboradas con los mejores ingredientes de temporada disponibles ahora</p>
+    <div class="recetas-grid">
+
+      <div class="receta-card">
+        <div class="receta-imagen">🥗</div>
+        <div class="receta-body">
+          <div class="receta-meta">
+            <span class="meta-tag">⏱️ 15 min</span>
+            <span class="meta-tag">👤 2 personas</span>
+            <span class="dificultad facil">Fácil</span>
+          </div>
+          <h3>Ensalada de fresas con espinaca y aguacate</h3>
+          <p>Combinación fresca y nutritiva que aprovecha tres superalimentos de temporada en un solo plato.</p>
+          <div class="ingredientes">
+            <strong>Ingredientes clave:</strong> Fresas · Espinaca baby · Aguacate · Nueces · Vinagreta de limón
+          </div>
+        </div>
+      </div>
+
+      <div class="receta-card">
+        <div class="receta-imagen">🥤</div>
+        <div class="receta-body">
+          <div class="receta-meta">
+            <span class="meta-tag">⏱️ 5 min</span>
+            <span class="meta-tag">👤 1 persona</span>
+            <span class="dificultad facil">Fácil</span>
+          </div>
+          <h3>Smoothie verde de kiwi y espinaca</h3>
+          <p>Bebida energizante cargada de vitamina C, hierro y clorofila. Perfecta para empezar el día.</p>
+          <div class="ingredientes">
+            <strong>Ingredientes clave:</strong> Kiwi · Espinaca · Plátano · Limón · Agua de coco
+          </div>
+        </div>
+      </div>
+
+      <div class="receta-card">
+        <div class="receta-imagen">🥕</div>
+        <div class="receta-body">
+          <div class="receta-meta">
+            <span class="meta-tag">⏱️ 30 min</span>
+            <span class="meta-tag">👤 4 personas</span>
+            <span class="dificultad facil">Fácil</span>
+          </div>
+          <h3>Crema de zanahoria y puerro</h3>
+          <p>Sopa reconfortante y depurativa con dos verduras estrella del invierno y la primavera temprana.</p>
+          <div class="ingredientes">
+            <strong>Ingredientes clave:</strong> Zanahoria · Puerro · Caldo vegetal · Jengibre · Aceite de oliva
+          </div>
+        </div>
+      </div>
+
+      <div class="receta-card">
+        <div class="receta-imagen">🥦</div>
+        <div class="receta-body">
+          <div class="receta-meta">
+            <span class="meta-tag">⏱️ 25 min</span>
+            <span class="meta-tag">👤 2 personas</span>
+            <span class="dificultad medio">Medio</span>
+          </div>
+          <h3>Brócoli al horno con limón y ajo</h3>
+          <p>Receta antioxidante que transforma el brócoli en un snack crujiente e irresistible.</p>
+          <div class="ingredientes">
+            <strong>Ingredientes clave:</strong> Brócoli · Ajo · Limón · Parmesano · Aceite de oliva
+          </div>
+        </div>
+      </div>
+
+      <div class="receta-card">
+        <div class="receta-imagen">🍓</div>
+        <div class="receta-body">
+          <div class="receta-meta">
+            <span class="meta-tag">⏱️ 20 min</span>
+            <span class="meta-tag">👤 4 personas</span>
+            <span class="dificultad facil">Fácil</span>
+          </div>
+          <h3>Tarta de fresas sin horno</h3>
+          <p>Postre fresco, ligero y sin azúcar añadida. Aprovecha las fresas en su mejor momento del año.</p>
+          <div class="ingredientes">
+            <strong>Ingredientes clave:</strong> Fresas · Yogur griego · Avena · Dátiles · Ralladura de limón
+          </div>
+        </div>
+      </div>
+
+      <div class="receta-card">
+        <div class="receta-imagen">🌿</div>
+        <div class="receta-body">
+          <div class="receta-meta">
+            <span class="meta-tag">⏱️ 40 min</span>
+            <span class="meta-tag">👤 2 personas</span>
+            <span class="dificultad medio">Medio</span>
+          </div>
+          <h3>Alcachofas rellenas de acelga y queso</h3>
+          <p>Plato principal sofisticado y depurativo. Las alcachofas de marzo son las más tiernas del año.</p>
+          <div class="ingredientes">
+            <strong>Ingredientes clave:</strong> Alcachofa · Acelga · Queso ricotta · Nuez moscada · Limón
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- CONSEJO DEL CHEF -->
+  <div class="consejo-chef">
+    <div class="consejo-chef-inner">
+      <h2>💡 Consejo del mes</h2>
+      <blockquote>
+        "Las hojas verdes de los rábanos y de las zanahorias son completamente comestibles
+        y tienen un sabor parecido al perejil. Úsalas en sofrito, en pestos o para decorar
+        tus platos. ¡No las tires!"
+      </blockquote>
+      <p>Reducir el desperdicio empieza en la cocina. Cada parte del alimento que aprovechas
+      es un pequeño acto de consumo responsable.</p>
+    </div>
+  </div>
+
+  <footer>
+    <p><strong>FrescaTemporada</strong> — Come mejor, vive mejor 🌱</p>
+    <p style="margin-top:.4rem; font-size:.8rem;">Proyecto académico · Diseño de Interfaces de Usuario · 2026</p>
+  </footer>
+
+</body>
+</html>

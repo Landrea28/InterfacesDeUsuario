@@ -1,32 +1,50 @@
-> **Rama:** `MelodiaSteam`  
+# 🪼 Parcial 1 - Diseno de Interfaces de Usuario
+> **Rama:** `Parcial1`  
 > **Asignatura:** Diseño de Interfaces de Usuario  
 > **Fecha:** Febrero 2026
 > **Rama Main:** https://github.com/Landrea28/Dise-oDeInterfacesDeUsuario/tree/main 
 
-## Proyecto: Melodia Stream - Plataforma de Streaming Especializada
 
-Este proyecto consiste en el diseño y desarrollo de una interfaz web moderna para una plataforma de streaming de música enfocada en tres géneros específicos: **Alternativa, Jazz y Rock**. El objetivo principal es aplicar conceptos de usabilidad, accesibilidad (WCAG AA) y diseño responsivo bajo una estética retro-vintage.
+## 📖 Descripcion General
 
-### Información del Estudiante
-- **Materia:** Diseño de Interfaces de Usuario
-- **Laboratorio:** #3
-- **Ciclo:** 2026
+Este espacio documenta el desarrollo del **Parcial 1** de la asignatura **Diseno de Interfaces de Usuario**.
+En esta entrega se trabaja el diseno y la organizacion de una experiencia web enfocada en contenido informativo y navegacion por secciones.
 
-### Características del Proyecto
-- **Temática:** Curaduría musical curada de nicho con vibras de Jazz, Rock y Hippie/Indie.
-- **Paleta de Colores:** Basada en tonos cálidos y oscuros (Amarillo Oro, Naranja Terracota y Crema Vintage) para evocar la estética de vinilos y clubes nocturnos.
-- **Secciones Implementadas:**
-    - **index.html:** Portal principal con exploración de géneros y artistas recomendados.
-    - **quienes-somos.html:** Narrativa de marca sobre la curaduría humana y la pasión por el sonido sin pérdida.
-    - **productos-servicios.html:** Planes de suscripción y servicios exclusivos como el "Vinyl Club".
-    - **login.html:** Interfaz de acceso de usuario con diseño minimalista.
-- **Tecnologías:** HTML5 semántico y CSS3 puro (Flexbox, Grid, Variables, Media Queries).
+La intencion de este parcial es demostrar aplicacion de principios de:
+- jerarquia visual
+- estructura de contenido
+- claridad en la navegacion
+- coherencia entre paginas
 
-### Criterios de Diseño (UX/UI)
-1. **Accesibilidad:** Cumplimiento de contrastes de color WCAG AA y navegación optimizada para teclado (`focus-visible`).
-2. **Responsividad:** Diseño adaptativo para dispositivos móviles, tablets y escritorio con un header horizontal optimizado.
-3. **Consistencia Visual:** Uso de variables CSS para mantener una identidad de marca coherente en todas las páginas.
-4. **Interactividad:** Feedback visual en botones y tarjetas de géneros para mejorar la experiencia de usuario.
+## 🧩 Organizacion del Repositorio
 
----
-*Este repositorio es parte de las entregas académicas para la asignatura de Diseño de Interfaces de Usuario.*
+Este proyecto pertenece a un repositorio academico organizado por ramas.
+Cada rama representa una entrega independiente, por ejemplo:
+- talleres
+- parciales
+- proyectos
+
+De esta manera, cada entrega se mantiene separada, trazable y facil de evaluar.
+
+## 🪸 Rama Actual
+
+La rama que contiene esta entrega es:
+
+**PARCIAL1**
+
+## 🪄 Alcance de Esta Entrega
+
+Dentro de esta rama se incluyen distintas vistas HTML que conforman el recorrido del usuario:
+- pagina principal
+- acceso/login
+- secciones de frutas y verduras
+- nutricion
+- recetas
+- enfoque sostenible
+- dashboard
+
+Cada archivo aporta una parte de la experiencia global y permite evaluar tanto la consistencia visual como la arquitectura de informacion del parcial.
+
+##  Nota Academica
+
+Este material forma parte del proceso de evaluacion del curso y se mantiene en su rama correspondiente para conservar el historial de avances por tipo de entrega.

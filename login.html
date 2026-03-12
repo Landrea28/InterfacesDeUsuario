@@ -1,187 +1,777 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iniciar Sesión | Melodia Stream</title>
-    <link rel="stylesheet" href="styles.css">
-    <meta name="description" content="Accede a tu cuenta de Melodia Stream y escucha tu música favorita.">
-    <style>
-        .login-wrapper {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 80vh;
-            padding: 2rem 0;
-        }
-        .login-card {
-            background-color: var(--light-bg);
-            padding: 3rem;
-            border-radius: 24px;
-            width: 100%;
-            max-width: 450px;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-        }
-        .login-card h2 {
-            font-size: 2.2rem;
-            color: var(--primary-color);
-            margin-bottom: 2rem;
-            text-align: center;
-        }
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: #ddd;
-            font-size: 0.95rem;
-        }
-        .form-group input {
-            background-color: #222;
-            border: 1px solid #333;
-            color: white;
-            padding: 1rem;
-            font-size: 1rem;
-            border-radius: 12px;
-            width: 100%;
-        }
-        .form-group input:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 2px rgba(29, 185, 84, 0.2);
-        }
-        .login-options {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-            font-size: 0.85rem;
-            color: #888;
-        }
-        .login-options a {
-            color: var(--primary-color);
-            text-decoration: none;
-        }
-        .social-login {
-            margin-top: 2.5rem;
-            text-align: center;
-            border-top: 1px solid #333;
-            padding-top: 2rem;
-        }
-        .social-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            margin-top: 1rem;
-        }
-        .social-btn {
-            background: #222;
-            border: 1px solid #333;
-            padding: 0.8rem;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .social-btn:hover {
-            border-color: var(--primary-color);
-            transform: scale(1.1);
-        }
-        .signup-link {
-            text-align: center;
-            margin-top: 2rem;
-            color: #888;
-        }
-        .signup-link a {
-            color: var(--primary-color);
-            font-weight: bold;
-            text-decoration: none;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Acceso – FrescaTemporada</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --verde-oscuro:  #2d6a4f;
+      --verde-medio:   #40916c;
+      --verde-claro:   #74c69d;
+      --crema:         #f8f4e3;
+      --naranja:       #e76f51;
+      --gris-suave:    #f1f5f1;
+      --rojo:          #e63946;
+      --sombra:        0 4px 18px rgba(0,0,0,.10);
+      --radio:         14px;
+    }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #d8f3dc 0%, #b7e4c7 40%, #fde8e4 100%);
+      background: linear-gradient(135deg, #2d6a4f 0%, #40916c 50%, #74c69d 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction:  column;
+    }
+
+    /* ── NAV mínima ── */
+    header {
+      background: rgba(45, 106, 79, .85);
+      backdrop-filter: blur(8px);
+      position: sticky; top: 0; z-index: 100;
+      box-shadow: var(--sombra);
+    }
+    .navbar {
+      max-width: 1200px; margin: 0 auto;
+      padding: 0 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 65px;
+    }
+    .logo { display: flex; align-items: center; gap: .5rem; text-decoration: none; }
+    .logo-icon { font-size: 1.8rem; }
+    .logo-text { font-size: 1.3rem; font-weight: 700; color: #fff; }
+    .logo-text span { color: var(--verde-claro); }
+    .btn-volver {
+      color: #e0f2e9; text-decoration: none; font-size: .9rem;
+      font-weight: 500; padding: .4rem .9rem; border-radius: 8px;
+      border: 1px solid #74c69d; transition: background .2s;
+    }
+    .btn-volver:hover { background: var(--verde-medio); color: #fff; }
+
+    /* ── CONTENEDOR PRINCIPAL ── */
+    .main-wrapper {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2.5rem 1rem;
+    }
+
+    /* ── TARJETA DE AUTH ── */
+    .auth-card {
+      background: #fff;
+      border-radius: var(--radio);
+      box-shadow: 0 20px 60px rgba(0,0,0,.25);
+      width: 100%;
+      max-width: 440px;
+      overflow: hidden;
+    }
+
+    /* Pestañas */
+    .tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    .tab-btn {
+      padding: 1.1rem;
+      border: none;
+      background: var(--gris-suave);
+      font-family: inherit;
+      font-size: .95rem;
+      font-weight: 600;
+      color: #888;
+      cursor: pointer;
+      transition: background .2s, color .2s;
+      letter-spacing: .3px;
+    }
+    .tab-btn.activo {
+      background: #fff;
+      color: var(--verde-oscuro);
+      border-bottom: 3px solid var(--verde-medio);
+    }
+    .tab-btn:first-child { border-right: 1px solid #e0ede6; }
+
+    /* Cuerpo del formulario */
+    .auth-body { padding: 2rem 2.2rem 2.2rem; }
+
+    .form-titulo {
+      font-size: 1.5rem;
+      color: var(--verde-oscuro);
+      margin-bottom: .3rem;
+      font-weight: 700;
+    }
+    .form-subtitulo { font-size: .88rem; color: #888; margin-bottom: 1.8rem; }
+
+    /* Campo */
+    .campo { margin-bottom: 1.2rem; }
+    .campo label {
+      display: block;
+      font-size: .85rem;
+      font-weight: 600;
+      color: var(--verde-oscuro);
+      margin-bottom: .4rem;
+    }
+    .input-wrap { position: relative; }
+    .input-wrap .icono-campo {
+      position: absolute; left: .85rem; top: 50%;
+      transform: translateY(-50%);
+      font-size: 1rem; color: #aaa;
+    }
+    .campo input {
+      width: 100%;
+      padding: .75rem .9rem .75rem 2.6rem;
+      border: 2px solid #d0e8d8;
+      border-radius: 10px;
+      font-size: .95rem;
+      font-family: inherit;
+      color: #222;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .campo input:focus {
+      border-color: var(--verde-medio);
+      box-shadow: 0 0 0 3px rgba(64, 145, 108, .15);
+    }
+    .campo input.error-input { border-color: var(--rojo); }
+    .campo input.ok-input   { border-color: #52b788; }
+
+    /* Ojo contraseña */
+    .ojo-btn {
+      position: absolute; right: .85rem; top: 50%;
+      transform: translateY(-50%);
+      background: none; border: none; cursor: pointer;
+      font-size: 1.1rem; color: #aaa; padding: 0;
+      transition: color .2s;
+    }
+    .ojo-btn:hover { color: var(--verde-oscuro); }
+
+    /* Requisitos de contraseña */
+    .requisitos {
+      margin-top: .5rem; display: none;
+      background: var(--gris-suave);
+      border-radius: 8px; padding: .7rem .9rem;
+    }
+    .requisitos.visible { display: block; }
+    .req-item {
+      font-size: .78rem; color: #666;
+      display: flex; align-items: center; gap: .4rem;
+      margin-bottom: .2rem;
+    }
+    .req-item.ok   { color: #2d6a4f; }
+    .req-item.fail { color: var(--rojo); }
+
+    /* Recordarme / ¿Olvidó? */
+    .opciones-login {
+      display: flex; justify-content: space-between;
+      align-items: center; margin-bottom: 1.5rem;
+    }
+    .check-label {
+      display: flex; align-items: center; gap: .4rem;
+      font-size: .82rem; color: #666; cursor: pointer;
+    }
+    .check-label input { accent-color: var(--verde-medio); }
+    .link-olvido {
+      font-size: .82rem; color: var(--verde-medio);
+      text-decoration: none; font-weight: 600;
+    }
+    .link-olvido:hover { text-decoration: underline; }
+
+    /* Botón principal */
+    .btn-submit {
+      width: 100%;
+      padding: .85rem;
+      background: var(--verde-oscuro);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background .2s, transform .15s;
+      letter-spacing: .3px;
+    }
+    .btn-submit:hover { background: var(--verde-medio); transform: translateY(-1px); }
+    .btn-submit:active { transform: translateY(0); }
+    .btn-submit.loading { opacity: .7; cursor: not-allowed; }
+
+    /* Divider */
+    .divider {
+      display: flex; align-items: center; gap: .8rem;
+      margin: 1.3rem 0;
+    }
+    .divider::before, .divider::after {
+      content: ''; flex: 1; height: 1px; background: #e0ede6;
+    }
+    .divider span { font-size: .8rem; color: #aaa; white-space: nowrap; }
+
+    /* Botón demo */
+    .btn-demo {
+      width: 100%;
+      padding: .7rem;
+      background: transparent;
+      color: var(--verde-oscuro);
+      border: 2px dashed #74c69d;
+      border-radius: 10px;
+      font-size: .88rem;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background .2s, border-color .2s;
+    }
+    .btn-demo:hover { background: #e8f5ee; border-color: var(--verde-medio); }
+
+    /* Alertas */
+    .alerta {
+      display: none;
+      padding: .85rem 1rem;
+      border-radius: 10px;
+      font-size: .88rem;
+      font-weight: 500;
+      margin-bottom: 1.2rem;
+      align-items: center;
+      gap: .6rem;
+    }
+    .alerta.visible { display: flex; }
+    .alerta.error   { background: #fde8e4; color: #7d2d00; border: 1px solid #f5b8b0; }
+    .alerta.exito   { background: #d8f3dc; color: #1b4332; border: 1px solid #95d5b2; }
+    .alerta.info    { background: #e8f4fd; color: #1a3a5c; border: 1px solid #90caf9; }
+
+    /* Panel de bienvenida (tras login exitoso) */
+    .panel-bienvenida {
+      display: none;
+      text-align: center;
+      padding: 2.5rem 2rem;
+    }
+    .panel-bienvenida.visible { display: block; }
+    .bienvenida-icon { font-size: 4rem; margin-bottom: .8rem; }
+    .panel-bienvenida h2 { color: var(--verde-oscuro); font-size: 1.6rem; margin-bottom: .5rem; }
+    .panel-bienvenida p  { color: #666; font-size: .9rem; margin-bottom: 1.5rem; }
+    .user-chip {
+      display: inline-block;
+      background: var(--gris-suave);
+      border: 1px solid #d0e8d8;
+      border-radius: 999px;
+      padding: .3rem 1rem;
+      font-size: .88rem;
+      color: var(--verde-oscuro);
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+    }
+    .btn-ir-app {
+      display: inline-block;
+      background: var(--verde-oscuro);
+      color: #fff;
+      padding: .8rem 2rem;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: .95rem;
+      transition: background .2s, transform .15s;
+      margin-bottom: .7rem;
+    }
+    .btn-ir-app:hover { background: var(--verde-medio); transform: translateY(-1px); }
+    .btn-cerrar-sesion {
+      display: block;
+      background: none;
+      border: none;
+      color: #aaa;
+      font-size: .82rem;
+      cursor: pointer;
+      font-family: inherit;
+      margin: .5rem auto 0;
+      text-decoration: underline;
+    }
+    .btn-cerrar-sesion:hover { color: var(--rojo); }
+
+    /* Condiciones registro */
+    .terminos-label {
+      display: flex; align-items: flex-start; gap: .5rem;
+      font-size: .8rem; color: #666; margin-bottom: 1.3rem;
+      cursor: pointer;
+      line-height: 1.4;
+    }
+    .terminos-label input { margin-top: .15rem; accent-color: var(--verde-medio); flex-shrink: 0; }
+    .terminos-label a { color: var(--verde-medio); text-decoration: none; }
+    .terminos-label a:hover { text-decoration: underline; }
+
+    /* Footer */
+    footer {
+      background: rgba(45,106,79,.9);
+      color: #cce5d6;
+      text-align: center;
+      padding: 1.2rem 1rem;
+      font-size: .82rem;
+    }
+    footer strong { color: #fff; }
+
+    /* Panel de vista previa de usuario (navbar si está logueado) */
+    .navbar-user {
+      display: none;
+      align-items: center;
+      gap: .6rem;
+      color: #e0f2e9;
+      font-size: .88rem;
+    }
+    .navbar-user.visible { display: flex; }
+    .avatar {
+      width: 34px; height: 34px;
+      background: var(--verde-claro);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; font-weight: 700;
+      color: var(--verde-oscuro);
+    }
+    .btn-logout-nav {
+      background: transparent;
+      border: 1px solid #74c69d;
+      color: #e0f2e9;
+      pad: .3rem .7rem;
+      border-radius: 8px;
+      font-size: .8rem;
+      font-family: inherit;
+      cursor: pointer;
+      padding: .3rem .75rem;
+      transition: background .2s;
+    }
+    .btn-logout-nav:hover { background: var(--verde-medio); }
+
+    @media (max-width: 480px) {
+      .auth-body { padding: 1.5rem 1.3rem 1.8rem; }
+      .form-titulo { font-size: 1.3rem; }
+    }
+  </style>
 </head>
 <body>
-    <header class="main-header">
-        <div class="container header-content">
-            <div class="logo">
-                <a href="index.html" aria-label="Inicio de Melodia Stream">
-                    <img src="https://i.pinimg.com/1200x/41/5c/87/415c8737a57f20f06d9b6daf4118126c.jpg" alt="Logo Melodia Stream">
-                </a>
-            </div>
-            <nav aria-label="Navegación principal">
-                <ul class="nav-links">
-                    <li><a href="index.html">Inicio</a></li>
-                    <li><a href="quienes-somos.html">Quiénes somos</a></li>
-                    <li><a href="productos-servicios.html">Productos y servicios</a></li>
-                    <li><a href="login.html">Login</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
 
-    <main class="container">
-        <div class="login-wrapper">
-            <div class="login-card">
-                <h2>Bienvenido</h2>
-                <form action="#">
-                    <div class="form-group">
-                        <label for="user">Correo o Usuario</label>
-                        <input type="text" id="user" placeholder="ejemplo@correo.com" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="pass">Contraseña</label>
-                        <input type="password" id="pass" placeholder="Tu contraseña" required>
-                    </div>
-                    <div class="login-options">
-                        <div>
-                            <input type="checkbox" id="remember">
-                            <label for="remember" style="display: inline; margin: 0;">Recuérdame</label>
-                        </div>
-                        <a href="#">¿Olvidaste tu contraseña?</a>
-                    </div>
-                    <button type="submit" class="btn-submit">Entrar ahora</button>
-                    
-                    <div class="social-login">
-                        <p>O continúa con</p>
-                        <div class="social-buttons">
-                            <button class="social-btn" title="Facebook">
-                                <img src="https://img.icons8.com/ios-filled/25/ffffff/facebook-new.png" alt="FB">
-                            </button>
-                            <button class="social-btn" title="Google">
-                                <img src="https://img.icons8.com/ios-filled/25/ffffff/google-logo.png" alt="G">
-                            </button>
-                            <button class="social-btn" title="Apple">
-                                <img src="https://img.icons8.com/ios-filled/25/ffffff/mac-os.png" alt="Apple">
-                            </button>
-                        </div>
-                    </div>
+  <!-- ══════════ HEADER ══════════ -->
+  <header>
+    <div class="navbar">
+      <a href="index.html" class="logo">
+        <span class="logo-icon">🥦</span>
+        <span class="logo-text">Fresca<span>Temporada</span></span>
+      </a>
+      <div class="navbar-user" id="navbarUser">
+        <div class="avatar" id="navAvatar">U</div>
+        <span id="navNombre">Usuario</span>
+        <button class="btn-logout-nav" onclick="cerrarSesion()">Salir</button>
+      </div>
+      <a href="index.html" class="btn-volver" title="Volver a la página principal de FrescaTemporada">← Volver al inicio</a>
+    </div>
+  </header>
 
-                    <div class="signup-link">
-                        ¿No tienes cuenta? <a href="index.html">Regístrate</a>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </main>
+  <!-- ══════════ MAIN ══════════ -->
+  <div class="main-wrapper">
+    <div class="auth-card">
 
-    <footer class="main-footer">
-        <div class="container footer-content">
-            <div class="footer-info">
-                <h3>Contacto</h3>
-                <p><strong>Melodia Stream S.A.</strong></p>
-                <address>
-                    Avenida de la Música # 12 - 34, Bogotá, Colombia
-                </address>
-                <p>Teléfono: +57 (601) 987 6543</p>
-                <p>Email: <a href="mailto:soporte@melodiastream.com">soporte@melodiastream.com</a></p>
-            </div>
-            <div class="footer-copy">
-                <p>&copy; 2026 Melodia Stream. Todos los derechos reservados.</p>
-            </div>
+      <!-- ─── PANEL BIENVENIDA (visible tras login) ─── -->
+      <div class="panel-bienvenida" id="panelBienvenida">
+        <div class="bienvenida-icon">🌿</div>
+        <h2>¡Bienvenido/a!</h2>
+        <div class="user-chip" id="chipUsuario">usuario@correo.com</div>
+        <p>Has iniciado sesión correctamente en <strong>FrescaTemporada</strong>.<br>
+           Ya puedes explorar todas las secciones de la app.</p>
+        <a href="index.html" class="btn-ir-app">Ir a la aplicación →</a>
+        <button class="btn-cerrar-sesion" onclick="cerrarSesion()">Cerrar sesión</button>
+      </div>
+
+      <!-- ─── FORMULARIOS (login / registro) ─── -->
+      <div id="contenidoAuth">
+
+        <!-- Pestañas -->
+        <div class="tabs">
+          <button class="tab-btn activo" id="tabLogin" onclick="cambiarTab('login')">
+            🔑 Iniciar sesión
+          </button>
+          <button class="tab-btn" id="tabRegister" onclick="cambiarTab('registro')">
+            ✏️ Crear cuenta
+          </button>
         </div>
-    </footer>
+
+        <!-- ══ FORMULARIO INICIO DE SESIÓN ══ -->
+        <div class="auth-body" id="formLoginWrap">
+          <h2 class="form-titulo">Bienvenido de nuevo</h2>
+          <p class="form-subtitulo">Ingresa tus credenciales para acceder a la app</p>
+
+          <!-- Alerta -->
+          <div class="alerta error" id="alertaLogin">
+            <span>⚠️</span>
+            <span id="msgLogin">Usuario o contraseña incorrectos.</span>
+          </div>
+
+          <form id="formLogin" onsubmit="validarLogin(event)" novalidate>
+
+            <!-- Campo usuario -->
+            <div class="campo">
+              <label for="loginUsuario">Usuario o correo electrónico</label>
+              <div class="input-wrap">
+                <span class="icono-campo">👤</span>
+                <input
+                  type="text"
+                  id="loginUsuario"
+                  placeholder="tu@correo.com o nombre de usuario"
+                  autocomplete="username"
+                  required
+                />
+              </div>
+            </div>
+
+            <!-- Campo contraseña -->
+            <div class="campo">
+              <label for="loginPassword">Contraseña</label>
+              <div class="input-wrap">
+                <span class="icono-campo">🔒</span>
+                <input
+                  type="password"
+                  id="loginPassword"
+                  placeholder="Ingresa tu contraseña"
+                  autocomplete="current-password"
+                  required
+                />
+                <button type="button" class="ojo-btn" onclick="togglePassword('loginPassword', this)">👁️</button>
+              </div>
+            </div>
+
+            <!-- Opciones -->
+            <div class="opciones-login">
+              <label class="check-label">
+                <input type="checkbox" id="recordarme" />
+                Recordarme
+              </label>
+              <a href="#" class="link-olvido" onclick="mostrarOlvido()">¿Olvidaste tu contraseña?</a>
+            </div>
+
+            <button type="submit" class="btn-submit" id="btnLogin">
+              Acceder →
+            </button>
+          </form>
+
+          <!-- Acceso demo -->
+          <div class="divider"><span>o prueba sin cuenta</span></div>
+          <button class="btn-demo" onclick="loginDemo()">
+            🚀 Acceso de demostración
+          </button>
+        </div>
+
+        <!-- ══ FORMULARIO REGISTRO ══ -->
+        <div class="auth-body" id="formRegistroWrap" style="display:none;">
+          <h2 class="form-titulo">Crear cuenta nueva</h2>
+          <p class="form-subtitulo">Regístrate gratis y accede a todas las funciones de la app</p>
+
+          <!-- Alerta registro -->
+          <div class="alerta error" id="alertaRegistro">
+            <span>⚠️</span>
+            <span id="msgRegistro">Completa todos los campos correctamente.</span>
+          </div>
+          <div class="alerta exito" id="alertaRegistroOK" style="">
+            <span>✅</span>
+            <span>¡Cuenta creada con éxito! Iniciando sesión automáticamente…</span>
+          </div>
+
+          <form id="formRegistro" onsubmit="registrarUsuario(event)" novalidate>
+
+            <!-- Nombre completo -->
+            <div class="campo">
+              <label for="regNombre">Nombre completo</label>
+              <div class="input-wrap">
+                <span class="icono-campo">🙍</span>
+                <input
+                  type="text"
+                  id="regNombre"
+                  placeholder="Ej: María García"
+                  required
+                />
+              </div>
+            </div>
+
+            <!-- Correo -->
+            <div class="campo">
+              <label for="regCorreo">Correo electrónico</label>
+              <div class="input-wrap">
+                <span class="icono-campo">📧</span>
+                <input
+                  type="email"
+                  id="regCorreo"
+                  placeholder="tu@correo.com"
+                  autocomplete="email"
+                  required
+                />
+              </div>
+            </div>
+
+            <!-- Contraseña nueva -->
+            <div class="campo">
+              <label for="regPassword">Contraseña</label>
+              <div class="input-wrap">
+                <span class="icono-campo">🔒</span>
+                <input
+                  type="password"
+                  id="regPassword"
+                  placeholder="Mínimo 6 caracteres"
+                  autocomplete="new-password"
+                  required
+                  oninput="verificarRequisitos()"
+                />
+                <button type="button" class="ojo-btn" onclick="togglePassword('regPassword', this)">👁️</button>
+              </div>
+              <!-- Requisitos visuales -->
+              <div class="requisitos" id="requisitos">
+                <div class="req-item" id="req-min">⬜ Mínimo 6 caracteres</div>
+                <div class="req-item" id="req-num">⬜ Al menos un número</div>
+                <div class="req-item" id="req-may">⬜ Al menos una letra</div>
+              </div>
+            </div>
+
+            <!-- Confirmar contraseña -->
+            <div class="campo">
+              <label for="regPasswordConf">Confirmar contraseña</label>
+              <div class="input-wrap">
+                <span class="icono-campo">🔐</span>
+                <input
+                  type="password"
+                  id="regPasswordConf"
+                  placeholder="Repite tu contraseña"
+                  autocomplete="new-password"
+                  required
+                />
+                <button type="button" class="ojo-btn" onclick="togglePassword('regPasswordConf', this)">👁️</button>
+              </div>
+            </div>
+
+            <!-- Términos -->
+            <label class="terminos-label">
+              <input type="checkbox" id="terminos" required />
+              Acepto los <a href="#">Términos de uso</a> y la
+              <a href="#">Política de privacidad</a> de FrescaTemporada.
+            </label>
+
+            <button type="submit" class="btn-submit" id="btnRegistro">
+              Crear cuenta →
+            </button>
+          </form>
+        </div>
+
+      </div><!-- fin #contenidoAuth -->
+    </div><!-- fin .auth-card -->
+  </div><!-- fin .main-wrapper -->
+
+  <!-- ══════════ FOOTER ══════════ -->
+  <footer>
+    <p><strong>FrescaTemporada</strong> — Tu guía de alimentación saludable y sostenible 🌱</p>
+    <p style="margin-top:.3rem; font-size:.78rem;">Proyecto académico · Diseño de Interfaces de Usuario · 2026</p>
+  </footer>
+
+  <!-- ══════════ JAVASCRIPT ══════════ -->
+  <script>
+    /* ─── Constante: usuario demo siempre disponible ─── */
+    const DEMO_USER = { usuario: 'demo', password: 'demo123', nombre: 'Usuario Demo' };
+
+    /* ─── Al cargar la página: si ya hay sesión activa → dashboard ─── */
+    window.addEventListener('DOMContentLoaded', () => {
+      const sesion = obtenerSesion();
+      if (sesion) window.location.replace('dashboard.html');
+    });
+
+    /* ─── Cambiar entre pestañas Login / Registro ─── */
+    function cambiarTab(tab) {
+      const esLogin = tab === 'login';
+      document.getElementById('tabLogin').classList.toggle('activo', esLogin);
+      document.getElementById('tabRegister').classList.toggle('activo', !esLogin);
+      document.getElementById('formLoginWrap').style.display   = esLogin ? 'block' : 'none';
+      document.getElementById('formRegistroWrap').style.display = esLogin ? 'none'  : 'block';
+      limpiarAlertas();
+    }
+
+    /* ─── Mostrar / ocultar contraseña ─── */
+    function togglePassword(id, btn) {
+      const input = document.getElementById(id);
+      if (input.type === 'password') { input.type = 'text';     btn.textContent = '🙈'; }
+      else                           { input.type = 'password'; btn.textContent = '👁️'; }
+    }
+
+    /* ─── Validar requisitos de contraseña en tiempo real ─── */
+    function verificarRequisitos() {
+      const val = document.getElementById('regPassword').value;
+      const req = document.getElementById('requisitos');
+      req.classList.add('visible');
+      setReq('req-min', val.length >= 6);
+      setReq('req-num', /\d/.test(val));
+      setReq('req-may', /[a-zA-Z]/.test(val));
+    }
+    function setReq(id, ok) {
+      const el = document.getElementById(id);
+      const texto = el.textContent.replace(/^[^\s]+\s/, '');
+      el.textContent = (ok ? '✅' : '⬜') + ' ' + texto;
+      el.className = 'req-item ' + (ok ? 'ok' : '');
+    }
+
+    /* ─── VALIDAR LOGIN ─── */
+    function validarLogin(e) {
+      e.preventDefault();
+      limpiarAlertas();
+
+      const usuario  = document.getElementById('loginUsuario').value.trim();
+      const password = document.getElementById('loginPassword').value;
+
+      if (!usuario || !password) {
+        mostrarAlerta('alertaLogin', 'Por favor completa ambos campos.', 'error');
+        return;
+      }
+
+      const btn = document.getElementById('btnLogin');
+      btn.textContent = 'Verificando…';
+      btn.classList.add('loading');
+
+      /* Simulación de petición asíncrona */
+      setTimeout(() => {
+        btn.textContent = 'Acceder →';
+        btn.classList.remove('loading');
+
+        /* 1) Verificar usuario demo */
+        if ((usuario === DEMO_USER.usuario || usuario === 'demo') && password === DEMO_USER.password) {
+          guardarSesion({ usuario: DEMO_USER.usuario, nombre: DEMO_USER.nombre });
+          window.location.href = 'dashboard.html';
+          return;
+        }
+
+        /* 2) Verificar usuarios registrados en localStorage */
+        const usuarios = obtenerUsuarios();
+        const encontrado = usuarios.find(
+          u => (u.correo === usuario || u.usuario === usuario) && u.password === password
+        );
+
+        if (encontrado) {
+          const recordar = document.getElementById('recordarme').checked;
+          guardarSesion({ usuario: encontrado.correo, nombre: encontrado.nombre }, recordar);
+          window.location.href = 'dashboard.html';
+        } else {
+          mostrarAlerta('alertaLogin', '❌ Usuario o contraseña incorrectos. ¿No tienes cuenta? Usa la pestaña <strong>Crear cuenta</strong>.', 'error');
+          document.getElementById('loginPassword').value = '';
+        }
+      }, 900);
+    }
+
+    /* ─── LOGIN DEMO ─── */
+    function loginDemo() {
+      document.getElementById('loginUsuario').value  = DEMO_USER.usuario;
+      document.getElementById('loginPassword').value = DEMO_USER.password;
+      mostrarAlerta('alertaLogin', '🚀 Credenciales de demostración cargadas. Pulsa <strong>Acceder</strong>.', 'info');
+    }
+
+    /* ─── REGISTRAR USUARIO ─── */
+    function registrarUsuario(e) {
+      e.preventDefault();
+      limpiarAlertas();
+
+      const nombre  = document.getElementById('regNombre').value.trim();
+      const correo  = document.getElementById('regCorreo').value.trim();
+      const pass    = document.getElementById('regPassword').value;
+      const passConf= document.getElementById('regPasswordConf').value;
+      const terminos= document.getElementById('terminos').checked;
+
+      /* Validaciones */
+      if (!nombre || !correo || !pass || !passConf) {
+        mostrarAlerta('alertaRegistro', 'Completa todos los campos.', 'error'); return;
+      }
+      if (!validarEmail(correo)) {
+        mostrarAlerta('alertaRegistro', 'Ingresa un correo electrónico válido.', 'error'); return;
+      }
+      if (pass.length < 6) {
+        mostrarAlerta('alertaRegistro', 'La contraseña debe tener al menos 6 caracteres.', 'error'); return;
+      }
+      if (pass !== passConf) {
+        mostrarAlerta('alertaRegistro', 'Las contraseñas no coinciden.', 'error'); return;
+      }
+      if (!terminos) {
+        mostrarAlerta('alertaRegistro', 'Debes aceptar los términos de uso para continuar.', 'error'); return;
+      }
+
+      /* Verificar que el correo no esté ya registrado */
+      const usuarios = obtenerUsuarios();
+      if (usuarios.find(u => u.correo === correo)) {
+        mostrarAlerta('alertaRegistro', 'Este correo ya tiene una cuenta registrada. Inicia sesión.', 'error'); return;
+      }
+
+      const btn = document.getElementById('btnRegistro');
+      btn.textContent = 'Creando cuenta…';
+      btn.classList.add('loading');
+
+      setTimeout(() => {
+        btn.textContent = 'Crear cuenta →';
+        btn.classList.remove('loading');
+
+        /* Guardar usuario */
+        usuarios.push({ nombre, correo, usuario: correo, password: pass });
+        localStorage.setItem('ft_usuarios', JSON.stringify(usuarios));
+
+        /* Alerta de éxito y login automático */
+        document.getElementById('alertaRegistroOK').classList.add('visible');
+
+        setTimeout(() => {
+          guardarSesion({ usuario: correo, nombre });
+          window.location.href = 'dashboard.html';
+        }, 1500);
+      }, 1000);
+    }
+
+    /* ─── MOSTRAR PANEL BIENVENIDA ─── */
+    function mostrarBienvenida(nombre) {
+      document.getElementById('contenidoAuth').style.display = 'none';
+      document.getElementById('panelBienvenida').classList.add('visible');
+      document.getElementById('chipUsuario').textContent = nombre;
+
+      /* Actualizar navbar */
+      document.getElementById('navbarUser').classList.add('visible');
+      document.getElementById('btnVolver').style.display = 'none';
+      document.getElementById('navNombre').textContent = nombre;
+      document.getElementById('navAvatar').textContent = nombre.charAt(0).toUpperCase();
+    }
+
+    /* ─── CERRAR SESIÓN ─── */
+    function cerrarSesion() {
+      sessionStorage.removeItem('ft_sesion');
+      localStorage.removeItem('ft_sesion');
+      location.reload();
+    }
+
+    /* ─── OLVIDÓ CONTRASEÑA ─── */
+    function mostrarOlvido() {
+      mostrarAlerta('alertaLogin',
+        '📧 En una versión real se enviaría un enlace de recuperación a tu correo. Por ahora usa el <strong>Acceso Demo</strong>.',
+        'info'
+      );
+    }
+
+    /* ══════════ UTILIDADES ══════════ */
+    function mostrarAlerta(id, msg, tipo) {
+      const el = document.getElementById(id);
+      el.innerHTML = '<span>' + (tipo === 'error' ? '⚠️' : tipo === 'exito' ? '✅' : 'ℹ️') + '</span><span>' + msg + '</span>';
+      el.className = 'alerta ' + tipo + ' visible';
+    }
+    function limpiarAlertas() {
+      ['alertaLogin','alertaRegistro','alertaRegistroOK'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.remove('visible');
+      });
+    }
+    function validarEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+    function obtenerUsuarios() {
+      return JSON.parse(localStorage.getItem('ft_usuarios') || '[]');
+    }
+    function guardarSesion(datos, persistente = false) {
+      const storage = persistente ? localStorage : sessionStorage;
+      storage.setItem('ft_sesion', JSON.stringify(datos));
+    }
+    function obtenerSesion() {
+      return JSON.parse(sessionStorage.getItem('ft_sesion') || localStorage.getItem('ft_sesion') || 'null');
+    }
+  </script>
+
 </body>
 </html>
