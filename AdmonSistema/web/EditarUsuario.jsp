@@ -15,10 +15,11 @@
  %>
 
  <div id="apDiv1">
- <form id="form1" name="form1" method="post" action="editarUsuario">
+ <!-- Formulario actualizado con Action en Mayuscula -->
+ <form id="form1" name="form1" method="post" action="EditarUsuario">
  <table width="665" border="1">
  <tr>
- <td>Identificación</td>
+ <td>Identificaciï¿½n</td>
  <td><label for="cid"></label>
  <input type="hidden" name="cidd" value="<%=id%>"/>
  <input type="text" name="cid" id="cid" value="<%=a.getIdentificacion()%>"/></td>

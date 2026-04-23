@@ -8,17 +8,17 @@
  <title>Listado</title>
  </head>
  <body>
- <h2>Listado de Datos de usuarios</h2>
+ <h2>Listado de Datos de usuarios (Actualizado)</h2>
  <table>
  <tr>
- <th>Identificación</th>
+ <th>Identificaciï¿½n</th>
  <th>Nombres</th>
  <th>Apellidos</th>
  <th>E-mail</th>
  <th>Usuario</th>
- <th>Contraseña</th>
+ <th>Contraseï¿½a</th>
  <th>Perfil</th>
- <th>Acción</th>
+ <th>Acciï¿½n</th>
  </tr>
  <%
  UsuarioDAO udao = new UsuarioDAO();
@@ -36,7 +36,7 @@
  <td><%=a.getIdperfil()%></td>
  <td>
  <a href="EditarUsuario.jsp?id=<%=a.getIddato()%>">Editar</a>
- <a href="eliminarUsuario?id=<%=a.getIddato()%>">Eliminar</a>
+ <a href="EliminarUsuario?id=<%=a.getIddato()%>">Eliminar</a>
  </td>
  </tr>
  <%
