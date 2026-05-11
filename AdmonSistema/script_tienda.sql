@@ -1,0 +1,13 @@
+CREATE DATABASE IF NOT EXISTS tienda;
+USE tienda;
+
+CREATE TABLE IF NOT EXISTS datos (
+    iddato INT AUTO_INCREMENT PRIMARY KEY,
+    identificacion VARCHAR(50) NOT NULL,
+    nombre VARCHAR(100) NOT NULL,
+    apellido VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    usuario VARCHAR(50) NOT NULL,
+    clave VARCHAR(255) NOT NULL,
+    id_perfil INT NOT NULL
+);

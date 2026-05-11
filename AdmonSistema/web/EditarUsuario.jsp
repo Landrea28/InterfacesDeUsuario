@@ -15,7 +15,6 @@
  %>
 
  <div id="apDiv1">
- <!-- Formulario actualizado con Action en Mayuscula -->
  <form id="form1" name="form1" method="post" action="EditarUsuario">
  <table width="665" border="1">
  <tr>

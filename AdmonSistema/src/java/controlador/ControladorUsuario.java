@@ -10,25 +10,35 @@ import modelo.*;
 
 @WebServlet(name = "ControladorUsuario", urlPatterns = {"/controladorUsuario"})
 public class ControladorUsuario extends HttpServlet {
-    // Cambio forzado para obligar a Netbeans a actualizar
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String identificacion;
-        String nombre;
-        String apellido;
-        String email;
-        String usuario;
-        String clave;
-        int idperfil;
+        
+        // Obtener los parámetros de forma segura (evita NullPointerException)
+        String paramIdentificacion = request.getParameter("cidentificacion");
+        String paramNombre = request.getParameter("cnombre");
+        String paramApellido = request.getParameter("capellido");
+        String paramEmail = request.getParameter("cmail");
+        String paramUsuario = request.getParameter("cusuario");
+        String paramClave = request.getParameter("cclave");
+        String paramPerfil = request.getParameter("cidperfil");
 
-        identificacion = new String(request.getParameter("cidentificacion").getBytes("ISO-8859-1"), "UTF-8");
-        nombre = new String(request.getParameter("cnombre").getBytes("ISO-8859-1"), "UTF-8");
-        apellido = new String(request.getParameter("capellido").getBytes("ISO-8859-1"), "UTF-8");
-        email = new String(request.getParameter("cmail").getBytes("ISO-8859-1"), "UTF-8");
-        usuario = new String(request.getParameter("cusuario").getBytes("ISO-8859-1"), "UTF-8");
-        clave = new String(request.getParameter("cclave").getBytes("ISO-8859-1"), "UTF-8");
-        idperfil = Integer.parseInt(request.getParameter("cidperfil"));
+        String identificacion = paramIdentificacion != null ? new String(paramIdentificacion.getBytes("ISO-8859-1"), "UTF-8") : "";
+        String nombre = paramNombre != null ? new String(paramNombre.getBytes("ISO-8859-1"), "UTF-8") : "";
+        String apellido = paramApellido != null ? new String(paramApellido.getBytes("ISO-8859-1"), "UTF-8") : "";
+        String email = paramEmail != null ? new String(paramEmail.getBytes("ISO-8859-1"), "UTF-8") : "";
+        String usuario = paramUsuario != null ? new String(paramUsuario.getBytes("ISO-8859-1"), "UTF-8") : "";
+        String clave = paramClave != null ? new String(paramClave.getBytes("ISO-8859-1"), "UTF-8") : "";
+        
+        int idperfil = 0;
+        try {
+            if (paramPerfil != null && !paramPerfil.isEmpty()) {
+                idperfil = Integer.parseInt(paramPerfil);
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Error al parsear el id de perfil: " + e.getMessage());
+        }
 
         Usuario u = new Usuario();
         UsuarioDAO udao = new UsuarioDAO();
@@ -45,7 +55,8 @@ public class ControladorUsuario extends HttpServlet {
 
         if (status > 0) {
             response.sendRedirect("mensaje.jsp");
-
+        } else {
+            response.getWriter().print("Error al guardar el usuario en la base de datos.");
         }
     }
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
