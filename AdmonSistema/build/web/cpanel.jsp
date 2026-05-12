@@ -14,7 +14,7 @@ String nombre=null; String apellido=null; String usu=null;
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Documento sin tÃ­tulo</title>
+<title>Documento sin título</title>
 <style type="text/css">
 #apDiv1 {
     position: absolute; left: 263px;
@@ -78,7 +78,7 @@ try {
         Statement sentencia2 = con2.createStatement();
         ResultSet resultado2 = sentencia2.executeQuery("SELECT actividades.nom_actividad AS actividad, actividades.id_actividad AS idAct, actividades.enlace AS enlace FROM datos, actividades, gesactividad, perfiles WHERE gesactividad.id_actividad = actividades.id_actividad AND gesactividad.id_perfil = perfiles.id_perfil AND Datos.id_perfil = perfiles.id_perfil AND datos.usuario ='"+nUsuario+"' ");
         
-        // Si logramos ejecutar esto y hay resultados, no mostramos el menÃº de respaldo
+        // Si logramos ejecutar esto y hay resultados, no mostramos el mennu de respaldo
         if(resultado2.next()) {
             showFallbackMenu = false;
         }
@@ -124,11 +124,11 @@ try {
 <div id="apDiv5">
     <table width="244" border="1"> 
         <tr>
-            <th><strong>MenÃº</strong></th> 
+            <th><strong>Menu</strong></th> 
         </tr>
         
         <%
-        // Visualiza en el menÃº de opciones las actividades asignadas al perfil de usuario
+        // Visualiza en el menu de opciones las actividades asignadas al perfil de usuario
         // Como sabemos que la consulta del profe falla por las tablas inexistentes, usamos un flag de respaldo
         if(!showFallbackMenu) {
             try {
@@ -164,7 +164,7 @@ try {
     <table width="657" border="1">
         <tr>
             <td width="473"><%=nombre%>&nbsp;<%=apellido%></td> 
-            <td width="168"><a href="CerrarSesion">Cerrar sesiÃ³n</a></td>
+            <td width="168"><a href="CerrarSesion">Cerrar sesion</a></td>
         </tr> 
     </table>
 </div>
