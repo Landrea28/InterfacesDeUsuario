@@ -20,20 +20,17 @@ import javax.servlet.http.HttpSession;
 @WebServlet(name = "CerrarSesion", urlPatterns = {"/CerrarSesion"})
 public class CerrarSesion extends HttpServlet {
 
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws
-            ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8"); 
         HttpSession ses = request.getSession(false);
         try {
-            HttpSession sesion_cli = request.getSession(false);
-            sesion_cli.invalidate();
+            HttpSession sesion_cli=request.getSession(false);
+            sesion_cli.invalidate(); 
             response.sendRedirect("index.jsp");
-        } catch (IOException e) {
-            ses.setAttribute("mensaje",
-                    "Session Activa.");
-            ses.setAttribute("exc",
-                    e.toString());
-        }
+        } catch (IOException e) { 
+            ses.setAttribute("mensaje", "SessionActiva.");
+            ses.setAttribute("exc", e.toString());
+        } 
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
