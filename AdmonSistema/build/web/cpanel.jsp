@@ -14,7 +14,7 @@ String nombre=null; String apellido=null; String usu=null;
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Documento sin tÃ­tulo</title>
+<title>Documento sin título</title>
 <style type="text/css">
 #apDiv1 {
     position: absolute; left: 263px;
@@ -85,7 +85,7 @@ try {
         con2.close();
     }
 } catch(Exception e) {
-    // La consulta fallarÃ¡ intencionalmente porque las tablas no existen. Lo capturamos.
+    // La consulta fallara¡ intencionalmente porque las tablas no existen. Lo capturamos.
 }
 %>
 
@@ -124,11 +124,11 @@ try {
 <div id="apDiv5">
     <table width="244" border="1"> 
         <tr>
-            <th><strong>MenÃº</strong></th> 
+            <th><strong>Menu</strong></th> 
         </tr>
         
         <%
-        // Visualiza en el menÃº de opciones las actividades asignadas al perfil de usuario
+        // Visualiza en el menú de opciones las actividades asignadas al perfil de usuario
         // Como sabemos que la consulta del profe falla por las tablas inexistentes, usamos un flag de respaldo
         if(!showFallbackMenu) {
             try {
@@ -160,16 +160,16 @@ try {
 </div>
 
 <div id="apDiv6">&nbsp;
-    <% //Visualiza en el Dashboard los nombres y apellidos del usuario en sesiÃ³n %>
+    <% //Visualiza en el Dashboard los nombres y apellidos del usuario en sesion %>
     <table width="657" border="1">
         <tr>
             <td width="473"><%=nombre%>&nbsp;<%=apellido%></td> 
-            <td width="168"><a href="CerrarSesion">Cerrar sesiÃ³n</a></td>
+            <td width="168"><a href="CerrarSesion">Cerrar sesion</a></td>
         </tr> 
     </table>
 </div>
 
-<% //Espacio de navegaciÃ³n donde se visualizarÃ¡ las operaciones transaccionales de la aplicaciÃ³n %>
+<% //Espacio de navegación donde se visualizará las operaciones transaccionales de la aplicación %>
 <div id="apDiv7">
     <iframe width="848" height="493" name="marco" src="front.jsp" frameborder="0"></iframe> 
 </div>

@@ -14,7 +14,7 @@
                         <input type="text" name="cusuario" id="cusuario" /></td>
                 </tr>
                 <tr>
-                    <td>ContraseÃ±a</td>
+                    <td>Contraseña</td>
                     <td><label for="cclave"></label>
                         <input type="password" name="cclave" id="cclave" /></td>
                 </tr>
