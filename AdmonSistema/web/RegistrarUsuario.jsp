@@ -4,7 +4,20 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Registrar Usuario</title>
-    </head>
+        <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; flex-direction: column; }
+        h2 { color: #333; margin-bottom: 20px; }
+        #apDiv1 { background: #ffffff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        table { border-collapse: collapse; width: 100%; }
+        td { padding: 10px 5px; border: none !important; }
+        input[type="text"], input[type="password"], input[type="email"], input[type="number"] { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        input[type="submit"] { margin-top: 15px; padding: 10px 15px; background-color: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; width: 100%; font-weight: bold; font-size: 16px; }
+        input[type="submit"]:hover { background-color: #218838; }
+        a { color: #0056b3; text-decoration: none; font-size: 14px; }
+        a:hover { text-decoration: underline; }
+        table[border="1"] { border: none; }
+    </style>
+</head>
     <body>
         <h2>Registro de Nuevo Usuario</h2>
         <div id="apDiv1">
@@ -56,4 +69,5 @@
         </div>
     </body>
 </html>
+
 
