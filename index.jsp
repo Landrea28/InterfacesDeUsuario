@@ -1,3 +1,4 @@
+<%@ page import="modelo.Usuario" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="es">
@@ -398,12 +399,24 @@
       </nav>
       <!-- Sesión -->
       <div class="nav-sesion">
+        <% 
+            Usuario usuarioValido = (Usuario) session.getAttribute("usuarioValido");
+            if (usuarioValido != null) { 
+        %>
+        <div class="nav-usuario visible" id="navUsuario">
+          <div class="nav-avatar" id="navAvatar"><%= usuarioValido.getNombre().substring(0, 1).toUpperCase() %></div>
+          <span id="navNombre"><%= usuarioValido.getNombre() %></span>
+          <button class="nav-salir" onclick="window.location.href='LoginServlet?accion=Salir'" title="Cerrar sesión – Salir de tu cuenta">Salir</button>
+        </div>
+        <a href="dashboard.jsp" class="btn-login-nav" id="btnIniciarSesion" title="Ir a mi panel">📊 Mi Dashboard</a>
+        <% } else { %>
         <div class="nav-usuario" id="navUsuario">
           <div class="nav-avatar" id="navAvatar">U</div>
           <span id="navNombre"></span>
-          <button class="nav-salir" onclick="navCerrarSesion()" title="Cerrar sesión – Salir de tu cuenta">Salir</button>
+          <button class="nav-salir" onclick="window.location.href='LoginServlet?accion=Salir'" title="Cerrar sesión – Salir de tu cuenta">Salir</button>
         </div>
         <a href="login.jsp" class="btn-login-nav" id="btnIniciarSesion" title="Iniciar sesión – Acceder o crear tu cuenta">🔑 Iniciar sesión</a>
+        <% } %>
       </div>
     </div>
   </header>
@@ -427,22 +440,6 @@
   </div>
 
   <script>
-    (function(){
-      var s=JSON.parse(sessionStorage.getItem('ft_sesion')||localStorage.getItem('ft_sesion')||'null');
-      if(s){
-        document.getElementById('navUsuario').classList.add('visible');
-        var btn=document.getElementById('btnIniciarSesion');
-        btn.textContent='📊 Mi Dashboard';
-        btn.href='dashboard.jsp';
-        document.getElementById('navNombre').textContent=s.nombre||s.usuario;
-        document.getElementById('navAvatar').textContent=(s.nombre||s.usuario).charAt(0).toUpperCase();
-      }
-    })();
-    function navCerrarSesion(){
-      sessionStorage.removeItem('ft_sesion');
-      localStorage.removeItem('ft_sesion');
-      location.reload();
-    }
     function toggleMenu(){
       var b=document.querySelector('.hamburger');
       var p=document.getElementById('navMobile');

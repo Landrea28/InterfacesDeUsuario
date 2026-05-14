@@ -42,9 +42,10 @@ public class RegistroServlet extends HttpServlet {
 
         if (registrado) {
             request.setAttribute("exitoRegistro", "¡Cuenta creada con éxito! Ahora puedes iniciar sesión.");
+            // En lugar de hacer forward, redirigimos limpiando la URL
             request.getRequestDispatcher("login.jsp").forward(request, response);
         } else {
-            request.setAttribute("errorRegistro", "Error al crear la cuenta. Es posible que el correo ya esté registrado.");
+            request.setAttribute("errorRegistro", "Error al crear la cuenta. Verifica que la BD esté activa y el correo no esté repetido.");
             request.getRequestDispatcher("login.jsp?tab=registro").forward(request, response);
         }
     }

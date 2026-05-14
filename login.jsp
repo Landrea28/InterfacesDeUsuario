@@ -457,7 +457,7 @@
             </div>
 
             <button type="submit" class="btn-submit" id="btnLogin">
-              Acceder →
+              Acceder 
             </button>
           </form>
 
@@ -569,7 +569,7 @@
             </label>
 
             <button type="submit" class="btn-submit" id="btnRegistro">
-              Crear cuenta →
+              Crear cuenta 
             </button>
           </form>
         </div>
@@ -586,14 +586,22 @@
 
   <!-- ══════════ JAVASCRIPT ══════════ -->
   <script>
-    /* ─── Constante: usuario demo siempre disponible ─── */
-    const DEMO_USER = { usuario: 'demo', password: 'demo123', nombre: 'Usuario Demo' };
-
-    /* ─── Al cargar la página: si ya hay sesión activa → dashboard ─── */
+    /* ─── Al cargar la página: manejar sesión y pestañas ─── */
     window.addEventListener('DOMContentLoaded', () => {
       <% if (session.getAttribute("usuarioValido") != null) { %>
       window.location.replace('dashboard.jsp');
       <% } %>
+
+      // Si hay error de registro, abrir la pestaña de registro
+      <% if (request.getAttribute("errorRegistro") != null) { %>
+      cambiarTab('registro');
+      <% } %>
+      
+      // Chequear parámetro tab en URL
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('tab') === 'registro') {
+          cambiarTab('registro');
+      }
     });
 
     /* ─── Cambiar entre pestañas Login / Registro ─── */
@@ -603,7 +611,6 @@
       document.getElementById('tabRegister').classList.toggle('activo', !esLogin);
       document.getElementById('formLoginWrap').style.display   = esLogin ? 'block' : 'none';
       document.getElementById('formRegistroWrap').style.display = esLogin ? 'none'  : 'block';
-      limpiarAlertas();
     }
 
     /* ─── Mostrar / ocultar contraseña ─── */
@@ -629,133 +636,17 @@
       el.className = 'req-item ' + (ok ? 'ok' : '');
     }
 
-    /* ─── VALIDAR LOGIN ─── */
-    function validarLogin(e) {
-      e.preventDefault();
-      limpiarAlertas();
-
-      const usuario  = document.getElementById('loginUsuario').value.trim();
-      const password = document.getElementById('loginPassword').value;
-
-      if (!usuario || !password) {
-        mostrarAlerta('alertaLogin', 'Por favor completa ambos campos.', 'error');
-        return;
-      }
-
-      const btn = document.getElementById('btnLogin');
-      btn.textContent = 'Verificando…';
-      btn.classList.add('loading');
-
-      /* Simulación de petición asíncrona */
-      setTimeout(() => {
-        btn.textContent = 'Acceder →';
-        btn.classList.remove('loading');
-
-        /* 1) Verificar usuario demo */
-        if ((usuario === DEMO_USER.usuario || usuario === 'demo') && password === DEMO_USER.password) {
-          guardarSesion({ usuario: DEMO_USER.usuario, nombre: DEMO_USER.nombre });
-          window.location.href = 'dashboard.jsp';
-          return;
-        }
-
-        /* 2) Verificar usuarios registrados en localStorage */
-        const usuarios = obtenerUsuarios();
-        const encontrado = usuarios.find(
-          u => (u.correo === usuario || u.usuario === usuario) && u.password === password
-        );
-
-        if (encontrado) {
-          const recordar = document.getElementById('recordarme').checked;
-          guardarSesion({ usuario: encontrado.correo, nombre: encontrado.nombre }, recordar);
-          window.location.href = 'dashboard.jsp';
-        } else {
-          mostrarAlerta('alertaLogin', '❌ Usuario o contraseña incorrectos. ¿No tienes cuenta? Usa la pestaña <strong>Crear cuenta</strong>.', 'error');
-          document.getElementById('loginPassword').value = '';
-        }
-      }, 900);
-    }
-
-    /* ─── LOGIN DEMO ─── */
+    /* ─── LOGIN DEMO (Rellena el formulario con el admin por defecto de la BD) ─── */
     function loginDemo() {
-      document.getElementById('loginUsuario').value  = DEMO_USER.usuario;
-      document.getElementById('loginPassword').value = DEMO_USER.password;
+      document.getElementById('loginUsuario').value  = 'admin@frescatemporada.com';
+      document.getElementById('loginPassword').value = 'Admin123!';
       mostrarAlerta('alertaLogin', '🚀 Credenciales de demostración cargadas. Pulsa <strong>Acceder</strong>.', 'info');
-    }
-
-    /* ─── REGISTRAR USUARIO ─── */
-    function registrarUsuarioEliminada(e) {
-      e.preventDefault();
-      limpiarAlertas();
-
-      const nombre  = document.getElementById('regNombre').value.trim();
-      const correo  = document.getElementById('regCorreo').value.trim();
-      const pass    = document.getElementById('regPassword').value;
-      const passConf= document.getElementById('regPasswordConf').value;
-      const terminos= document.getElementById('terminos').checked;
-
-      /* Validaciones */
-      if (!nombre || !correo || !pass || !passConf) {
-        mostrarAlerta('alertaRegistro', 'Completa todos los campos.', 'error'); return;
-      }
-      if (!validarEmail(correo)) {
-        mostrarAlerta('alertaRegistro', 'Ingresa un correo electrónico válido.', 'error'); return;
-      }
-      if (pass.length < 6) {
-        mostrarAlerta('alertaRegistro', 'La contraseña debe tener al menos 6 caracteres.', 'error'); return;
-      }
-      if (pass !== passConf) {
-        mostrarAlerta('alertaRegistro', 'Las contraseñas no coinciden.', 'error'); return;
-      }
-      if (!terminos) {
-        mostrarAlerta('alertaRegistro', 'Debes aceptar los términos de uso para continuar.', 'error'); return;
-      }
-
-      /* Verificar que el correo no esté ya registrado */
-      const usuarios = obtenerUsuarios();
-      if (usuarios.find(u => u.correo === correo)) {
-        mostrarAlerta('alertaRegistro', 'Este correo ya tiene una cuenta registrada. Inicia sesión.', 'error'); return;
-      }
-
-      const btn = document.getElementById('btnRegistro');
-      btn.textContent = 'Creando cuenta…';
-      btn.classList.add('loading');
-
-      setTimeout(() => {
-        btn.textContent = 'Crear cuenta →';
-        btn.classList.remove('loading');
-
-        /* Guardar usuario */
-        usuarios.push({ nombre, correo, usuario: correo, password: pass });
-        localStorage.setItem('ft_usuarios', JSON.stringify(usuarios));
-
-        /* Alerta de éxito y login automático */
-        document.getElementById('alertaRegistroOK').classList.add('visible');
-
-        setTimeout(() => {
-          guardarSesion({ usuario: correo, nombre });
-          window.location.href = 'dashboard.jsp';
-        }, 1500);
-      }, 1000);
-    }
-
-    /* ─── MOSTRAR PANEL BIENVENIDA ─── */
-    function mostrarBienvenida(nombre) {
-      document.getElementById('contenidoAuth').style.display = 'none';
-      document.getElementById('panelBienvenida').classList.add('visible');
-      document.getElementById('chipUsuario').textContent = nombre;
-
-      /* Actualizar navbar */
-      document.getElementById('navbarUser').classList.add('visible');
-      document.getElementById('btnVolver').style.display = 'none';
-      document.getElementById('navNombre').textContent = nombre;
-      document.getElementById('navAvatar').textContent = nombre.charAt(0).toUpperCase();
     }
 
     /* ─── CERRAR SESIÓN ─── */
     function cerrarSesion() {
-      sessionStorage.removeItem('ft_sesion');
-      localStorage.removeItem('ft_sesion');
-      location.reload();
+      // Redirigir al servlet de logout
+      window.location.href = 'LoginServlet?accion=Salir';
     }
 
     /* ─── OLVIDÓ CONTRASEÑA ─── */
@@ -771,25 +662,6 @@
       const el = document.getElementById(id);
       el.innerHTML = '<span>' + (tipo === 'error' ? '⚠️' : tipo === 'exito' ? '✅' : 'ℹ️') + '</span><span>' + msg + '</span>';
       el.className = 'alerta ' + tipo + ' visible';
-    }
-    function limpiarAlertas() {
-      ['alertaLogin','alertaRegistro','alertaRegistroOK'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.classList.remove('visible');
-      });
-    }
-    function validarEmail(email) {
-      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    }
-    function obtenerUsuarios() {
-      return JSON.parse(localStorage.getItem('ft_usuarios') || '[]');
-    }
-    function guardarSesion(datos, persistente = false) {
-      const storage = persistente ? localStorage : sessionStorage;
-      storage.setItem('ft_sesion', JSON.stringify(datos));
-    }
-    function obtenerSesion() {
-      return JSON.parse(sessionStorage.getItem('ft_sesion') || localStorage.getItem('ft_sesion') || 'null');
     }
   </script>
 

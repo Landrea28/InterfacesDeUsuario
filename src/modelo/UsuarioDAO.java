@@ -27,33 +27,7 @@ public class UsuarioDAO {
                     user.setEmail(rs.getString("email"));
                     user.setPassword(rs.getString("password"));
                     user.setRol(rs.getString("rol"));
-    public boolean registrar(Usuario user) {
-        String sql = "INSERT INTO KLS_USUARIOS (nombre, email, password, rol) VALUES (?, ?, ?, ?)";
-        try {
-            con = cn.getConnection();
-            if (con != null) {
-                ps = con.prepareStatement(sql);
-                ps.setString(1, user.getNombre());
-                ps.setString(2, user.getEmail());
-                ps.setString(3, user.getPassword());
-                ps.setString(4, user.getRol() != null ? user.getRol() : "usuario");
-                int filasAfectadas = ps.executeUpdate();
-                return filasAfectadas > 0;
-            }
-        } catch (Exception e) {
-            System.err.println("Error en UsuarioDAO.registrar: " + e.getMessage());
-            e.printStackTrace();
-        } finally {
-            try {
-                if (ps != null) ps.close();
-                if (con != null) con.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return false;
-    }
-}
+                }
             }
         } catch (Exception e) {
             System.err.println("Error en UsuarioDAO.validar: " + e.getMessage());
@@ -68,5 +42,35 @@ public class UsuarioDAO {
             }
         }
         return user;
+    }
+
+    public boolean registrar(Usuario user) {
+        String sql = "INSERT INTO KLS_USUARIOS (nombre, email, password, rol) VALUES (?, ?, ?, ?)";
+        try {
+            con = cn.getConnection();
+            if (con != null) {
+                ps = con.prepareStatement(sql);
+                ps.setString(1, user.getNombre());
+                ps.setString(2, user.getEmail());
+                ps.setString(3, user.getPassword());
+                ps.setString(4, user.getRol() != null ? user.getRol() : "usuario");
+                int filasAfectadas = ps.executeUpdate();
+                return filasAfectadas > 0;
+            } else {
+                System.err.println("Error en UsuarioDAO.registrar: La conexión es nula.");
+                return false;
+            }
+        } catch (Exception e) {
+            System.err.println("Error en UsuarioDAO.registrar: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            try {
+                if (ps != null) ps.close();
+                if (con != null) con.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
     }
 }
