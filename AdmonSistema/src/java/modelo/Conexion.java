@@ -31,13 +31,11 @@ public class Conexion {
  }
  catch(java.lang.ClassNotFoundException ex)
  {
- System.out.println("classnotfound: " + ex.getMessage());
- ex.printStackTrace();
+ throw new RuntimeException("Driver ClassNotFound: " + ex.getMessage());
  }
  catch(SQLException e)
  {
- System.out.println("error de enlace canal: " + e.getMessage());
- e.printStackTrace();
+ throw new RuntimeException("SQLException: " + e.getMessage());
  }
 
  return con;

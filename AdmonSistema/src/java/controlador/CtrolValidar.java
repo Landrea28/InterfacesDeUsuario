@@ -35,15 +35,21 @@ String cla = request.getParameter("cclave");
 
 datos=logindao.Login_datos(usu, cla);
 
-if(datos.getUsuario() != null){ 
-request.setAttribute("datos", datos);
-
-HttpSession sesion_cli = request.getSession(true);
-sesion_cli.setAttribute("nUsuario", request.getParameter("cusuario"));
-
-request.getRequestDispatcher("cpanel.jsp").forward(request, response);
+if(datos != null && datos.getUsuario() != null){ 
+    if (datos.getUsuario().startsWith("ERROR") || datos.getUsuario().startsWith("SQL_ERROR") || datos.getUsuario().startsWith("OTHER_ERROR")) {
+        request.setAttribute("error", "Error del sistema: " + datos.getUsuario());
+        request.getRequestDispatcher("index.jsp").forward(request, response);
+    } else {
+        request.setAttribute("datos", datos);
+        
+        HttpSession sesion_cli = request.getSession(true);
+        sesion_cli.setAttribute("nUsuario", request.getParameter("cusuario"));
+        
+        request.getRequestDispatcher("cpanel.jsp").forward(request, response);
+    }
 }
 else {
+request.setAttribute("error", "Usuario o contraseña incorrectos o error de base de datos.");
 request.getRequestDispatcher("index.jsp").forward(request, response);
 }
 }else{

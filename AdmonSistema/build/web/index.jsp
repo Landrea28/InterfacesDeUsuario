@@ -19,6 +19,9 @@
 </head>
     <body>
         <form id="form1" name="form1" method="post" action="ctrolValidar">
+            <div style="color: red; font-weight: bold; text-align: center; margin-bottom: 10px;">
+                ${error != null ? error : ""}
+            </div>
             <table width="421" height="102" border="1">
                 <tr>
                     <td width="157">Usuario</td>
