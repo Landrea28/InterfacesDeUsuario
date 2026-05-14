@@ -160,7 +160,7 @@
 
   <header>
     <div class="navbar">
-      <a href="index.html" class="logo" title="FrescaTemporada – Ir al inicio">
+      <a href="index.jsp" class="logo" title="FrescaTemporada – Ir al inicio">
         <span class="logo-icon">🥦</span>
         <span class="logo-text">Fresca<span>Temporada</span></span>
       </a>
@@ -169,7 +169,7 @@
       </button>
       <nav>
         <ul>
-          <li><a href="index.html" title="Inicio – Página principal de FrescaTemporada">Inicio</a></li>
+          <li><a href="index.jsp" title="Inicio – Página principal de FrescaTemporada">Inicio</a></li>
           <li><a href="frutas.html" class="active" title="Frutas – Calendario de frutas de temporada por mes">Frutas</a></li>
           <li><a href="verduras.html" title="Verduras – Guía de hortalizas de temporada">Verduras</a></li>
           <li><a href="nutricion.html" title="Nutrición – Vitaminas, minerales y beneficios para la salud">Nutrición</a></li>
@@ -188,11 +188,11 @@
   <div class="nav-mobile" id="navMobile">
     <div class="nav-mobile-backdrop" onclick="cerrarMenu()"></div>
     <div class="nav-mobile-panel">
-      <a href="index.html" class="nav-mobile-logo" title="FrescaTemporada – Ir al inicio">
+      <a href="index.jsp" class="nav-mobile-logo" title="FrescaTemporada – Ir al inicio">
         <span class="mi">🥦</span>
         <span class="mt">Fresca<span>Temporada</span></span>
       </a>
-      <a href="index.html" title="Inicio – Página principal de FrescaTemporada">🏠 Inicio</a>
+      <a href="index.jsp" title="Inicio – Página principal de FrescaTemporada">🏠 Inicio</a>
       <a href="frutas.html" class="active" title="Frutas – Calendario de frutas de temporada por mes">🍓 Frutas</a>
       <a href="verduras.html" title="Verduras – Guía de hortalizas de temporada">🥦 Verduras</a>
       <a href="nutricion.html" title="Nutrición – Vitaminas, minerales y beneficios para la salud">🧬 Nutrición</a>

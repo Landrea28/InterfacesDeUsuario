@@ -379,7 +379,7 @@
   <!-- ═══════════════════════════ HEADER / NAV ═══════════════════════════ -->
   <header>
     <div class="navbar">
-      <a href="index.html" class="logo" title="FrescaTemporada – Ir al inicio">
+      <a href="index.jsp" class="logo" title="FrescaTemporada – Ir al inicio">
         <span class="logo-icon">🥦</span>
         <span class="logo-text">Fresca<span>Temporada</span></span>
       </a>
@@ -388,7 +388,7 @@
       </button>
       <nav>
         <ul>
-          <li><a href="index.html" class="active" title="Inicio – Página principal de FrescaTemporada">Inicio</a></li>
+          <li><a href="index.jsp" class="active" title="Inicio – Página principal de FrescaTemporada">Inicio</a></li>
           <li><a href="frutas.html" title="Frutas – Calendario de frutas de temporada por mes">Frutas</a></li>
           <li><a href="verduras.html" title="Verduras – Guía de hortalizas de temporada">Verduras</a></li>
           <li><a href="nutricion.html" title="Nutrición – Vitaminas, minerales y beneficios para la salud">Nutrición</a></li>
@@ -403,7 +403,7 @@
           <span id="navNombre"></span>
           <button class="nav-salir" onclick="navCerrarSesion()" title="Cerrar sesión – Salir de tu cuenta">Salir</button>
         </div>
-        <a href="login.html" class="btn-login-nav" id="btnIniciarSesion" title="Iniciar sesión – Acceder o crear tu cuenta">🔑 Iniciar sesión</a>
+        <a href="login.jsp" class="btn-login-nav" id="btnIniciarSesion" title="Iniciar sesión – Acceder o crear tu cuenta">🔑 Iniciar sesión</a>
       </div>
     </div>
   </header>
@@ -412,17 +412,17 @@
   <div class="nav-mobile" id="navMobile">
     <div class="nav-mobile-backdrop" onclick="cerrarMenu()"></div>
     <div class="nav-mobile-panel">
-      <a href="index.html" class="nav-mobile-logo" title="FrescaTemporada – Ir al inicio">
+      <a href="index.jsp" class="nav-mobile-logo" title="FrescaTemporada – Ir al inicio">
         <span class="mi">🥦</span>
         <span class="mt">Fresca<span>Temporada</span></span>
       </a>
-      <a href="index.html" class="active" title="Inicio – Página principal de FrescaTemporada">🏠 Inicio</a>
+      <a href="index.jsp" class="active" title="Inicio – Página principal de FrescaTemporada">🏠 Inicio</a>
       <a href="frutas.html" title="Frutas – Calendario de frutas de temporada por mes">🍓 Frutas</a>
       <a href="verduras.html" title="Verduras – Guía de hortalizas de temporada">🥦 Verduras</a>
       <a href="nutricion.html" title="Nutrición – Vitaminas, minerales y beneficios para la salud">🧬 Nutrición</a>
       <a href="sostenible.html" title="Consumo Sostenible – Consejos para un consumo responsable">♻️ Consumo Sostenible</a>
       <a href="recetas.html" title="Recetas – Platos deliciosos con ingredientes de temporada">🥗 Recetas</a>
-      <a href="login.html" title="Mi cuenta – Iniciar sesión o crear una cuenta nueva">🔑 Mi Cuenta</a>
+      <a href="login.jsp" title="Mi cuenta – Iniciar sesión o crear una cuenta nueva">🔑 Mi Cuenta</a>
     </div>
   </div>
 
@@ -433,7 +433,7 @@
         document.getElementById('navUsuario').classList.add('visible');
         var btn=document.getElementById('btnIniciarSesion');
         btn.textContent='📊 Mi Dashboard';
-        btn.href='dashboard.html';
+        btn.href='dashboard.jsp';
         document.getElementById('navNombre').textContent=s.nombre||s.usuario;
         document.getElementById('navAvatar').textContent=(s.nombre||s.usuario).charAt(0).toUpperCase();
       }

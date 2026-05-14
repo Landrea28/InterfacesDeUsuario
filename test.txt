@@ -2,8 +2,6 @@
 <%@ page import="modelo.Usuario" %>
 <%@ page import="modelo.Alimento" %>
 <%@ page import="modelo.AlimentoDAO" %>
-<%@ page import="modelo.Auditoria" %>
-<%@ page import="modelo.AuditoriaDAO" %>
 <%@ page import="java.util.List" %>
 <%
     Usuario usuario = (Usuario) session.getAttribute("usuarioValido");
@@ -16,21 +14,6 @@
     AlimentoDAO daoAlimento = new AlimentoDAO();
     List<Alimento> listaVerduras = daoAlimento.listarPorTipo("Verdura");
     List<Alimento> listaFrutas = daoAlimento.listarPorTipo("Fruta");
-    
-    // Cargar actividades recientes
-    AuditoriaDAO daoAuditoria = new AuditoriaDAO();
-    List<Auditoria> actividadesRecientes = daoAuditoria.listarRecientes();
-    
-    // Cargar reporte de auditoria si hay fechas
-    String fechaInicio = request.getParameter("fechaInicio");
-    String fechaFin = request.getParameter("fechaFin");
-    List<Auditoria> reporteAuditoria = null;
-    if (fechaInicio != null && fechaFin != null && !fechaInicio.isEmpty() && !fechaFin.isEmpty()) {
-        reporteAuditoria = daoAuditoria.listarPorFecha(fechaInicio, fechaFin);
-    } else {
-        // Por defecto, listamos todo
-        reporteAuditoria = daoAuditoria.listarTodos();
-    }
 %>
 <!DOCTYPE html>
 <html lang="es">
@@ -387,7 +370,6 @@
     }
     .ai-verde   { background: #d8f3dc; }
     .ai-naranja { background: #fde8d4; }
-    .ai-rojo    { background: #fde8e4; }
     .ai-azul    { background: #dbeafe; }
     .ai-gris    { background: #f0f0f0; }
     .act-texto .titulo { font-size: .88rem; color: #333; font-weight: 500; line-height: 1.3; }
@@ -606,7 +588,7 @@
   <header class="topbar">
     <button class="btn-menu" onclick="toggleSidebar()">☰</button>
 
-    <a href="index.jsp" class="topbar-logo">
+    <a href="index.html" class="topbar-logo">
       <span class="icono">🥦</span>
       <span class="texto">Fresca<span>Temporada</span></span>
     </a>
@@ -677,9 +659,6 @@
         <% if(usuario != null && "admin".equalsIgnoreCase(usuario.getRol())) { %>
           <button class="nav-item" data-seccion="adminAlimentos" title="Administrar Alimentos" onclick="mostrarSeccion('adminAlimentos')">
             <span class="nav-icono">⚙️</span> Admin Alimentos
-          </button>
-          <button class="nav-item" data-seccion="reporteAuditoria" title="Reporte de Auditoría" onclick="mostrarSeccion('reporteAuditoria')">
-            <span class="nav-icono">📊</span> Reporte Auditoría
           </button>
         <% } %>
         <button class="nav-item" data-seccion="favoritos" title="Mis Favoritos – Frutas y recetas que has guardado" onclick="mostrarSeccion('favoritos')">
@@ -827,32 +806,13 @@
               <h3>📋 Actividad reciente</h3>
               <a href="#" class="ver-todo">Ver todo</a>
             </div>
-              <div class="actividad-lista">
-                <% if (actividadesRecientes != null && !actividadesRecientes.isEmpty()) { 
-                     for (Auditoria aud : actividadesRecientes) { 
-                       String colorClase = "ai-gris";
-                       String icono = "📝";
-                       if ("INSERT".equals(aud.getOperacion())) { colorClase = "ai-verde"; icono = "➕"; }
-                       else if ("UPDATE".equals(aud.getOperacion())) { colorClase = "ai-naranja"; icono = "✏️"; }
-                       else if ("DELETE".equals(aud.getOperacion())) { colorClase = "ai-rojo"; icono = "🗑️"; }
-                %>
-                <div class="actividad-item">
-                  <div class="act-icono-wrap <%= colorClase %>"><%= icono %></div>
-                  <div class="act-texto">
-                    <div class="titulo">El usuario <strong><%= aud.getUsuarioBd() %></strong> realizó la operación <strong><%= aud.getOperacion() %></strong> en <%= aud.getTablaAfectada() %>.</div>
-                    <div class="hora"><%= aud.getDatosNuevos() %> <br> <em><%= new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm").format(aud.getFecha()) %></em></div>
-                  </div>
+            <div class="actividad-lista">
+              <div class="actividad-item">
+                <div class="act-icono-wrap ai-verde">🍓</div>
+                <div class="act-texto">
+                  <div class="titulo">Consultaste las <strong>frutas de marzo</strong> en el calendario</div>
+                  <div class="hora">Hace 5 minutos</div>
                 </div>
-                <%   }
-                   } else { %>
-                <div class="actividad-item">
-                  <div class="act-texto">
-                    <div class="titulo" style="color:#888;">No hay actividad reciente registrada en el sistema.</div>
-                  </div>
-                </div>
-                <% } %>
-              </div>
-            </div>
               </div>
               <div class="actividad-item">
                 <div class="act-icono-wrap ai-naranja">🥗</div>
@@ -927,113 +887,7 @@
 
       </div><!-- /sec-inicio -->
 
-      <!-- ══════════ SECCIÓN: ADMIN ALIMENTOS ══════════ -->
-      <div id="sec-adminAlimentos" style="display:none;">
-        <div class="seccion-header">
-          <div><h1>⚙️ Administrar Alimentos</h1><p class="sub">Agrega, edita y elimina frutas o verduras</p></div>
-          <button style="background:var(--verde-oscuro);color:#fff;padding:.6rem 1.2rem;border-radius:8px;border:none;cursor:pointer;font-weight:bold;" onclick="abrirModalAgregar()">+ Nuevo Alimento</button>
-        </div>
-        <div style="background:#fff; border-radius:var(--radio); padding:1rem; box-shadow:var(--sombra); overflow-x:auto;">
-          <table class="tabla-verd" style="width:100%;">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Tipo</th>
-                <th>Calorías</th>
-                <th>Temporada</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% 
-                 List<Alimento> todosAlimentos = daoAlimento.listarTodos();
-                 if (todosAlimentos != null && !todosAlimentos.isEmpty()) { 
-                   for(Alimento a : todosAlimentos) { %>
-                <tr>
-                  <td><%= a.getIdAlimento() %></td>
-                  <td><strong><%= a.getNombre() %></strong></td>
-                  <td><%= a.getTipo() %></td>
-                  <td><%= a.getCalorias() %> kcal</td>
-                  <td><span class="badge-mes"><%= a.getTemporada() %></span></td>
-                  <td>
-                    <button style="background:#e9c46a;border:none;padding:.4rem .7rem;border-radius:4px;cursor:pointer;margin-right:.3rem;" onclick="abrirModalEditar(<%= a.getIdAlimento() %>, '<%= a.getNombre() %>', '<%= a.getTipo() %>', <%= a.getCalorias() %>, '<%= a.getTemporada() %>')">✏️</button>
-                    <form action="AlimentoServlet" method="POST" style="display:inline;" onsubmit="return confirm('¿Eliminar <%= a.getNombre() %>?');">
-                      <input type="hidden" name="accion" value="Eliminar">
-                      <input type="hidden" name="id" value="<%= a.getIdAlimento() %>">
-                      <button type="submit" style="background:#e63946;color:#fff;border:none;padding:.4rem .7rem;border-radius:4px;cursor:pointer;">🗑️</button>
-                    </form>
-                  </td>
-                </tr>
-              <%   } 
-                 } else { %>
-                <tr>
-                  <td colspan="6" style="text-align: center; color: #888; padding: 2rem;">No hay alimentos registrados en la base de datos.</td>
-                </tr>
-              <% } %>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- ══════════ SECCIÓN: REPORTE AUDITORÍA ══════════ -->
-      <div id="sec-reporteAuditoria" style="display:none;">
-        <div class="seccion-header">
-          <div><h1>📊 Reporte de Auditoría</h1><p class="sub">Consulta los cambios realizados en el sistema por fecha</p></div>
-        </div>
-        <div style="background:#fff; border-radius:var(--radio); padding:1.5rem; box-shadow:var(--sombra); margin-bottom:1.5rem;">
-          <form method="GET" action="dashboard.jsp" style="display:flex; gap:1rem; align-items:flex-end; flex-wrap:wrap;">
-            <input type="hidden" name="seccion" value="reporteAuditoria">
-            <div>
-              <label style="display:block; font-size:.85rem; color:#666; margin-bottom:.3rem;">Fecha Inicio:</label>
-              <input type="date" name="fechaInicio" value="<%= fechaInicio != null ? fechaInicio : "" %>" style="padding:.5rem; border:1px solid #ccc; border-radius:6px;" required>
-            </div>
-            <div>
-              <label style="display:block; font-size:.85rem; color:#666; margin-bottom:.3rem;">Fecha Fin:</label>
-              <input type="date" name="fechaFin" value="<%= fechaFin != null ? fechaFin : "" %>" style="padding:.5rem; border:1px solid #ccc; border-radius:6px;" required>
-            </div>
-            <button type="submit" style="background:var(--verde-oscuro); color:#fff; border:none; padding:.6rem 1.2rem; border-radius:6px; cursor:pointer; font-weight:bold;">🔍 Filtrar</button>
-            <a href="dashboard.jsp" style="background:#f1f1f1; color:#333; text-decoration:none; padding:.6rem 1.2rem; border-radius:6px; font-size:.9rem;">Limpiar</a>
-          </form>
-        </div>
-
-        <div style="background:#fff; border-radius:var(--radio); padding:1rem; box-shadow:var(--sombra); overflow-x:auto;">
-          <table class="tabla-verd" style="width:100%;">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Tabla</th>
-                <th>Operación</th>
-                <th>Usuario BD</th>
-                <th>Fecha</th>
-                <th>Datos Afectados</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% if (reporteAuditoria != null && !reporteAuditoria.isEmpty()) { 
-                   for(Auditoria au : reporteAuditoria) { %>
-                <tr>
-                  <td><%= au.getIdAuditoria() %></td>
-                  <td><span class="ac-tag" style="margin:0;"><%= au.getTablaAfectada() %></span></td>
-                  <td><strong><%= au.getOperacion() %></strong></td>
-                  <td><%= au.getUsuarioBd() %></td>
-                  <td><%= new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(au.getFecha()) %></td>
-                  <td style="max-width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="<%= au.getDatosNuevos() %>">
-                    <%= au.getDatosNuevos() %>
-                  </td>
-                </tr>
-              <%   } 
-                 } else { %>
-                <tr>
-                  <td colspan="6" style="text-align: center; color: #888; padding: 2rem;">No se encontraron registros en el rango de fechas seleccionado.</td>
-                </tr>
-              <% } %>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- ══════════ SECCIÓN: FAVORITOS ══════════ -->
+      <!-- ═══════════ SECCIÓN: FAVORITOS ═══════════ -->
       <div id="sec-favoritos" style="display:none;">
         <div class="seccion-header">
           <div><h1>❤️ Mis Favoritos</h1><p class="sub">Frutas, verduras y recetas que has guardado</p></div>
@@ -1392,94 +1246,17 @@
   <!-- ══════════════════════════════════════════
        MODAL CERRAR SESIÓN
   ══════════════════════════════════════════ -->
-    <div class="overlay" id="overlay" onclick="cerrarModal(event)">
-      <div class="modal">
-        <div class="modal-icono">🚪</div>
-        <h3>¿Cerrar sesión?</h3>
-        <p>Se cerrará tu sesión activa y serás redirigido/a a la pantalla de inicio de sesión.</p>
-        <div class="modal-btns">
-          <button class="btn-cancel" onclick="cerrarModal()">Cancelar</button>
-          <button class="btn-confirm" onclick="confirmarCerrarSesion()">Sí, cerrar sesión</button>
-        </div>
+  <div class="overlay" id="overlay" onclick="cerrarModal(event)">
+    <div class="modal">
+      <div class="modal-icono">🚪</div>
+      <h3>¿Cerrar sesión?</h3>
+      <p>Se cerrará tu sesión activa y serás redirigido/a a la pantalla de inicio de sesión.</p>
+      <div class="modal-btns">
+        <button class="btn-cancel" onclick="cerrarModal()">Cancelar</button>
+        <button class="btn-confirm" onclick="confirmarCerrarSesion()">Sí, cerrar sesión</button>
       </div>
     </div>
-
-    <!-- MODAL AGREGAR ALIMENTO -->
-    <div class="overlay" id="modalAgregar">
-      <div class="modal" style="text-align: left; max-width: 500px;">
-        <h3 style="margin-bottom: 1rem; color: var(--verde-oscuro);">➕ Agregar Nuevo Alimento</h3>
-        <form action="AlimentoServlet" method="POST">
-          <input type="hidden" name="accion" value="Agregar">
-          
-          <div style="margin-bottom: 1rem;">
-            <label style="display:block; font-weight:bold; margin-bottom:.3rem; font-size:.9rem;">Nombre del alimento</label>
-            <input type="text" name="nombre" required style="width:100%; padding:.6rem; border:1px solid #ccc; border-radius:6px;">
-          </div>
-          
-          <div style="margin-bottom: 1rem;">
-            <label style="display:block; font-weight:bold; margin-bottom:.3rem; font-size:.9rem;">Tipo</label>
-            <select name="tipo" required style="width:100%; padding:.6rem; border:1px solid #ccc; border-radius:6px;">
-              <option value="Verdura">Verdura</option>
-              <option value="Fruta">Fruta</option>
-            </select>
-          </div>
-          
-          <div style="margin-bottom: 1rem;">
-            <label style="display:block; font-weight:bold; margin-bottom:.3rem; font-size:.9rem;">Calorías (por 100g)</label>
-            <input type="number" name="calorias" required style="width:100%; padding:.6rem; border:1px solid #ccc; border-radius:6px;">
-          </div>
-          
-          <div style="margin-bottom: 1.5rem;">
-            <label style="display:block; font-weight:bold; margin-bottom:.3rem; font-size:.9rem;">Temporada (Meses)</label>
-            <input type="text" name="temporada" placeholder="Ej: Mar - May" required style="width:100%; padding:.6rem; border:1px solid #ccc; border-radius:6px;">
-          </div>
-          
-          <div class="modal-btns">
-            <button type="button" class="btn-cancel" onclick="document.getElementById('modalAgregar').classList.remove('visible')">Cancelar</button>
-            <button type="submit" class="btn-confirm" style="background: var(--verde-oscuro); color: white;">Guardar Alimento</button>
-          </div>
-        </form>
-      </div>
-    </div>
-
-    <!-- MODAL EDITAR ALIMENTO -->
-    <div class="overlay" id="modalEditar">
-      <div class="modal" style="text-align: left; max-width: 500px;">
-        <h3 style="margin-bottom: 1rem; color: var(--verde-oscuro);">✏️ Editar Alimento</h3>
-        <form action="AlimentoServlet" method="POST">
-          <input type="hidden" name="accion" value="Editar">
-          <input type="hidden" name="id" id="edit_id">
-          
-          <div style="margin-bottom: 1rem;">
-            <label style="display:block; font-weight:bold; margin-bottom:.3rem; font-size:.9rem;">Nombre del alimento</label>
-            <input type="text" name="nombre" id="edit_nombre" required style="width:100%; padding:.6rem; border:1px solid #ccc; border-radius:6px;">
-          </div>
-          
-          <div style="margin-bottom: 1rem;">
-            <label style="display:block; font-weight:bold; margin-bottom:.3rem; font-size:.9rem;">Tipo</label>
-            <select name="tipo" id="edit_tipo" required style="width:100%; padding:.6rem; border:1px solid #ccc; border-radius:6px;">
-              <option value="Verdura">Verdura</option>
-              <option value="Fruta">Fruta</option>
-            </select>
-          </div>
-          
-          <div style="margin-bottom: 1rem;">
-            <label style="display:block; font-weight:bold; margin-bottom:.3rem; font-size:.9rem;">Calorías (por 100g)</label>
-            <input type="number" name="calorias" id="edit_calorias" required style="width:100%; padding:.6rem; border:1px solid #ccc; border-radius:6px;">
-          </div>
-          
-          <div style="margin-bottom: 1.5rem;">
-            <label style="display:block; font-weight:bold; margin-bottom:.3rem; font-size:.9rem;">Temporada (Meses)</label>
-            <input type="text" name="temporada" id="edit_temporada" required style="width:100%; padding:.6rem; border:1px solid #ccc; border-radius:6px;">
-          </div>
-          
-          <div class="modal-btns">
-            <button type="button" class="btn-cancel" onclick="document.getElementById('modalEditar').classList.remove('visible')">Cancelar</button>
-            <button type="submit" class="btn-confirm" style="background: #e9c46a; color: #333;">Actualizar Alimento</button>
-          </div>
-        </form>
-      </div>
-    </div>
+  </div>
 
   <!-- Toast -->
   <div class="toast" id="toast">🌿 <span id="toastMsg"></span></div>
@@ -1494,15 +1271,10 @@
       /* --- Inicialización --- */
       document.addEventListener('DOMContentLoaded', () => {
         // ... (las secciones y navegación se manejan sin sessionStorage ahora)
-        const urlParams = new URLSearchParams(window.location.search);
-        const sec = urlParams.get('seccion');
-        if (sec && secciones.includes(sec)) {
-            mostrarSeccion(sec);
-        }
       });
 
     /* ─── Navegación entre secciones del dashboard ─── */
-    const secciones = ['inicio','favoritos','calendario','alertas','perfil','ajustes','frutas','verduras','nutricion','sostenible','recetas','adminAlimentos','reporteAuditoria'];
+    const secciones = ['inicio','favoritos','calendario','alertas','perfil','ajustes','frutas','verduras','nutricion','sostenible','recetas'];
     function mostrarSeccion(id) {
       secciones.forEach(s => {
         document.getElementById('sec-' + s).style.display = s === id ? 'block' : 'none';
@@ -1526,17 +1298,6 @@
     /* ─── Modal cerrar sesión ─── */
     function abrirModal() {
       document.getElementById('overlay').classList.add('visible');
-    }
-    function abrirModalAgregar() {
-      document.getElementById('modalAgregar').classList.add('visible');
-    }
-    function abrirModalEditar(id, nombre, tipo, calorias, temporada) {
-      document.getElementById('edit_id').value = id;
-      document.getElementById('edit_nombre').value = nombre;
-      document.getElementById('edit_tipo').value = tipo;
-      document.getElementById('edit_calorias').value = calorias;
-      document.getElementById('edit_temporada').value = temporada;
-      document.getElementById('modalEditar').classList.add('visible');
     }
     function cerrarModal(e) {
       if (!e || e.target === document.getElementById('overlay')) {

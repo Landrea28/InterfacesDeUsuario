@@ -352,7 +352,7 @@
   <!-- ══════════ HEADER ══════════ -->
   <header>
     <div class="navbar">
-      <a href="index.html" class="logo">
+      <a href="index.jsp" class="logo">
         <span class="logo-icon">🥦</span>
         <span class="logo-text">Fresca<span>Temporada</span></span>
       </a>
@@ -361,7 +361,7 @@
         <span id="navNombre">Usuario</span>
         <button class="btn-logout-nav" onclick="cerrarSesion()">Salir</button>
       </div>
-      <a href="index.html" class="btn-volver" title="Volver a la página principal de FrescaTemporada">← Volver al inicio</a>
+      <a href="index.jsp" class="btn-volver" title="Volver a la página principal de FrescaTemporada">← Volver al inicio</a>
     </div>
   </header>
 
@@ -376,7 +376,7 @@
         <div class="user-chip" id="chipUsuario">usuario@correo.com</div>
         <p>Has iniciado sesión correctamente en <strong>FrescaTemporada</strong>.<br>
            Ya puedes explorar todas las secciones de la app.</p>
-        <a href="index.html" class="btn-ir-app">Ir a la aplicación →</a>
+        <a href="index.jsp" class="btn-ir-app">Ir a la aplicación →</a>
         <button class="btn-cerrar-sesion" onclick="cerrarSesion()">Cerrar sesión</button>
       </div>
 
@@ -399,12 +399,20 @@
           <p class="form-subtitulo">Ingresa tus credenciales para acceder a la app</p>
 
           <!-- Alerta -->
+          <% if (request.getAttribute("errorLogin") != null) { %>
+          <div class="alerta error visible" id="alertaLogin" style="display:flex;">
+            <span>⚠️</span>
+            <span id="msgLogin"><%= request.getAttribute("errorLogin") %></span>
+          </div>
+          <% } else { %>
           <div class="alerta error" id="alertaLogin">
             <span>⚠️</span>
             <span id="msgLogin">Usuario o contraseña incorrectos.</span>
           </div>
+          <% } %>
 
-          <form id="formLogin" onsubmit="validarLogin(event)" novalidate>
+          <form id="formLogin" action="LoginServlet" method="POST">
+            <input type="hidden" name="accion" value="Ingresar" />
 
             <!-- Campo usuario -->
             <div class="campo">
@@ -414,6 +422,7 @@
                 <input
                   type="text"
                   id="loginUsuario"
+                  name="email"
                   placeholder="tu@correo.com o nombre de usuario"
                   autocomplete="username"
                   required
@@ -429,6 +438,7 @@
                 <input
                   type="password"
                   id="loginPassword"
+                  name="password"
                   placeholder="Ingresa tu contraseña"
                   autocomplete="current-password"
                   required
@@ -463,17 +473,21 @@
           <h2 class="form-titulo">Crear cuenta nueva</h2>
           <p class="form-subtitulo">Regístrate gratis y accede a todas las funciones de la app</p>
 
-          <!-- Alerta registro -->
-          <div class="alerta error" id="alertaRegistro">
+          <!-- Alertas servidor -->
+          <% if (request.getAttribute("errorRegistro") != null) { %>
+          <div class="alerta error visible" style="display:flex;">
             <span>⚠️</span>
-            <span id="msgRegistro">Completa todos los campos correctamente.</span>
+            <span><%= request.getAttribute("errorRegistro") %></span>
           </div>
-          <div class="alerta exito" id="alertaRegistroOK" style="">
+          <% } %>
+          <% if (request.getAttribute("exitoRegistro") != null) { %>
+          <div class="alerta exito visible" style="display:flex;">
             <span>✅</span>
-            <span>¡Cuenta creada con éxito! Iniciando sesión automáticamente…</span>
+            <span><%= request.getAttribute("exitoRegistro") %></span>
           </div>
+          <% } %>
 
-          <form id="formRegistro" onsubmit="registrarUsuario(event)" novalidate>
+          <form id="formRegistro" action="RegistroServlet" method="POST">
 
             <!-- Nombre completo -->
             <div class="campo">
@@ -482,6 +496,7 @@
                 <span class="icono-campo">🙍</span>
                 <input
                   type="text"
+                  name="nombre"
                   id="regNombre"
                   placeholder="Ej: María García"
                   required
@@ -496,6 +511,7 @@
                 <span class="icono-campo">📧</span>
                 <input
                   type="email"
+                  name="email"
                   id="regCorreo"
                   placeholder="tu@correo.com"
                   autocomplete="email"
@@ -511,6 +527,7 @@
                 <span class="icono-campo">🔒</span>
                 <input
                   type="password"
+                  name="password"
                   id="regPassword"
                   placeholder="Mínimo 6 caracteres"
                   autocomplete="new-password"
@@ -534,6 +551,7 @@
                 <span class="icono-campo">🔐</span>
                 <input
                   type="password"
+                  name="passwordConf"
                   id="regPasswordConf"
                   placeholder="Repite tu contraseña"
                   autocomplete="new-password"
@@ -573,8 +591,9 @@
 
     /* ─── Al cargar la página: si ya hay sesión activa → dashboard ─── */
     window.addEventListener('DOMContentLoaded', () => {
-      const sesion = obtenerSesion();
-      if (sesion) window.location.replace('dashboard.html');
+      <% if (session.getAttribute("usuarioValido") != null) { %>
+      window.location.replace('dashboard.jsp');
+      <% } %>
     });
 
     /* ─── Cambiar entre pestañas Login / Registro ─── */
@@ -635,7 +654,7 @@
         /* 1) Verificar usuario demo */
         if ((usuario === DEMO_USER.usuario || usuario === 'demo') && password === DEMO_USER.password) {
           guardarSesion({ usuario: DEMO_USER.usuario, nombre: DEMO_USER.nombre });
-          window.location.href = 'dashboard.html';
+          window.location.href = 'dashboard.jsp';
           return;
         }
 
@@ -648,7 +667,7 @@
         if (encontrado) {
           const recordar = document.getElementById('recordarme').checked;
           guardarSesion({ usuario: encontrado.correo, nombre: encontrado.nombre }, recordar);
-          window.location.href = 'dashboard.html';
+          window.location.href = 'dashboard.jsp';
         } else {
           mostrarAlerta('alertaLogin', '❌ Usuario o contraseña incorrectos. ¿No tienes cuenta? Usa la pestaña <strong>Crear cuenta</strong>.', 'error');
           document.getElementById('loginPassword').value = '';
@@ -664,7 +683,7 @@
     }
 
     /* ─── REGISTRAR USUARIO ─── */
-    function registrarUsuario(e) {
+    function registrarUsuarioEliminada(e) {
       e.preventDefault();
       limpiarAlertas();
 
@@ -714,7 +733,7 @@
 
         setTimeout(() => {
           guardarSesion({ usuario: correo, nombre });
-          window.location.href = 'dashboard.html';
+          window.location.href = 'dashboard.jsp';
         }, 1500);
       }, 1000);
     }
